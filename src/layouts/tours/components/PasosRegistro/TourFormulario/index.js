@@ -1,8 +1,21 @@
-import * as React from "react";
+import *   as React  from "react";
+import  {useState , useContext}  from "react";
 import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
 
+import { TourContext } from '../../../context/TourContext';
+
 export default function TourFormulario() {
+
+  const {  tour } = useContext(TourContext);
+
+  const [titulo , setTitulo]  = useState('');
+  const [duracion , setDuracion]  = useState('');
+  const [detalles , setDetalles]  = useState('');
+  const [incluye , setIncluye]  = useState('');
+  const [noIncluye , setNoincluye]  = useState('');
+  const [informacionAdicional , setInformacionAdicional]  = useState('');
+
   return (
     <Box
       component="form"
@@ -13,13 +26,14 @@ export default function TourFormulario() {
       autoComplete="off"
     >
       <div></div>
-      <div></div>
+     
       <div>
         <TextField
           required
           id="standard-required"
           label="Titulo"
           multiline
+          onChange={(e) => setTitulo(e.target.value)}
           style={{ width: 550 }}
           defaultValue=""
           variant="standard"
@@ -29,6 +43,7 @@ export default function TourFormulario() {
           required
           id="standard-required"
           label="Duracion"
+          onChange={ (e) => setDuracion(e.target.value)}
           multiline
           style={{ width: 230 }}
           defaultValue=""
@@ -40,6 +55,7 @@ export default function TourFormulario() {
           required
           id="standard-required"
           label="Detalles"
+          onChange={ (e) => setDetalles(e.target.value)}
           multiline
           style={{ width: 800 }}
           defaultValue=""
@@ -51,6 +67,7 @@ export default function TourFormulario() {
           id="standard-required"
           label="Incluye"
           multiline
+          onChange={ (e) => setIncluye(e.target.value)}
           style={{ width: 400 }}
           defaultValue=""
           variant="standard"
@@ -60,9 +77,10 @@ export default function TourFormulario() {
           required
           id="standard-required"
           label="No Incluye"
+          onChange={ (e) => setNoincluye(e.target.value)}
           multiline
           style={{ width: 400 }}
-          defaultValue=""
+          defaultValue="12345"
           variant="standard"
           helperText="¿Qué NO incluye en el Tour? P. Ej: Gastos personales, Comidas extras, etc."
         />
@@ -72,6 +90,7 @@ export default function TourFormulario() {
           id="standard-required"
           label="Información Adicional"
           multiline
+          onChange={ (e) => setInformacionAdicional(e.target.value)}
           style={{ width: 800 }}
           defaultValue=""
           variant="standard"
