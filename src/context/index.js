@@ -61,6 +61,14 @@ function MaterialUIControllerProvider({ children }) {
     direction: "ltr",
     layout: "dashboard",
     darkMode: false,
+    datos: {
+      titulo: "123",
+      duracion: "456",
+      detalles: "789",
+      incluye: "",
+      noIncluye: "",
+      informacionAdicional: "",
+    },
   };
 
   const [controller, dispatch] = useReducer(reducer, initialState);
