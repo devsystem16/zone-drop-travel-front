@@ -15,7 +15,18 @@ export default function TourFormulario() {
   const [noIncluye, setNoincluye] = useState("");
   const [informacionAdicional, setInformacionAdicional] = useState("");
 
-  const setValues = (e) => {};
+  const handleChange = (event) => {
+    const { name , value  } = event.target;
+
+    const newValues = {
+      ...tour,
+      [name]: value,
+    };
+    setTour(newValues);
+
+  };
+
+
   return (
     <Box
       component="form"
@@ -33,7 +44,9 @@ export default function TourFormulario() {
           id="standard-required"
           label="Titulo"
           multiline
-          onChange={(e) => setTitulo(e.target.value)}
+          name="titulo"
+          onChange={handleChange}
+          //onChange={(e) => setTitulo(e.target.value)}
           style={{ width: 550 }}
           defaultValue=""
           variant="standard"
@@ -43,7 +56,9 @@ export default function TourFormulario() {
           required
           id="standard-required"
           label="Duracion"
-          onChange={(e) => setDuracion(e.target.value)}
+          name="duracion"
+          onChange={handleChange}
+          //onChange={(e) => setDuracion(e.target.value)}
           multiline
           style={{ width: 230 }}
           defaultValue=""
@@ -55,7 +70,9 @@ export default function TourFormulario() {
           required
           id="standard-required"
           label="Detalles"
-          onChange={(e) => setDetalles(e.target.value)}
+          name="detalles"
+          onChange={handleChange}
+          //onChange={(e) => setDetalles(e.target.value)}
           multiline
           style={{ width: 800 }}
           defaultValue=""
@@ -67,7 +84,9 @@ export default function TourFormulario() {
           id="standard-required"
           label="Incluye"
           multiline
-          onChange={(e) => setIncluye(e.target.value)}
+          name="incluye"
+          onChange={handleChange}
+          //onChange={(e) => setIncluye(e.target.value)}
           style={{ width: 400 }}
           defaultValue=""
           variant="standard"
@@ -77,7 +96,9 @@ export default function TourFormulario() {
           required
           id="standard-required"
           label="No Incluye"
-          onChange={(e) => setNoincluye(e.target.value)}
+          name="noIncluye"
+          onChange={handleChange}
+          //onChange={(e) => setNoincluye(e.target.value)}
           multiline
           style={{ width: 400 }}
           defaultValue="12345"
@@ -90,7 +111,9 @@ export default function TourFormulario() {
           id="standard-required"
           label="Información Adicional"
           multiline
-          onChange={(e) => setInformacionAdicional(e.target.value)}
+          name="informacionAdicional"
+          onChange={handleChange}
+          //onChange={(e) => setInformacionAdicional(e.target.value)}
           style={{ width: 800 }}
           defaultValue=""
           variant="standard"
