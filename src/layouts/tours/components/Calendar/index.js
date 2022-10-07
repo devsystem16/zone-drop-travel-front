@@ -1,7 +1,7 @@
-import {  useContext } from "react";
+import { useContext } from "react";
 import DatePicker from "react-multi-date-picker";
 import DatePanel from "react-multi-date-picker/plugins/date_panel";
-import {TourContext} from '../../context/TourContext'
+import { TourContext } from "../../context/TourContext";
 
 export default function Example() {
   const today = new Date();
@@ -9,8 +9,8 @@ export default function Example() {
   const weekDays = ["Dom", "Lun", "Mar", "Mie", "Jue", "Vie", "Sab"];
 
   tomorrow.setDate(tomorrow.getDate() + 1);
- 
-  const { tour, setTour , precios } = useContext(TourContext);
+
+  const { tour, setTour, precios } = useContext(TourContext);
 
   const months = [
     "Ene",
@@ -27,38 +27,38 @@ export default function Example() {
     "Dic",
   ];
 
-  
-
   return (
     <>
       <DatePicker
-        style={{ width: 750 }}
+        style={{ width: "47ch" }}
         weekDays={weekDays}
         months={months}
         multiple
         onChange={(array) => {
           //console.log("selected dates :\n" + array.join(",\n"));
-         var datos = array.join().split(',');
-             datos.map(value => {
+          var arrayProgramacionFechas = [];
 
-              var jsonDatos = { } ;
-              jsonDatos.fecha = value ;
-              jsonDatos.observacion = "";
-              jsonDatos.estado = true ;
+          var datos = array.join().split(",");
+          datos.map((fecha) => {
+            var jsonDatos = {};
+            jsonDatos.fecha = fecha;
+            jsonDatos.observacion = "";
+            jsonDatos.estado = true;
+            jsonDatos.precios = {
+              adultos: precios.adultos,
+              terceraEdad: precios.terceraEdad,
+              ninios: precios.ninios,
+              infantes: precios.infantes,
+            };
 
-              jsonDatos.precios= {precios} ;
-               
-           
-            
+            arrayProgramacionFechas.push(jsonDatos);
+          });
 
-
-              const newValues = {
-                ...tour,
-                "jsonFEchas": jsonDatos,
-              };
-              setTour(newValues);
-             })
-
+          const newValues = {
+            ...tour,
+            programacionFechas: arrayProgramacionFechas,
+          };
+          setTour(newValues);
         }}
         // onClose={() => setState({})}
         // onFocusedDateChange={(dateFocused, dateClicked) => {

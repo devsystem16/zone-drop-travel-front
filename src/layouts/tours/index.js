@@ -39,10 +39,12 @@ function Tours() {
     <DashboardLayout>
       <DashboardNavbar />
       <h3>Salida Tour</h3>
-      <NewTour></NewTour>
+
       <MDBox pt={6} pb={3}>
         <Grid container spacing={6}>
-          <Grid item xs={12}></Grid>
+          <Grid item xs={12}>
+            <NewTour></NewTour>
+          </Grid>
 
           <Grid item xs={12}>
             <Card>

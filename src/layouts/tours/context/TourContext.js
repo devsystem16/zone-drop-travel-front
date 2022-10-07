@@ -9,23 +9,32 @@ const TourProvider = (props) => {
     detalles: "",
     incluye: "",
     noIncluye: "",
-    informacionAdicional: ""
-   
+    informacionAdicional: "",
   });
 
-  const [precios , setPrecios] = useState ({
-    "Adulto": 0 ,
-    "terceraEdad": 0 ,
-    "ninios": 0 ,
-    "infantes": 0 
+  const [precios, setPrecios] = useState({
+    adultos: 0,
+    terceraEdad: 0,
+    ninios: 0,
+    infantes: 0,
   });
 
-
-  return <TourContext.Provider value={{ 
-    tour,
-    setTour,
-    precios, 
-    setPrecios }}>{props.children}</TourContext.Provider>;
+  const guardarTour = () => {
+    alert(JSON.stringify(tour));
+  };
+  return (
+    <TourContext.Provider
+      value={{
+        tour,
+        setTour,
+        precios,
+        setPrecios,
+        guardarTour,
+      }}
+    >
+      {props.children}
+    </TourContext.Provider>
+  );
 };
 
 export default TourProvider;
