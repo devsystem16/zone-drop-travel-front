@@ -8,13 +8,7 @@ import { TourContext } from "../../../context/TourContext";
 export default function TourFormulario() {
   const { tour, setTour } = useContext(TourContext);
 
-  const [titulo, setTitulo] = useState("");
-  const [duracion, setDuracion] = useState("");
-  const [detalles, setDetalles] = useState("");
-  const [incluye, setIncluye] = useState("");
-  const [noIncluye, setNoincluye] = useState("");
-  const [informacionAdicional, setInformacionAdicional] = useState("");
-
+ 
   const handleChange = (event) => {
     const { name , value  } = event.target;
 
@@ -46,9 +40,9 @@ export default function TourFormulario() {
           multiline
           name="titulo"
           onChange={handleChange}
-          //onChange={(e) => setTitulo(e.target.value)}
+          
           style={{ width: 550 }}
-          defaultValue=""
+          defaultValue={tour.titulo}
           variant="standard"
           helperText="Lugar del Tour, P. Ej: Máncora "
         />
@@ -58,10 +52,10 @@ export default function TourFormulario() {
           label="Duracion"
           name="duracion"
           onChange={handleChange}
-          //onChange={(e) => setDuracion(e.target.value)}
+          defaultValue={tour.duracion}
           multiline
           style={{ width: 230 }}
-          defaultValue=""
+          
           variant="standard"
           helperText="Duración del Tour, P. Ej: 2 días."
         />
@@ -75,7 +69,7 @@ export default function TourFormulario() {
           //onChange={(e) => setDetalles(e.target.value)}
           multiline
           style={{ width: 800 }}
-          defaultValue=""
+          defaultValue={tour.detalles}
           variant="standard"
           helperText="Describa brevemente lo que el cliente disfrutará del tour."
         />
@@ -88,7 +82,7 @@ export default function TourFormulario() {
           onChange={handleChange}
           //onChange={(e) => setIncluye(e.target.value)}
           style={{ width: 400 }}
-          defaultValue=""
+          defaultValue={tour.incluye}
           variant="standard"
           helperText="¿Qué se incluye en el Tour? P. Ej: Transporte, Seguro, etc."
         />
@@ -98,10 +92,10 @@ export default function TourFormulario() {
           label="No Incluye"
           name="noIncluye"
           onChange={handleChange}
-          //onChange={(e) => setNoincluye(e.target.value)}
+          
           multiline
           style={{ width: 400 }}
-          defaultValue="12345"
+          defaultValue={tour.noIncluye}
           variant="standard"
           helperText="¿Qué NO incluye en el Tour? P. Ej: Gastos personales, Comidas extras, etc."
         />
@@ -115,7 +109,7 @@ export default function TourFormulario() {
           onChange={handleChange}
           //onChange={(e) => setInformacionAdicional(e.target.value)}
           style={{ width: 800 }}
-          defaultValue=""
+          defaultValue={tour.informacionAdicional}
           variant="standard"
           helperText="Añada aqui la información Adicional que desee, por Ej: los costos para reservar."
         />

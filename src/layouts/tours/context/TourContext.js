@@ -9,10 +9,23 @@ const TourProvider = (props) => {
     detalles: "",
     incluye: "",
     noIncluye: "",
-    informacionAdicional: "",
+    informacionAdicional: ""
+   
   });
 
-  return <TourContext.Provider value={{ tour, setTour }}>{props.children}</TourContext.Provider>;
+  const [precios , setPrecios] = useState ({
+    "Adulto": 0 ,
+    "terceraEdad": 0 ,
+    "ninios": 0 ,
+    "infantes": 0 
+  });
+
+
+  return <TourContext.Provider value={{ 
+    tour,
+    setTour,
+    precios, 
+    setPrecios }}>{props.children}</TourContext.Provider>;
 };
 
 export default TourProvider;
