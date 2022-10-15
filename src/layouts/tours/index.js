@@ -31,15 +31,16 @@ import NewTour from "../tours/components/NewTour";
 import authorsTableData from "layouts/tables/data/authorsTableData";
 import projectsTableData from "layouts/tables/data/projectsTableData";
 import toursTableData from "layouts/tours/data/toursTableData";
+import TourRegistrarCliente from "./components/TourRegistrarCliente/TourRegistrarCliente";
+
 function Tours() {
   const { columns, rows } = toursTableData();
-  const { columns: pColumns, rows: pRows } = projectsTableData();
 
   return (
     <DashboardLayout>
       <DashboardNavbar />
       <h3>Salida Tour</h3>
-
+      <TourRegistrarCliente />
       <MDBox pt={6} pb={3}>
         <Grid container spacing={6}>
           <Grid item xs={12}>
@@ -65,6 +66,7 @@ function Tours() {
               {/* Tabla Torus */}
               <MDBox pt={2}>
                 <DataTable
+                  canSearch={true}
                   table={{ columns, rows }}
                   isSorted={false}
                   entriesPerPage={false}

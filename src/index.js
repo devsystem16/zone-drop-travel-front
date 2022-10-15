@@ -18,14 +18,19 @@ import ReactDOM from "react-dom";
 import { BrowserRouter } from "react-router-dom";
 import App from "App";
 
+import RegistroTourClienteProvider from "./layouts/tours/context/RegistroTourCliente";
+
 // Material Dashboard 2 React Context Provider
 import { MaterialUIControllerProvider } from "context";
 
 ReactDOM.render(
-  <BrowserRouter>
-    <MaterialUIControllerProvider>
-      <App />
-    </MaterialUIControllerProvider>
-  </BrowserRouter>,
+  <RegistroTourClienteProvider>
+    <BrowserRouter>
+      <MaterialUIControllerProvider>
+        <App />
+      </MaterialUIControllerProvider>
+    </BrowserRouter>
+  </RegistroTourClienteProvider>,
+
   document.getElementById("root")
 );

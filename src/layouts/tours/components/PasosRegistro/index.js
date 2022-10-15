@@ -10,7 +10,7 @@ import Typography from "@mui/material/Typography";
 import { TourContext } from "../../context/TourContext";
 import Switch from "./Switch";
 
-const steps = ["Información del Tour", "Precios", "Programación de Fechas"];
+const steps = ["Información del Tour", "Precios", "Programación de Fechas", "Lugares de Salida"];
 
 export default function PasosRegistro() {
   const [activeStep, setActiveStep] = React.useState(0);

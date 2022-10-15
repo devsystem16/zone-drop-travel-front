@@ -8,18 +8,15 @@ import { TourContext } from "../../../context/TourContext";
 export default function TourFormulario() {
   const { tour, setTour } = useContext(TourContext);
 
- 
   const handleChange = (event) => {
-    const { name , value  } = event.target;
+    const { name, value } = event.target;
 
     const newValues = {
       ...tour,
       [name]: value,
     };
     setTour(newValues);
-
   };
-
 
   return (
     <Box
@@ -40,7 +37,6 @@ export default function TourFormulario() {
           multiline
           name="titulo"
           onChange={handleChange}
-          
           style={{ width: 550 }}
           defaultValue={tour.titulo}
           variant="standard"
@@ -55,7 +51,6 @@ export default function TourFormulario() {
           defaultValue={tour.duracion}
           multiline
           style={{ width: 230 }}
-          
           variant="standard"
           helperText="Duración del Tour, P. Ej: 2 días."
         />
@@ -92,7 +87,6 @@ export default function TourFormulario() {
           label="No Incluye"
           name="noIncluye"
           onChange={handleChange}
-          
           multiline
           style={{ width: 400 }}
           defaultValue={tour.noIncluye}
