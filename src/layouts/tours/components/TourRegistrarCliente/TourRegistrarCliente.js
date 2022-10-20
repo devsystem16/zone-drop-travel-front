@@ -12,16 +12,22 @@ import IconButton from "@mui/material/IconButton";
 import Typography from "@mui/material/Typography";
 import CloseIcon from "@mui/icons-material/Close";
 import Slide from "@mui/material/Slide";
-
+import useMediaQuery from "@mui/material/useMediaQuery";
+import { useTheme } from "@mui/material/styles";
 import FormularioClienteTitular from "./FormularioClienteTitular";
 
-import { RegistroTourClienteContext } from "../../context/RegistroTourCliente";
+import { RegistroTourClienteContext } from "../../context/RegistroTourClienteContext";
+
+import StepsIncripcionTour from "../IncripcionTour/StepsIncripcionTour";
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
 });
 
 export default function FullScreenDialog() {
+  const theme = useTheme();
+  const fullScreen = useMediaQuery(theme.breakpoints.down("md"));
+
   const { modalTourRegistroCliente, setModalTourRegistroCliente } = useContext(
     RegistroTourClienteContext
   );
@@ -30,14 +36,17 @@ export default function FullScreenDialog() {
     setModalTourRegistroCliente(true);
   };
 
-  const handleClose = () => {
+  const handleClose = (event, reason) => {
+    if (reason && reason == "backdropClick") return;
+
     setModalTourRegistroCliente(false);
   };
 
   return (
     <div>
       <Dialog
-        fullScreen={false}
+        fullScreen={true}
+        disableclo
         open={modalTourRegistroCliente}
         onClose={handleClose}
         TransitionComponent={Transition}
@@ -50,13 +59,18 @@ export default function FullScreenDialog() {
             <Typography sx={{ ml: 2, flex: 1 }} variant="h6" component="div">
               Datos del titular de la reserva
             </Typography>
-            <Button autoFocus color="inherit" onClick={handleClose}>
-              Guardar
+            <Button autoFocus color="error" onClick={handleClose}>
+              Cerrar
             </Button>
           </Toolbar>
         </AppBar>
         <List>
-          <FormularioClienteTitular></FormularioClienteTitular>
+          <center>
+            <h2>Registro de TOUR</h2>
+          </center>
+
+          <StepsIncripcionTour></StepsIncripcionTour>
+          {/* <FormularioClienteTitular></FormularioClienteTitular> */}
         </List>
       </Dialog>
     </div>

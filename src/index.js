@@ -18,7 +18,7 @@ import ReactDOM from "react-dom";
 import { BrowserRouter } from "react-router-dom";
 import App from "App";
 
-import RegistroTourClienteProvider from "./layouts/tours/context/RegistroTourCliente";
+import RegistroTourClienteProvider from "./layouts/tours/context/RegistroTourClienteContext";
 
 // Material Dashboard 2 React Context Provider
 import { MaterialUIControllerProvider } from "context";

@@ -9,7 +9,7 @@ import moment from "moment";
 // Images
 import zone_drop_travel_icon from "assets/images/zone-drop-travel/zone-drop-travel-icon.jpg";
 import API from "../../../Environment/config";
-import { RegistroTourClienteContext } from "../context/RegistroTourCliente";
+import { RegistroTourClienteContext } from "../context/RegistroTourClienteContext";
 
 export default function data() {
   const { modalTourRegistroCliente, setModalTourRegistroCliente } = useContext(
@@ -32,7 +32,7 @@ export default function data() {
   }, []);
 
   const clicFecha = (id) => {
-    // alert("Clic Fecha " + id);
+    localStorage.setItem("programacion_fecha_id", id);
     setModalTourRegistroCliente(true);
   };
 
