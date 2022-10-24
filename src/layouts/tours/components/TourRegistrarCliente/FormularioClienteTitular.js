@@ -7,15 +7,14 @@ import Button from "@mui/material/Button";
 import ListaGenero from "./ListaGenero.js";
 import { RegistroTourClienteContext } from "../../context/RegistroTourClienteContext";
 import SelectTipoAcompañante from "../SelectTipoAcompañante/SelectTipoAcompañante.js";
+import Loading from "../../../../components/Loading/Loading";
 
 import { buscarCliente } from "../../../../Controllers/ClienteController";
 
 export default function FormularioClienteTitular() {
-  console.log("RENDERIZO FormularioClienteTitular");
   const { cliente, setCliente, guardarCliente } = useContext(RegistroTourClienteContext);
-
   const [tipoAcompañante, setTipoAcompañante] = useState({ descripcion: "adulto", id: -1 });
-
+  const [isLoading, setIsLoading] = useState(false);
   const handleChange = (event) => {
     const { name, value } = event.target;
 
@@ -32,10 +31,12 @@ export default function FormularioClienteTitular() {
     }
   };
   const find = async () => {
+    setIsLoading(true);
     const data = await buscarCliente(cliente.documento);
     if (data.encontro) {
       setCliente(data.cliente);
     }
+    setIsLoading(false);
   };
   const handleChangeSelect = (event) => {
     const newValues = {
@@ -55,6 +56,7 @@ export default function FormularioClienteTitular() {
       noValidates
       autoComplete="off"
     >
+      <Loading open={isLoading}></Loading>;
       <div>
         <TextField
           required

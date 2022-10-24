@@ -11,6 +11,9 @@ import zone_drop_travel_icon from "assets/images/zone-drop-travel/zone-drop-trav
 import API from "../../../Environment/config";
 import { RegistroTourClienteContext } from "../context/RegistroTourClienteContext";
 
+import OptionTour from "../components/OptionTour/OptionTour";
+import OptionFechaSalida from "../components/OptionFechaSalida/OptionFechaSalida";
+
 export default function data() {
   const { modalTourRegistroCliente, setModalTourRegistroCliente } = useContext(
     RegistroTourClienteContext
@@ -35,51 +38,62 @@ export default function data() {
     localStorage.setItem("programacion_fecha_id", id);
     setModalTourRegistroCliente(true);
   };
+  const saltoLinea = (index, columnas) => {
+    return (index + 1) % columnas === 0 ? true : false;
+  };
+
+  const retornarArray = (cadena) => {
+    let lineas = mensaje.split("<br />");
+  };
 
   const cargarTours = async () => {
     const jsonTours = await API.get("/tour/listado/tabla");
     const Elementos = jsonTours.data.map((tour) => {
       return {
-        author: (
-          <Author
+        lugarDestino: (
+          <DestinoTour
+            tour={tour}
             image={zone_drop_travel_icon}
-            name={tour.titulo}
-            email={`${tour.duracion} ${tour.detalles}`}
+            titulo={tour.titulo}
+            descripcion={`${tour.duracion} ${tour.detalles}`}
           />
         ),
-        function: (
+        fechas_salida: (
           <MDTypography component="a" variant="caption" color="text" fontWeight="medium">
-            {/* <div>📆 Octubre: 02, 08, 09, 10, 16, 22 y 30</div>
-            <div>📆 Noviembre: 04, 06, 13, 20 y 27 </div>
-            <div>📆 Diciembre: 03, 05, 18 y 25</div> */}
-            {tour.programacionFechas.map((fecha) => {
-              return (
-                <Chip
-                  // label=" 📆 22/01/2011"
-                  label={`📆 ${moment(fecha.fecha).format("MMMM, D")}`}
-                  variant="outlined"
-                  sx={{
-                    color: "info.dark",
-                    fontWeight: "bold",
-
-                    mx: 0.5,
-                    fontSize: 11,
-                    cursor: "pointer",
-                  }}
-                  onClick={() => clicFecha(fecha.id)}
-                  onDelete={() => clicFecha(fecha.id)}
-                />
-              );
+            {tour.programacionFechas.map((fecha, index) => {
+              if (saltoLinea(index, 3)) {
+                return (
+                  <>
+                    <OptionFechaSalida
+                      fecha={fecha}
+                      onClick={clicFecha}
+                      onDelete={clicFecha}
+                      setModalTourRegistroCliente={setModalTourRegistroCliente}
+                    ></OptionFechaSalida>
+                    <br />
+                    {/* <FechaSalida fecha={fecha} onClick={clicFecha} onDelete={clicFecha} /> <br /> */}
+                  </>
+                );
+              } else {
+                return (
+                  <OptionFechaSalida
+                    tour={tour}
+                    fecha={fecha}
+                    onClick={clicFecha}
+                    onDelete={clicFecha}
+                  ></OptionFechaSalida>
+                );
+                // return <FechaSalida fecha={fecha} onClick={clicFecha} onDelete={clicFecha} />;
+              }
             })}
           </MDTypography>
         ),
         incluye: (
           <MDTypography component="a" href="#" variant="caption" color="text" fontWeight="medium">
-            {/* <div>🚌 Transporte de Turismo.</div>
-            <div>⛑ Seguro de Accidente Vial.</div>
-            <div>🦠 Protocolo de Bioseguridad.</div> */}
-
-            <div dangerouslySetInnerHTML={{ __html: tour.incluye }}></div>
+            <div
+              title={tour.incluye}
+              dangerouslySetInnerHTML={{ __html: acotarText(tour.incluye) }}
+            ></div>
 
             <div>
               <strong style={{ color: "#1A73E8" }}>Ver mas</strong>
@@ -88,37 +102,25 @@ export default function data() {
         ),
         noIncluye: (
           <MDTypography component="a" href="#" variant="caption" color="text" fontWeight="medium">
-            {/* <div>📜 No especificado en el itinerario.</div>
-            <div>🍔 Comidas extras.</div>
-            <div>🎊 Gastos personales.</div> */}
             <div dangerouslySetInnerHTML={{ __html: tour.noIncluye }}></div>
+            <div>
+              <strong style={{ color: "#1A73E8" }}>Ver mas</strong>
+            </div>
           </MDTypography>
         ),
         lugarSalida: (
           <MDTypography component="a" variant="caption" color="text" fontWeight="medium">
-            {tour.lugaresSalidas.map((lugares) => {
-              return (
-                <Chip
-                  label={`🅿️ ${lugares.descripcion} (${lugares.hora})`}
-                  variant="outlined"
-                  sx={{
-                    color: "info.dark",
-                    fontWeight: "bold",
-
-                    mx: 0.5,
-                    fontSize: 11,
-                    cursor: "pointer",
-                  }}
-                  onClick={() => clicFecha(lugares.id)}
-                  onDelete={() => clicFecha(lugares.id)}
-                />
-              );
+            {tour.lugaresSalidas.map((lugares, index) => {
+              if (saltoLinea(index, 3)) {
+                return (
+                  <>
+                    <LugarSalida lugar={lugares} onClick={clicFecha} onDelete={clicFecha} /> <br />
+                  </>
+                );
+              } else {
+                return <LugarSalida lugar={lugares} onClick={clicFecha} onDelete={clicFecha} />;
+              }
             })}
-
-            {/* <div>🅿️ 03:00 am: Valle Chillos, Centro Comercial San Luis. </div>
-            <div> 🅿️ 03:05 am: Triangulo, parada de los buses.</div>
-            <div> 🅿️ 03:35 am: Centro Comercial Quicentro Sur.</div> */}
-            <div>{/* <strong style={{ color: "#1A73E8" }}>Ver mas</strong> */}</div>
           </MDTypography>
         ),
 
@@ -131,9 +133,6 @@ export default function data() {
         reservacion: (
           <MDTypography component="a" href="#" variant="caption" color="text" fontWeight="medium">
             <div dangerouslySetInnerHTML={{ __html: tour.informacionAdicional }}></div>
-            {/* <div>💰 Con $ 20,00 dólares por cada uno.</div>
-            <div>💵 Efectivo, Transferencia o Depósito Bancario.</div>
-            <div> 💳 Tarjeta Crédito hasta 12 meses con intereses.</div> */}
           </MDTypography>
         ),
         employed: (
@@ -156,37 +155,71 @@ export default function data() {
     setFilas(Elementos);
   };
   const acotarText = (text) => {
-    if (text.length > 80) return text.substring(0, 60) + "...";
+    if (text.length > 50) return text.substring(0, 50) + "...";
     return text;
   };
 
-  const Author = ({ image, name, email }) => (
+  const DestinoTour = ({ tour, image, titulo, descripcion }) => (
     <MDBox display="flex" alignItems="center" lineHeight={1}>
-      <MDAvatar src={image} name={name} size="sm" />
+      <OptionTour tour={tour} image={image}></OptionTour>
+      <MDAvatar src={image} name={titulo} size="sm" />
       <MDBox ml={2} lineHeight={1}>
         <MDTypography display="block" variant="button" fontWeight="medium">
-          {name}
+          {titulo}
         </MDTypography>
-        <MDTypography title={email} variant="caption">
-          {acotarText(email)}
+        <MDTypography title={descripcion} variant="caption">
+          {acotarText(descripcion)}
         </MDTypography>
       </MDBox>
     </MDBox>
   );
 
-  const Job = ({ title, description }) => (
-    <MDBox lineHeight={1} textAlign="left">
-      <MDTypography display="block" variant="caption" color="text" fontWeight="medium">
-        {title}
-      </MDTypography>
-      <MDTypography variant="caption">{description}</MDTypography>
-    </MDBox>
-  );
+  const FechaSalida = ({ fecha, onClick, onDelete }) => {
+    var title = "";
+    fecha.precios.map((precios) => {
+      title = title + precios.descripcion + " $" + precios.precio + "     ";
+    });
+    return (
+      <Chip
+        label={`📆 ${moment(fecha.fecha).format("MMMM, D")}`}
+        variant="outlined"
+        title={title}
+        sx={{
+          color: "info.dark",
+          fontWeight: "bold",
+          mx: 0.5,
+          fontSize: 11,
+          cursor: "pointer",
+        }}
+        onClick={() => onClick(fecha.id)}
+        onDelete={() => onDelete(fecha.id)}
+      />
+    );
+  };
+
+  const LugarSalida = ({ lugar, onClick, onDelete }) => {
+    return (
+      <Chip
+        label={`🅿️ ${lugar.descripcion} (${lugar.hora})`}
+        variant="outlined"
+        sx={{
+          color: "info.dark",
+          fontWeight: "bold",
+          margin: 0.5,
+          mx: 0.5,
+          fontSize: 11,
+          cursor: "pointer",
+        }}
+        onClick={() => onClick(lugar.id)}
+        onDelete={() => onDelete(lugar.id)}
+      />
+    );
+  };
 
   return {
     columns: [
-      { Header: "destino", accessor: "author", width: "20", align: "left" },
-      { Header: "Salidas", accessor: "function", align: "left" },
+      { Header: "destino", accessor: "lugarDestino", width: "20", align: "left" },
+      { Header: "Fechas", accessor: "fechas_salida", align: "left" },
       { Header: "Incluye", accessor: "incluye", align: "left" },
       { Header: "no incluye", accessor: "noIncluye", align: "left" },
       { Header: "Lugares Salida", accessor: "lugarSalida", align: "left" },

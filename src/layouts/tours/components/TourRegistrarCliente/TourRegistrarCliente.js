@@ -57,7 +57,7 @@ export default function FullScreenDialog() {
               <CloseIcon />
             </IconButton>
             <Typography sx={{ ml: 2, flex: 1 }} variant="h6" component="div">
-              Datos del titular de la reserva
+              Registre sus datos
             </Typography>
             <Button autoFocus color="error" onClick={handleClose}>
               Cerrar
@@ -65,9 +65,7 @@ export default function FullScreenDialog() {
           </Toolbar>
         </AppBar>
         <List>
-          <center>
-            <h2>Registro de TOUR</h2>
-          </center>
+          <center>{/* <h2>Registro de TOUR</h2> */}</center>
 
           <StepsIncripcionTour></StepsIncripcionTour>
           {/* <FormularioClienteTitular></FormularioClienteTitular> */}

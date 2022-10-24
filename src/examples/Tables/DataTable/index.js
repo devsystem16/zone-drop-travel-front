@@ -146,7 +146,14 @@ function DataTable({
   }
 
   return (
-    <TableContainer sx={{ boxShadow: "none" }}>
+    <TableContainer
+      sx={{ boxShadow: "none" }}
+      style={{
+        maxHeight: "75vh",
+        height: "75vh",
+        // backgroundColor: "#0000001c",
+      }}
+    >
       {entriesPerPage || canSearch ? (
         <MDBox display="flex" justifyContent="space-between" alignItems="center" p={3}>
           {entriesPerPage && (

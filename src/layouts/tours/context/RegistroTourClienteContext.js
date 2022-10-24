@@ -31,6 +31,7 @@ const RegistroTourClienteProvider = (props) => {
   const [habitciones, setHabitaciones] = useState([]);
   const [lugarSalida, SetLugarSalida] = useState([]);
   const [informacionPagos, setInformacionPagos] = useState({
+    esAgencia: false,
     descuentoAgencia: 0,
     abono: 0,
     descuento: 0,
@@ -84,7 +85,8 @@ const RegistroTourClienteProvider = (props) => {
   const registrarInscripcion = () => {
     setModalTourRegistroCliente(false);
     var datos = {
-      ciente: cliente,
+      cliente: cliente,
+      programacion_fecha_id: localStorage.getItem("programacion_fecha_id"),
       acompaniantes: acompañantes,
       informacionPagos: informacionPagos,
       bancoId: banco,

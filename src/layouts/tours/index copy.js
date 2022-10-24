@@ -28,33 +28,21 @@ import DataTable from "examples/Tables/DataTable";
 import NewTour from "../tours/components/NewTour";
 
 import CardTour from "./components/CardTour/CardTour";
-import TextField from "@mui/material/TextField";
-import TablaListaReservas from "./TablaListaReservas/TablaListaReservas";
 
 // Data
 import authorsTableData from "layouts/tables/data/authorsTableData";
 import projectsTableData from "layouts/tables/data/projectsTableData";
 import toursTableData from "layouts/tours/data/toursTableData";
 import TourRegistrarCliente from "./components/TourRegistrarCliente/TourRegistrarCliente";
-import Modal from "./components/Modal/Modal";
-const Ejemmplo2 = ({ text }) => {
-  return (
-    <div>
-      <h1> {text}</h1>
-    </div>
-  );
-};
+
 function Tours() {
   const { columns, rows } = toursTableData();
 
   return (
     <DashboardLayout>
-      <Modal Component={null}></Modal>
-
-      {/* <DashboardNavbar /> */}
+      <DashboardNavbar />
       <h3>Listado de Tours</h3>
       <TourRegistrarCliente />
-
       <MDBox pt={6} pb={3}>
         <Grid container spacing={6}>
           {/* <Grid item xs={12}>
@@ -63,7 +51,7 @@ function Tours() {
 
           <Grid item xs={12}>
             <Card>
-              <MDBox
+              {/* <MDBox
                 mx={1}
                 mt={-3}
                 py={1}
@@ -76,21 +64,28 @@ function Tours() {
                 <MDTypography variant="h6" color="white">
                   Tours
                 </MDTypography>
-              </MDBox>
+              </MDBox> */}
 
-              <MDBox
-                pt={0}
-                /*style={{ backgroundColor: "rgb(0, 30, 60)", borderRadius: 20 }}*/
-              >
-                <TextField
-                  id="standard-search"
-                  label="Buscar..."
-                  type="search"
-                  variant="standard"
-                />
+              {/* <MDBox p={2}>
+                <Grid container spacing={1}>
+                  <Grid item xs={1} md={4}>
+                    <CardTour />
+                  </Grid>
+                  <Grid item xs={1} md={4}>
+                    <CardTour />
+                  </Grid>
+                </Grid>
+              </MDBox> */}
+              {/* Tabla Torus */}
+              <MDBox pt={2} /*style={{ backgroundColor: "rgb(0, 30, 60)", borderRadius: 20 }}*/>
+                {/* <CardTour />
+                <CardTour />
+                <CardTour /> */}
+
                 <DataTable
+                  canSearch={true}
                   table={{ columns, rows }}
-                  isSorted={true}
+                  isSorted={false}
                   entriesPerPage={false}
                   showTotalEntries={false}
                   noEndBorder
@@ -98,6 +93,34 @@ function Tours() {
               </MDBox>
             </Card>
           </Grid>
+          {/* 
+          <Grid item xs={12}>
+            <Card>
+              <MDBox
+                mx={2}
+                mt={-3}
+                py={3}
+                px={2}
+                variant="gradient"
+                bgColor="info"
+                borderRadius="lg"
+                coloredShadow="info"
+              >
+                <MDTypography variant="h6" color="white">
+                  Projects Table
+                </MDTypography>
+              </MDBox>
+              <MDBox pt={3}>
+                <DataTable
+                  table={{ columns: pColumns, rows: pRows }}
+                  isSorted={false}
+                  entriesPerPage={false}
+                  showTotalEntries={false}
+                  noEndBorder
+                />
+              </MDBox>
+            </Card>
+          </Grid> */}
         </Grid>
       </MDBox>
       {/* <Footer /> */}

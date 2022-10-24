@@ -39,6 +39,10 @@ export default function IncripcionInformacionDePago() {
 
   const handleChangeCheck = (event) => {
     setCheckIsAgencia(event.target.checked);
+    setInformacionPagos({
+      ...informacionPagos,
+      esAgencia: event.target.checked,
+    });
   };
 
   const handleChange = (event) => {
