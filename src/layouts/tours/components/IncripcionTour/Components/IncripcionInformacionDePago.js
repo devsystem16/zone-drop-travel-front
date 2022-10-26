@@ -31,6 +31,7 @@ export default function IncripcionInformacionDePago() {
   };
 
   useEffect(() => {
+    localStorage.setItem("current_component", "component-informacion-pago");
     if (recalcularValores) {
       calcularValor();
       setRecalcularValores(false);
@@ -100,6 +101,8 @@ export default function IncripcionInformacionDePago() {
           onChange={handleChange}
           type="search"
           variant="standard"
+          // defaultValue={0}
+          value={0}
         />
         <TextField
           style={{ width: widthText }}

@@ -12,11 +12,14 @@ import API from "../../../../Environment/config";
 import { RegistroTourClienteContext } from "../../context/RegistroTourClienteContext";
 import SeleccionHabitaciones from "../../components/IncripcionTour/Components/SeleccionHabitaciones";
 import { buscarAcompañante } from "../../../../Controllers/AcompañanteController";
+import { buscarCliente } from "../../../../Controllers/ClienteController";
+import Loading from "../../../../components/Loading/Loading";
 
 export default function FormularioRegistrarAcompañante() {
   const { acompañantes, setHabitaciones } = useContext(RegistroTourClienteContext);
 
-  const buscarCliente = (text) => {};
+  //
+
   return (
     <Box sx={{ flexGrow: 1 }}>
       <Grid container spacing={2}>
@@ -39,8 +42,9 @@ export default function FormularioRegistrarAcompañante() {
 }
 
 const FormularioAcompañante = () => {
+  const [isLoading, setIsLoading] = useState(false);
   const { acompañantes, setAcompañantes } = useContext(RegistroTourClienteContext);
-  const [tipoAcompañante, setTipoAcompañante] = useState({ descripcion: "adulto", id: -1 });
+  const [tipoAcompañante, setTipoAcompañante] = useState(null);
   const [acompañante, setAcompañante] = useState({
     id: -1,
     cliente_id: -1,
@@ -59,6 +63,7 @@ const FormularioAcompañante = () => {
   const [listaTiposAcompañante, setListaTiposAcompañante] = useState([]);
 
   useEffect(() => {
+    localStorage.setItem("current_component", "component-acompañantes");
     cargarTiposAcompañantePrecio();
   }, []);
 
@@ -76,10 +81,17 @@ const FormularioAcompañante = () => {
 
   const añadirTipoAcompañante = () => {
     if (acompañante.nombres === "") {
-      alert("Ingrese un nombre");
+      alertify.error("Ingrese un nombre");
       return;
     }
-
+    if (acompañante.apellidos === "") {
+      alertify.error("Ingrese un nombre");
+      return;
+    }
+    if (tipoAcompañante === null) {
+      alertify.error("Seleccione el tipo de acompañante");
+      return;
+    }
     var newAcom = {
       ...acompañante,
 
@@ -121,11 +133,24 @@ const FormularioAcompañante = () => {
     });
   };
 
+  // const find = async () => {
+  //   const data = await buscarAcompañante(acompañante.documento);
+  //   if (data.encontro) {
+  //     setAcompañante(data.acompañante);
+  //   }
+  // };
+
   const find = async () => {
-    const data = await buscarAcompañante(acompañante.documento);
+    if (acompañante.documento === "") return;
+    setIsLoading(true);
+    const data = await buscarCliente(acompañante.documento);
     if (data.encontro) {
-      setAcompañante(data.acompañante);
+      setAcompañante(data.cliente);
+    } else {
+      alertify.error("No encontrado");
+      // resetear("cliente");
     }
+    setIsLoading(false);
   };
 
   return (
@@ -138,6 +163,7 @@ const FormularioAcompañante = () => {
       autoComplete="off"
       style={{ backgroundColor: "#f4f4f4", borderRadius: 20 }}
     >
+      <Loading open={isLoading}></Loading>
       <div>
         <TextField
           required
@@ -170,7 +196,7 @@ const FormularioAcompañante = () => {
         defaultValue={acompañante.nombres}
         variant="standard"
         helperText="Nombres del Titular de la reserva"
-      />{" "}
+      />
       <TextField
         required
         id="standard-required"

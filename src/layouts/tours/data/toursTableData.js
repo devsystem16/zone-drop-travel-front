@@ -66,6 +66,7 @@ export default function data() {
                   <>
                     <OptionFechaSalida
                       fecha={fecha}
+                      tour={tour}
                       onClick={clicFecha}
                       onDelete={clicFecha}
                       setModalTourRegistroCliente={setModalTourRegistroCliente}

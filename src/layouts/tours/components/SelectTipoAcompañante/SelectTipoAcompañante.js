@@ -26,11 +26,11 @@ const SelectTipoAcompañante = ({ handleChange, value, ProgramacionFechaId }) =>
       <TextField
         id="standard-select-currency"
         select
-        label="Tipo de Acompañante"
+        label="Tipo de Cliente"
         value={value}
         onChange={handleChange}
         defaultValue={value}
-        helperText="El tipo de acompañante define el precio."
+        helperText="El tipo de cliente define el precio."
         variant="standard"
       >
         {listTipoAcompañante.map((option) => (

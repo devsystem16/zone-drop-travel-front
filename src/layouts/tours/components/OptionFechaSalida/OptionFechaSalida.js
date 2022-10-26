@@ -29,6 +29,7 @@ export default function OptionFechaSalida({ tour, fecha, onClick, onDelete }) {
         setModalTourRegistroCliente(true);
       }
       if (e.target.textContent == "Ver Inscritos") {
+        // alert(JSON.stringify(tour));
         setComponent(
           <TablaListaReservas
             tour={tour}

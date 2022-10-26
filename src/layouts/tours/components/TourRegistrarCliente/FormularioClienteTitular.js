@@ -6,15 +6,17 @@ import SearchIcon from "@mui/icons-material/Search";
 import Button from "@mui/material/Button";
 import ListaGenero from "./ListaGenero.js";
 import { RegistroTourClienteContext } from "../../context/RegistroTourClienteContext";
+import { GlobalConfigContext } from "../../context/GlobalConfigContext";
 import SelectTipoAcompañante from "../SelectTipoAcompañante/SelectTipoAcompañante.js";
 import Loading from "../../../../components/Loading/Loading";
-
 import { buscarCliente } from "../../../../Controllers/ClienteController";
+import iziToast from "izitoast";
 
 export default function FormularioClienteTitular() {
-  const { cliente, setCliente, guardarCliente } = useContext(RegistroTourClienteContext);
+  const { cliente, setCliente, guardarCliente, resetear } = useContext(RegistroTourClienteContext);
   const [tipoAcompañante, setTipoAcompañante] = useState({ descripcion: "adulto", id: -1 });
   const [isLoading, setIsLoading] = useState(false);
+
   const handleChange = (event) => {
     const { name, value } = event.target;
 
@@ -31,10 +33,14 @@ export default function FormularioClienteTitular() {
     }
   };
   const find = async () => {
+    if (cliente.documento === "") return;
     setIsLoading(true);
     const data = await buscarCliente(cliente.documento);
     if (data.encontro) {
       setCliente(data.cliente);
+    } else {
+      // alertify.error("No encontrado");
+      // resetear("cliente");
     }
     setIsLoading(false);
   };
@@ -46,7 +52,9 @@ export default function FormularioClienteTitular() {
     setCliente(newValues);
     setTipoAcompañante(event.target.value);
   };
-
+  useEffect(() => {
+    localStorage.setItem("current_component", "component-registro-titular");
+  }, []);
   return (
     <Box
       component="form"
@@ -56,7 +64,7 @@ export default function FormularioClienteTitular() {
       noValidates
       autoComplete="off"
     >
-      <Loading open={isLoading}></Loading>;
+      <Loading open={isLoading}></Loading>
       <div>
         <TextField
           required
@@ -65,6 +73,7 @@ export default function FormularioClienteTitular() {
           name="documento"
           onChange={handleChange}
           onKeyDown={handleKeyDown}
+          onBlur={find}
           value={cliente.documento}
           style={{ width: 350 }}
           defaultValue={cliente.documento}

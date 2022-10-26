@@ -1,5 +1,5 @@
 import * as React from "react";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 
 import Radio from "@mui/material/Radio";
 import RadioGroup from "@mui/material/RadioGroup";
@@ -19,6 +19,7 @@ export default function SeleccionLugaresSalida({ setValues }) {
   };
 
   useEffect(() => {
+    localStorage.setItem("current_component", "component-lugares-salida");
     cargarLugaresSalidaTour();
   }, []);
   const cargarLugaresSalidaTour = async () => {

@@ -33,7 +33,7 @@ import CardTour from "./components/CardTour/CardTour";
 import authorsTableData from "layouts/tables/data/authorsTableData";
 import projectsTableData from "layouts/tables/data/projectsTableData";
 import toursTableData from "layouts/tours/data/toursTableData";
-import TourRegistrarCliente from "./components/TourRegistrarCliente/TourRegistrarCliente";
+import TourRegistrarCliente from "./components/TourRegistrarCliente/ModalNuevaReserva";
 
 function Tours() {
   const { columns, rows } = toursTableData();

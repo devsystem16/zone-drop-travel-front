@@ -9,6 +9,7 @@ import Typography from "@mui/material/Typography";
 import { RegistroTourClienteContext } from "../../context/RegistroTourClienteContext";
 
 import Switch from "./Switch";
+import alertify from "alertifyjs";
 
 const steps = [
   "Registro/busqueda Titular",
@@ -18,7 +19,7 @@ const steps = [
 ];
 
 export default function StepsIncripcionTour() {
-  const { registrarInscripcion } = useContext(RegistroTourClienteContext);
+  const { registrarInscripcion, validar } = useContext(RegistroTourClienteContext);
   const [activeStep, setActiveStep] = React.useState(0);
   const [skipped, setSkipped] = React.useState(new Set());
 
@@ -31,6 +32,13 @@ export default function StepsIncripcionTour() {
   };
 
   const handleNext = (e) => {
+    const data = validar(localStorage.getItem("current_component"));
+
+    if (!data.estado) {
+      alertify.error(data.mensaje);
+      return;
+    }
+
     if (e.target.firstChild.nodeValue == "Guardar") {
       registrarInscripcion();
     }

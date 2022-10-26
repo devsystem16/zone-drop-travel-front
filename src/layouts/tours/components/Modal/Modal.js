@@ -10,18 +10,12 @@ import { GlobalConfigContext } from "../../context/GlobalConfigContext";
 export default function Modal({ titulo }) {
   const { modalGlobal, setModalGlobal, Component } = useContext(GlobalConfigContext);
 
-  const handleClickOpen = () => {
-    setModalGlobal(true);
-  };
   const handleClose = () => {
     setModalGlobal(false);
   };
 
   return (
     <React.Fragment>
-      <Button variant="outlined" onClick={handleClickOpen}>
-        Open max-width dialog
-      </Button>
       <Dialog fullWidth={true} maxWidth="xl" open={modalGlobal} onClose={handleClose}>
         <DialogTitle> {titulo}</DialogTitle>
         <DialogContent>
