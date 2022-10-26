@@ -14,8 +14,8 @@ Coded by www.creative-tim.com
 */
 
 // react-router-dom components
-import { Link } from "react-router-dom";
-
+import { Link, useNavigate } from "react-router-dom";
+import { useState } from "react";
 // @mui material components
 import Card from "@mui/material/Card";
 import Checkbox from "@mui/material/Checkbox";
@@ -25,7 +25,7 @@ import MDBox from "components/MDBox";
 import MDTypography from "components/MDTypography";
 import MDInput from "components/MDInput";
 import MDButton from "components/MDButton";
-
+import DefaultNavbarLink from "examples/Navbars/DefaultNavbar/DefaultNavbarLink";
 // Authentication layout components
 import CoverLayout from "layouts/authentication/components/CoverLayout";
 
@@ -33,6 +33,19 @@ import CoverLayout from "layouts/authentication/components/CoverLayout";
 import bgImage from "assets/images/bg-sign-up-cover.jpeg";
 
 function Cover() {
+  const [user, setUser] = useState("");
+  const [password, setPassword] = useState("");
+
+  const login = () => {
+    // let navigate = useNavigate();
+    // navigate("/dashboard");
+    if (user === "marco" && password === "monta") {
+      localStorage.setItem("isLogin", true);
+      location.href = "/dashboard";
+    } else alertify.error("Credenciales incorrectas.");
+    // alert("Ingresar");
+    // history.push("/dashboard");
+  };
   return (
     <CoverLayout image={bgImage}>
       <Card>
@@ -48,34 +61,46 @@ function Cover() {
           textAlign="center"
         >
           <MDTypography variant="h4" fontWeight="medium" color="white" mt={1}>
-            Join us today
+            Drop Zone Travel
           </MDTypography>
           <MDTypography display="block" variant="button" color="white" my={1}>
-            Enter your email and password to register
+            Ingrese sus credenciales para ingresar
           </MDTypography>
         </MDBox>
         <MDBox pt={4} pb={3} px={3}>
           <MDBox component="form" role="form">
-            <MDBox mb={2}>
+            {/* <MDBox mb={2}>
               <MDInput type="text" label="Name" variant="standard" fullWidth />
+            </MDBox> */}
+            <MDBox mb={2}>
+              <MDInput
+                type="email"
+                onChange={(e) => setUser(e.target.value)}
+                label="Email"
+                variant="standard"
+                fullWidth
+              />
             </MDBox>
             <MDBox mb={2}>
-              <MDInput type="email" label="Email" variant="standard" fullWidth />
-            </MDBox>
-            <MDBox mb={2}>
-              <MDInput type="password" label="Password" variant="standard" fullWidth />
+              <MDInput
+                type="password"
+                onChange={(e) => setPassword(e.target.value)}
+                label="Password"
+                variant="standard"
+                fullWidth
+              />
             </MDBox>
             <MDBox display="flex" alignItems="center" ml={-1}>
-              <Checkbox />
-              <MDTypography
+              {/* <Checkbox /> */}
+              {/* <MDTypography
                 variant="button"
                 fontWeight="regular"
                 color="text"
                 sx={{ cursor: "pointer", userSelect: "none", ml: -1 }}
               >
                 &nbsp;&nbsp;I agree the&nbsp;
-              </MDTypography>
-              <MDTypography
+              </MDTypography> */}
+              {/* <MDTypography
                 component="a"
                 href="#"
                 variant="button"
@@ -84,14 +109,20 @@ function Cover() {
                 textGradient
               >
                 Terms and Conditions
-              </MDTypography>
+              </MDTypography> */}
             </MDBox>
             <MDBox mt={4} mb={1}>
-              <MDButton variant="gradient" color="info" fullWidth>
-                sign in
+              {/* <DefaultNavbarLink icon="key" name="sign in" route="/authentication/sign-in"> */}
+              <MDButton onClick={login} variant="gradient" color="info" fullWidth>
+                Ingresar
               </MDButton>
+              {/* </DefaultNavbarLink> */}
+
+              {/* <MDButton variant="gradient" color="info" fullWidth>
+                Ingresar
+              </MDButton> */}
             </MDBox>
-            <MDBox mt={3} mb={1} textAlign="center">
+            {/* <MDBox mt={3} mb={1} textAlign="center">
               <MDTypography variant="button" color="text">
                 Already have an account?{" "}
                 <MDTypography
@@ -102,10 +133,10 @@ function Cover() {
                   fontWeight="medium"
                   textGradient
                 >
-                  Sign In
+                 Iniciar Sesion
                 </MDTypography>
               </MDTypography>
-            </MDBox>
+            </MDBox> */}
           </MDBox>
         </MDBox>
       </Card>

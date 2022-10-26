@@ -50,7 +50,7 @@ function Footer({ light }) {
             color={light ? "white" : "text"}
             fontSize={size.sm}
           >
-            &copy; {new Date().getFullYear()}, made with
+            &copy; {new Date().getFullYear()}, Drop Zone Travel
             <MDBox fontSize={size.md} color={light ? "white" : "dark"} mb={-0.5} mx={0.25}>
               <Icon color="inherit" fontSize="inherit">
                 favorite
@@ -59,10 +59,10 @@ function Footer({ light }) {
             by
             <Link href="https://www.creative-tim.com/" target="_blank">
               <MDTypography variant="button" fontWeight="medium" color={light ? "white" : "dark"}>
-                &nbsp;Creative Tim&nbsp;
+                &nbsp;desarrollos16&nbsp;
               </MDTypography>
             </Link>
-            for a better web.
+            todos los derechos reservados.
           </MDBox>
           <MDBox
             component="ul"
@@ -88,7 +88,7 @@ function Footer({ light }) {
                   fontWeight="regular"
                   color={light ? "white" : "dark"}
                 >
-                  Creative Tim
+                  {/* Creative Tim */}
                 </MDTypography>
               </Link>
             </MDBox>
@@ -99,7 +99,7 @@ function Footer({ light }) {
                   fontWeight="regular"
                   color={light ? "white" : "dark"}
                 >
-                  About Us
+                  {/* About Us */}
                 </MDTypography>
               </Link>
             </MDBox>
@@ -110,7 +110,7 @@ function Footer({ light }) {
                   fontWeight="regular"
                   color={light ? "white" : "dark"}
                 >
-                  Blog
+                  {/* Blog */}
                 </MDTypography>
               </Link>
             </MDBox>
@@ -121,7 +121,7 @@ function Footer({ light }) {
                   fontWeight="regular"
                   color={light ? "white" : "dark"}
                 >
-                  License
+                  {/* License */}
                 </MDTypography>
               </Link>
             </MDBox>
