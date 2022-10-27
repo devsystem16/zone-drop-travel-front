@@ -7,25 +7,39 @@ import FormControl from "@mui/material/FormControl";
 
 import API from "../../Environment/config";
 
-const SelectBancos = ({ banco, setBanco }) => {
+const SelectBancos = ({ setBanco, defaultValue = "" }) => {
   const [bancos, setBancos] = useState([]);
+  const [defaultBank, setDefaultBank] = useState("");
 
   useEffect(() => {
     cargarBancos();
   }, []);
 
+  const EstsablecerBancoDefault = (array) => {
+    if (defaultValue !== "") {
+      setDefaultBank(defaultValue);
+      return;
+    }
+    array.map((obj) => {
+      if (obj.default === 1) {
+        setDefaultBank(obj.descripcion);
+        return;
+      }
+    });
+  };
   const cargarBancos = async () => {
     try {
       var response = await API.get("/bancos");
       setBancos(response.data);
+      EstsablecerBancoDefault(response.data);
     } catch (error) {
-      alert("Ocurrió un error.", error);
-      console.error(error);
+      alertify.error("Ocurrió un error. Al carcar los bancos." + error);
       return;
     }
   };
   const handleChangeSelect = (event) => {
-    setBanco(event.target.value);
+    setBanco(JSON.parse(event.explicitOriginalTarget.attributes.objetoatributos.value));
+    setDefaultBank(event.target.value);
   };
 
   return (
@@ -37,13 +51,17 @@ const SelectBancos = ({ banco, setBanco }) => {
           <Select
             labelId="demo-simple-select-label"
             id="demo-simple-select"
-            value={banco}
+            value={defaultBank}
             label="Bancos"
             onChange={handleChangeSelect}
           >
             {bancos.map((banc) => {
               return (
-                <MenuItem key={banc.id} value={banc.id}>
+                <MenuItem
+                  objetoAtributos={JSON.stringify(banc)}
+                  key={banc.id}
+                  value={banc.descripcion}
+                >
                   {banc.descripcion}
                 </MenuItem>
               );

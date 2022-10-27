@@ -9,10 +9,19 @@ import Switch from "@mui/material/Switch";
 import { RegistroTourClienteContext } from "../../../context/RegistroTourClienteContext";
 
 import SelectBancos from "../../../../../components/SelectBancos/SelectBancos";
-
+import SelectTipoTransaccion from "../../../../../components/SelectTipoTransaccion/SelectTipoTransaccion";
+import InputMoneda from "./InputMoneda";
 export default function IncripcionInformacionDePago() {
-  const { cliente, acompañantes, informacionPagos, setInformacionPagos, banco, setBanco } =
-    useContext(RegistroTourClienteContext);
+  const [precioDistribuidor, setPrecioDistribuidor] = useState(0);
+  const {
+    cliente,
+    acompañantes,
+    informacionPagos,
+    setInformacionPagos,
+    banco,
+    setBanco,
+    setTipoTransaccion,
+  } = useContext(RegistroTourClienteContext);
 
   const [totalCalculado, setTotalCalculado] = useState(0);
   const [recalcularValores, setRecalcularValores] = useState(true);
@@ -85,7 +94,7 @@ export default function IncripcionInformacionDePago() {
               name="descuentoAgencia"
               onChange={handleChange}
               label="$ Comisión Agencia"
-              type="search"
+              type="number"
               variant="standard"
             />
           ) : null}
@@ -104,6 +113,13 @@ export default function IncripcionInformacionDePago() {
           // defaultValue={0}
           value={0}
         />
+
+        <InputMoneda
+          label="P. Mayorista"
+          helperText="Precio para ventas al mayoreo"
+          onChangeText={setPrecioDistribuidor}
+        />
+
         <TextField
           style={{ width: widthText }}
           id="standard-search"
@@ -115,16 +131,21 @@ export default function IncripcionInformacionDePago() {
         />
       </div>
       <div>
-        <SelectBancos banco={banco} setBanco={setBanco} />
+        <SelectBancos setBanco={setBanco} defaultValue="" />
       </div>
-      <TextField
+      <SelectTipoTransaccion
+        titulo="Tipo de transacción"
+        pathApi="/tipo-transacciones/list-select"
+        setGlobalValue={setTipoTransaccion}
+      ></SelectTipoTransaccion>
+      {/* <TextField
         id="standard-search"
         name="tipoTransaccion"
         onChange={handleChange}
         label="Tipo Transaccion"
         type="search"
         variant="standard"
-      />
+      /> */}
       <TextField
         id="standard-search"
         name="numeroDeposito"

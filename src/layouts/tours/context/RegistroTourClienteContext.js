@@ -30,6 +30,7 @@ const RegistroTourClienteProvider = (props) => {
   const [banco, setBanco] = useState(null);
   const [habitciones, setHabitaciones] = useState([]);
   const [lugarSalida, SetLugarSalida] = useState(null);
+  const [tipoTransaccion, setTipoTransaccion] = useState(null);
   const [currentComponent, setCurrentComponent] = useState({
     complete: false,
     component: "not load",
@@ -39,7 +40,6 @@ const RegistroTourClienteProvider = (props) => {
     descuentoAgencia: 0,
     abono: 0,
     descuento: 0,
-    tipoTransaccion: "",
     numeroDeposito: "",
     fechaDeposito: "",
     observaciones: "",
@@ -65,12 +65,12 @@ const RegistroTourClienteProvider = (props) => {
       });
     }
     if (opcion === "informacionPagos" || "all") {
+      setTipoTransaccion(null);
       setInformacionPagos({
         esAgencia: false,
         descuentoAgencia: 0,
         abono: 0,
         descuento: 0,
-        tipoTransaccion: "",
         numeroDeposito: "",
         fechaDeposito: "",
         observaciones: "",
@@ -165,15 +165,21 @@ const RegistroTourClienteProvider = (props) => {
 
   const registrarInscripcion = async () => {
     setModalTourRegistroCliente(false);
+
+    var infoPagos = {
+      ...informacionPagos,
+      tipoTransaccion: tipoTransaccion,
+    };
     var reserva = {
       cliente: cliente,
       programacion_fecha_id: localStorage.getItem("programacion_fecha_id"),
       acompaniantes: acompañantes,
-      informacionPagos: informacionPagos,
-      bancoId: banco,
+      informacionPagos: infoPagos,
+      banco: banco,
       habitaciones: habitciones,
       lugarSalida: lugarSalida,
     };
+
     console.log("DATOS DE RESERVA", reserva);
     try {
       var response = await API.post("/reserva", reserva);
@@ -210,6 +216,8 @@ const RegistroTourClienteProvider = (props) => {
         currentComponent,
         setCurrentComponent,
         validar,
+        tipoTransaccion,
+        setTipoTransaccion,
       }}
     >
       {props.children}
