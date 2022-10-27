@@ -67,6 +67,10 @@ export default function IncripcionInformacionDePago() {
     }
   };
 
+  const setValueInputMoneda = (e) => {
+    console.log(e);
+  };
+
   const widthText = "7%";
   return (
     <Box
@@ -88,47 +92,18 @@ export default function IncripcionInformacionDePago() {
             label="Aplica Descuento por Agencia"
           />
           {checkIsAgencia ? (
-            <TextField
-              id="standard-search"
-              required
-              name="descuentoAgencia"
-              onChange={handleChange}
+            <InputMoneda
               label="$ Comisión Agencia"
-              type="number"
-              variant="standard"
-            />
+              name="descuentoAgencia"
+              setValue={handleChange}
+            ></InputMoneda>
           ) : null}
         </FormGroup>
       </div>
 
       <div>
-        <TextField
-          style={{ width: widthText }}
-          id="standard-search"
-          label="Descuento"
-          name="descuento"
-          onChange={handleChange}
-          type="search"
-          variant="standard"
-          // defaultValue={0}
-          value={0}
-        />
-
-        <InputMoneda
-          label="P. Mayorista"
-          helperText="Precio para ventas al mayoreo"
-          onChangeText={setPrecioDistribuidor}
-        />
-
-        <TextField
-          style={{ width: widthText }}
-          id="standard-search"
-          label="Abono"
-          name="abono"
-          onChange={handleChange}
-          type="search"
-          variant="standard"
-        />
+        <InputMoneda label="Descuento" name="descuento" setValue={handleChange}></InputMoneda>
+        <InputMoneda label="Abono" name="abono" setValue={handleChange}></InputMoneda>
       </div>
       <div>
         <SelectBancos setBanco={setBanco} defaultValue="" />
@@ -138,14 +113,7 @@ export default function IncripcionInformacionDePago() {
         pathApi="/tipo-transacciones/list-select"
         setGlobalValue={setTipoTransaccion}
       ></SelectTipoTransaccion>
-      {/* <TextField
-        id="standard-search"
-        name="tipoTransaccion"
-        onChange={handleChange}
-        label="Tipo Transaccion"
-        type="search"
-        variant="standard"
-      /> */}
+
       <TextField
         id="standard-search"
         name="numeroDeposito"
