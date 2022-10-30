@@ -14,6 +14,7 @@ export default function TourLugaresSalida() {
   };
 
   useEffect(() => {
+    localStorage.setItem("current_component", "component-lugares-salida");
     cargarLugaresSalida();
   }, []);
 

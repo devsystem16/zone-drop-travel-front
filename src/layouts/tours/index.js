@@ -1,42 +1,23 @@
-/**
-=========================================================
-* Material Dashboard 2 React - v2.1.0
-=========================================================
+import React, { useContext } from "react";
 
-* Product Page: https://www.creative-tim.com/product/material-dashboard-react
-* Copyright 2022 Creative Tim (https://www.creative-tim.com)
-
-Coded by www.creative-tim.com
-
- =========================================================
-
-* The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-*/
-
-// @mui material components
 import Grid from "@mui/material/Grid";
 import Card from "@mui/material/Card";
-
 import MDBox from "components/MDBox";
 import MDTypography from "components/MDTypography";
-
 import DashboardLayout from "examples/LayoutContainers/DashboardLayout";
-import DashboardNavbar from "examples/Navbars/DashboardNavbar";
-import DefaultProjectCard from "examples/Cards/ProjectCards/DefaultProjectCard";
 import DataTable from "examples/Tables/DataTable";
-
 import NewTour from "../tours/components/NewTour";
-
-import CardTour from "./components/CardTour/CardTour";
 import TextField from "@mui/material/TextField";
-import TablaListaReservas from "./TablaListaReservas/TablaListaReservas";
+
+import Fab from "@mui/material/Fab";
+import AddIcon from "@mui/icons-material/Add";
 
 // Data
-import authorsTableData from "layouts/tables/data/authorsTableData";
-import projectsTableData from "layouts/tables/data/projectsTableData";
 import toursTableData from "layouts/tours/data/toursTableData";
-import TourRegistrarCliente from "./components/TourRegistrarCliente/ModalNuevaReserva";
+import ModalNuevaReserva from "./components/TourRegistrarCliente/ModalNuevaReserva";
 import Modal from "./components/Modal/Modal";
+
+import { GlobalConfigContext } from "./context/GlobalConfigContext";
 const Ejemmplo2 = ({ text }) => {
   return (
     <div>
@@ -45,7 +26,13 @@ const Ejemmplo2 = ({ text }) => {
   );
 };
 function Tours() {
+  const { setModalGlobal, setComponent } = useContext(GlobalConfigContext);
   const { columns, rows } = toursTableData();
+
+  const nuevoTour = () => {
+    setComponent(<NewTour />);
+    setModalGlobal(true);
+  };
 
   return (
     <DashboardLayout>
@@ -53,14 +40,10 @@ function Tours() {
 
       {/* <DashboardNavbar /> */}
       <h3>Listado de Tours</h3>
-      <TourRegistrarCliente />
+      <ModalNuevaReserva />
 
       <MDBox pt={6} pb={3}>
         <Grid container spacing={6}>
-          {/* <Grid item xs={12}>
-            <NewTour></NewTour>
-          </Grid> */}
-
           <Grid item xs={12}>
             <Card>
               <MDBox
@@ -78,16 +61,25 @@ function Tours() {
                 </MDTypography>
               </MDBox>
 
-              <MDBox
-                pt={0}
-                /*style={{ backgroundColor: "rgb(0, 30, 60)", borderRadius: 20 }}*/
-              >
-                <TextField
-                  id="standard-search"
-                  label="Buscar..."
-                  type="search"
-                  variant="standard"
-                />
+              <MDBox pt={0}>
+                <div style={{ textAlign: "center", width: "100%" }}>
+                  <TextField
+                    id="standard-search"
+                    label="Buscar..."
+                    type="search"
+                    variant="standard"
+                  />
+                  <Fab
+                    title="Añadir Nuevo Tour"
+                    style={{ marginLeft: "78%" }}
+                    color="secondary"
+                    onClick={nuevoTour}
+                    aria-label="add"
+                  >
+                    <AddIcon />
+                  </Fab>
+                </div>
+
                 <DataTable
                   table={{ columns, rows }}
                   isSorted={true}

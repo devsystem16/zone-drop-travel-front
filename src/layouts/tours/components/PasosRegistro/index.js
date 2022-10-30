@@ -12,10 +12,10 @@ import Switch from "./Switch";
 
 const steps = ["Información del Tour", "Precios", "Programación de Fechas", "Lugares de Salida"];
 
-export default function PasosRegistro() {
+export default function PasosRegistro({ editing, tour }) {
   const [activeStep, setActiveStep] = React.useState(0);
   const [skipped, setSkipped] = React.useState(new Set());
-  const { guardarTour } = useContext(TourContext);
+  const { guardarTour, validar } = useContext(TourContext);
 
   const isStepOptional = (step) => {
     return step === 1;
@@ -26,6 +26,12 @@ export default function PasosRegistro() {
   };
 
   const handleNext = (e) => {
+    const data = validar(localStorage.getItem("current_component"));
+    if (!data.estado) {
+      alertify.error(data.mensaje);
+      return;
+    }
+
     if (e.target.firstChild.nodeValue == "Guardar") {
       guardarTour();
     }
@@ -78,7 +84,7 @@ export default function PasosRegistro() {
       ) : (
         <React.Fragment>
           <Typography sx={{ mt: 2, mb: 1 }}>
-            <Switch step={activeStep + 1} />
+            <Switch editing={editing} tour={tour} step={activeStep + 1} />
           </Typography>
           <Box sx={{ display: "flex", flexDirection: "row", pt: 2 }}>
             <Button color="inherit" disabled={activeStep === 0} onClick={handleBack} sx={{ mr: 1 }}>

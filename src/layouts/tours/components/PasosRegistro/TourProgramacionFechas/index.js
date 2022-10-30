@@ -10,6 +10,7 @@ const TourProgramacionFechas = () => {
       sx={{
         "& .MuiTextField-root": { m: 1, width: "25ch" },
       }}
+      style={{ height: "20ch" }}
       noValidate
       autoComplete="off"
     >

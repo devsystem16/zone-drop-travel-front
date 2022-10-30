@@ -7,22 +7,35 @@ import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import { GlobalConfigContext } from "../../context/GlobalConfigContext";
-export default function Modal({ titulo }) {
+
+export default function Modal({ titulo = "" }) {
   const { modalGlobal, setModalGlobal, Component } = useContext(GlobalConfigContext);
 
-  const handleClose = () => {
-    setModalGlobal(false);
+  const handleClose = (e) => {
+    console.log(e.target.textContent);
+    if (e.target.textContent === "Cerrar") setModalGlobal(false);
   };
 
   return (
     <React.Fragment>
-      <Dialog fullWidth={true} maxWidth="xl" open={modalGlobal} onClose={handleClose}>
+      <Dialog
+        // sx={{ "& .MuiDialog-paper": { width: "80%", height: "80%", maxHeight: 935 } }}
+        // fullScreen={true}
+        fullWidth={true}
+        maxWidth="xl"
+        open={modalGlobal}
+        onClose={handleClose}
+      >
         <DialogTitle> {titulo}</DialogTitle>
         <DialogContent>
           <DialogContentText>{Component}</DialogContentText>
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleClose}>Cerrar</Button>
+          <Button onClick={handleClose} variant="secondary" color="error">
+            Cerrar
+          </Button>
+
+          {/* <Button onClick={handleClose}>Cerrar</Button> */}
         </DialogActions>
       </Dialog>
     </React.Fragment>

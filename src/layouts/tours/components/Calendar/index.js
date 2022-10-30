@@ -1,4 +1,4 @@
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 import DatePicker from "react-multi-date-picker";
 import DatePanel from "react-multi-date-picker/plugins/date_panel";
 import { TourContext } from "../../context/TourContext";
@@ -27,6 +27,9 @@ export default function Example() {
     "Dic",
   ];
 
+  useEffect(() => {
+    localStorage.setItem("current_component", "component-programacion-fechas");
+  }, []);
   return (
     <>
       <DatePicker
@@ -44,13 +47,7 @@ export default function Example() {
             jsonDatos.fecha = fecha;
             jsonDatos.observacion = "";
             jsonDatos.estado = true;
-            jsonDatos.precios = {
-              adultos: precios.adultos,
-              terceraEdad: precios.terceraEdad,
-              ninios: precios.ninios,
-              infantes: precios.infantes,
-            };
-
+            jsonDatos.precios = precios;
             arrayProgramacionFechas.push(jsonDatos);
           });
 

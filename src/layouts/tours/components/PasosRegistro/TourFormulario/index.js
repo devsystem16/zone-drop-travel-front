@@ -1,11 +1,11 @@
 import * as React from "react";
-import { useState, useContext } from "react";
+import { useState, useContext, useEffect } from "react";
 import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
 
 import { TourContext } from "../../../context/TourContext";
 
-export default function TourFormulario() {
+export default function TourFormulario({ editing, dataTour }) {
   const { tour, setTour } = useContext(TourContext);
 
   const handleChange = (event) => {
@@ -18,6 +18,17 @@ export default function TourFormulario() {
     setTour(newValues);
   };
 
+  useEffect(() => {
+    localStorage.setItem("current_component", "component-informacion-tour");
+    if (editing) setTour(dataTour);
+  }, []);
+
+  function replaceAll(str, find, replace) {
+    return str.replace(new RegExp(escapeRegExp(find), "g"), replace);
+  }
+  function escapeRegExp(string) {
+    return string.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"); // $& means the whole matched string
+  }
   return (
     <Box
       component="form"
@@ -38,7 +49,7 @@ export default function TourFormulario() {
           name="titulo"
           onChange={handleChange}
           style={{ width: 550 }}
-          defaultValue={tour.titulo}
+          defaultValue={replaceAll(tour.titulo, "<br />", "\n")}
           variant="standard"
           helperText="Lugar del Tour, P. Ej: Máncora "
         />
@@ -48,7 +59,7 @@ export default function TourFormulario() {
           label="Duracion"
           name="duracion"
           onChange={handleChange}
-          defaultValue={tour.duracion}
+          defaultValue={replaceAll(tour.duracion, "<br />", "\n")}
           multiline
           style={{ width: 230 }}
           variant="standard"
@@ -64,7 +75,7 @@ export default function TourFormulario() {
           //onChange={(e) => setDetalles(e.target.value)}
           multiline
           style={{ width: 800 }}
-          defaultValue={tour.detalles}
+          defaultValue={replaceAll(tour.detalles, "<br />", "\n")}
           variant="standard"
           helperText="Describa brevemente lo que el cliente disfrutará del tour."
         />
@@ -77,7 +88,7 @@ export default function TourFormulario() {
           onChange={handleChange}
           //onChange={(e) => setIncluye(e.target.value)}
           style={{ width: 400 }}
-          defaultValue={tour.incluye}
+          defaultValue={replaceAll(tour.incluye, "<br />", "\n")}
           variant="standard"
           helperText="¿Qué se incluye en el Tour? P. Ej: Transporte, Seguro, etc."
         />
@@ -89,7 +100,7 @@ export default function TourFormulario() {
           onChange={handleChange}
           multiline
           style={{ width: 400 }}
-          defaultValue={tour.noIncluye}
+          defaultValue={replaceAll(tour.noIncluye, "<br />", "\n")}
           variant="standard"
           helperText="¿Qué NO incluye en el Tour? P. Ej: Gastos personales, Comidas extras, etc."
         />
@@ -103,7 +114,7 @@ export default function TourFormulario() {
           onChange={handleChange}
           //onChange={(e) => setInformacionAdicional(e.target.value)}
           style={{ width: 800 }}
-          defaultValue={tour.informacionAdicional}
+          defaultValue={replaceAll(tour.informacionAdicional, "<br />", "\n")}
           variant="standard"
           helperText="Añada aqui la información Adicional que desee, por Ej: los costos para reservar."
         />

@@ -14,27 +14,9 @@ const TourProvider = (props) => {
     noIncluye: "",
     informacionAdicional: "",
     lugaresSalidas: null,
+    programacionFechas: null,
   });
-
-  const [precios, setPrecios] = useState({
-    adultos: {
-      id: "1",
-      valor: "0",
-    },
-    terceraEdad: {
-      id: "2",
-      valor: "0",
-    },
-    niños: {
-      id: "3",
-      valor: "0",
-    },
-    infantes: {
-      id: "4",
-      valor: "0",
-    },
-  });
-
+  const [precios, setPrecios] = useState({});
   const [listLugaresSalida, setListLugaresSalida] = useState([]);
 
   const guardarTour = async () => {
@@ -47,7 +29,6 @@ const TourProvider = (props) => {
     setTour(jsonDatos);
 
     const response = await API.post("/tour", jsonDatos);
-
     if (response.status === 200) {
       setTour({
         titulo: "",
@@ -59,35 +40,65 @@ const TourProvider = (props) => {
         noIncluye: "",
         informacionAdicional: "",
         lugaresSalidas: null,
+        programacionFechas: null,
       });
-      setPrecios({
-        adultos: {
-          id: "1",
-          valor: "0",
-        },
-        terceraEdad: {
-          id: "2",
-          valor: "0",
-        },
-        niños: {
-          id: "3",
-          valor: "0",
-        },
-        infantes: {
-          id: "4",
-          valor: "0",
-        },
-      });
-      alert("Todo Guardado");
+      setPrecios({});
+      setListLugaresSalida([]);
+      alertify.success("Guardado correctamente.");
     }
-    setListLugaresSalida([]);
-
-    // alert(JSON.stringify(response));
+    alertify.error("Error al guardar");
+    console.log(response);
   };
+
+  const validar = (option) => {
+    switch (option) {
+      case "component-informacion-tour":
+        return validarInformacionTour();
+
+      case "component-registro-precios":
+        return validarInformacionPrecios();
+
+      case "component-programacion-fechas":
+        return validarInformacionFechas();
+
+      case "component-lugares-salida":
+        return validarLugaresSalida();
+    }
+    return { estado: true, mensaje: "Datos correctos" };
+  };
+
+  const validarInformacionTour = () => {
+    if (tour.titulo === "") return { estado: false, mensaje: "Ingrese el titulo del Tour" };
+    if (tour.duracion === "") return { estado: false, mensaje: "Falta la duración del tour" };
+    if (tour.detalles === "") return { estado: false, mensaje: "Ingrese los detalles" };
+    if (tour.incluye === "")
+      return { estado: false, mensaje: "Falta colocar que servicios incluye el tour" };
+    if (tour.noIncluye === "")
+      return { estado: false, mensaje: "Falta colocar que servicios NO incluye el tour" };
+
+    return { estado: true, mensaje: "Datos correctos" };
+  };
+  const validarInformacionPrecios = () => {
+    if (Object.keys(precios).length === 0)
+      return { estado: false, mensaje: "Configure con Mayor a 0 al menos 1 Precio." };
+    return { estado: true, mensaje: "Datos correctos" };
+  };
+  const validarInformacionFechas = () => {
+    if (tour.programacionFechas === null)
+      return { estado: false, mensaje: "Configure al menos 1 fecha." };
+    return { estado: true, mensaje: "Datos correctos" };
+  };
+  const validarLugaresSalida = () => {
+    if (listLugaresSalida.length === 0)
+      return { estado: false, mensaje: "Configure al menos 1 lugar de salida." };
+    return { estado: true, mensaje: "Datos correctos" };
+  };
+
   return (
     <TourContext.Provider
       value={{
         tour,
+        validar,
         setTour,
         precios,
         setPrecios,

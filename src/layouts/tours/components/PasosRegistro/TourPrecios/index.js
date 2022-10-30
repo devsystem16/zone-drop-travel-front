@@ -1,14 +1,35 @@
 import React, { createContext, useState, useEffect, useContext } from "react";
 import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
+
+import NumberFormatCustom from "components/ValidationCurrency/ValidationCurrency";
 import { TourContext } from "../../../context/TourContext";
 
-const TourPrecios = () => {
+import API from "../../../../../Environment/config";
+
+const TourPrecios = ({ editing, dataTour }) => {
   const { precios, setPrecios } = useContext(TourContext);
 
-  const handleChange = (event) => {
+  const [tiposAcompañantes, setTiposAcompañantes] = useState([]);
+
+  useEffect(() => {
+    localStorage.setItem("current_component", "component-registro-precios");
+    if (editing) {
+      alert(JSON.stringify(dataTour.programacionFechas[0].precios));
+      setTiposAcompañantes(dataTour.programacionFechas[0].precios);
+      console.log("hola");
+    } else {
+      loadTipoAcompañantes();
+    }
+  }, []);
+
+  const loadTipoAcompañantes = async () => {
+    const response = await API.get("/tipoacompanante");
+    setTiposAcompañantes(response.data);
+  };
+
+  const handleChange = (event, codigo) => {
     const { name, value } = event.target;
-    let codigo = event.target.offsetParent.offsetParent.attributes.identificador.value;
     setPrecios({
       ...precios,
       [name]: {
@@ -33,46 +54,24 @@ const TourPrecios = () => {
           cobro. <br /> <br />
         </div>
 
-        <TextField
-          id="standard-disabled"
-          label="Adultos"
-          identificador="1"
-          name="adultos"
-          onChange={handleChange}
-          defaultValue={precios.adultos.valor}
-          variant="standard"
-          style={{ width: 200 }}
-        />
-        <TextField
-          id="standard-disableds"
-          identificador="2"
-          name="ninios"
-          label="Niños"
-          onChange={handleChange}
-          defaultValue={precios.niños.valor}
-          variant="standard"
-          style={{ width: 200 }}
-        />
-        <TextField
-          id="standard-disableds"
-          name="terceraEdad"
-          identificador="3"
-          label="3era Edad & Discapacitados"
-          defaultValue={precios.terceraEdad.valor}
-          onChange={handleChange}
-          variant="standard"
-          style={{ width: 200 }}
-        />
-        <TextField
-          id="standard-disableds"
-          identificador="4"
-          label="infantes"
-          name="infantes"
-          variant="standard"
-          defaultValue={precios.infantes.valor}
-          onChange={handleChange}
-          style={{ width: 200 }}
-        />
+        {tiposAcompañantes.map((tipo) => {
+          return (
+            <TextField
+              id="standard-disabled"
+              label={tipo.descripcion}
+              identificador={tipo.id}
+              name={tipo.descripcion}
+              onChange={(event) => handleChange(event, tipo.id)}
+              defaultValue={editing ? tiposAcompañantes.precio : 0}
+              value={editing ? tipo.precio : 0}
+              variant="standard"
+              style={{ width: 200 }}
+              InputProps={{
+                inputComponent: NumberFormatCustom,
+              }}
+            />
+          );
+        })}
       </div>
       {/* <Button variant="secondary" endIcon={<SendIcon />}>
         Añadir
