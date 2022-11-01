@@ -41,7 +41,7 @@ function Cover() {
     // navigate("/dashboard");
     if (user === "marco" && password === "monta") {
       localStorage.setItem("isLogin", true);
-      location.href = "/dashboard";
+      location.href = "/tables";
     } else alertify.error("Credenciales incorrectas.");
     // alert("Ingresar");
     // history.push("/dashboard");

@@ -1,9 +1,10 @@
 import React from "react";
 import Box from "@mui/material/Box";
-import Button from "@mui/material/Button";
 import Calendar from "../../Calendar";
-
-const TourProgramacionFechas = () => {
+import MDOption from "../../../../../components/MDOption/MDoption";
+import moment from "moment";
+import Stack from "@mui/material/Stack";
+const TourProgramacionFechas = ({ editing, dataTour }) => {
   return (
     <Box
       component="form"
@@ -15,9 +16,18 @@ const TourProgramacionFechas = () => {
       autoComplete="off"
     >
       Fechas
-      <Calendar />
+      <Calendar editing={editing} dataTour={dataTour} />
+      <Stack direction="row" spacing={1}>
+        <FechasGuardadas fechas={dataTour.programacionFechas}></FechasGuardadas>
+      </Stack>
     </Box>
   );
 };
 
 export default TourProgramacionFechas;
+
+const FechasGuardadas = ({ fechas }) => {
+  return fechas.map((fecha) => {
+    return <MDOption label={`📆 ${moment(fecha.fecha).format("MMMM, D")}`}></MDOption>;
+  });
+};

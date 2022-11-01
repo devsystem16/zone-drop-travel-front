@@ -20,9 +20,11 @@ import Logout from "@mui/icons-material/Logout";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import NewTour from "../NewTour";
 import { GlobalConfigContext } from "../../context/GlobalConfigContext";
+import { RegistroTourClienteContext } from "../../context/RegistroTourClienteContext";
 
 export default function OptionTour({ tour, image }) {
   const { setComponent, setModalGlobal } = useContext(GlobalConfigContext);
+  const { eliminarTour } = useContext(RegistroTourClienteContext);
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
   const handleClick = (event) => {
@@ -31,13 +33,29 @@ export default function OptionTour({ tour, image }) {
   };
   const handleClose = (e) => {
     setAnchorEl(null);
-    console.log(e.target.innerText);
+    // console.log(e.target.innerText);
 
     if (e.target.innerText !== "") {
-      // alert(tour.titulo);
-
-      setComponent(<NewTour editing={true} tour={tour} />);
-      setModalGlobal(true);
+      // alert(e.target.innerText);
+      //  alert(tour.titulo);
+      if (e.target.innerText === "Editar Tour") {
+        setComponent(<NewTour editing={true} tour={tour} />);
+        setModalGlobal(true);
+      }
+      if (e.target.innerText === "Eliminar Tour") {
+        alertify
+          .confirm(
+            "",
+            `¿Está seguro de eliminar el Tour <strong> ${tour.titulo} </strong>?`,
+            function () {
+              eliminarTour(tour.id);
+            },
+            function () {
+              // alertify.error("Cancel");
+            }
+          )
+          .set("labels", { ok: "Si, elinar", cancel: "Cancelar" });
+      }
     }
   };
 

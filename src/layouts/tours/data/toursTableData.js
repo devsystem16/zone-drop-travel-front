@@ -14,10 +14,8 @@ import { RegistroTourClienteContext } from "../context/RegistroTourClienteContex
 import OptionTour from "../components/OptionTour/OptionTour";
 import OptionFechaSalida from "../components/OptionFechaSalida/OptionFechaSalida";
 
-export default function data() {
-  const { modalTourRegistroCliente, setModalTourRegistroCliente } = useContext(
-    RegistroTourClienteContext
-  );
+export default function ToursTableData() {
+  const { setModalTourRegistroCliente, listaTours } = useContext(RegistroTourClienteContext);
 
   moment.locale("es", {
     months:
@@ -29,26 +27,16 @@ export default function data() {
     weekdaysShort: "Dom._Lun._Mar._Mier._Jue._Vier._Sab.".split("_"),
     weekdaysMin: "Do_Lu_Ma_Mi_Ju_Vi_Sa".split("_"),
   });
+
   const [filas, setFilas] = useState([]);
   useEffect(() => {
+    // console.log("RECARGA DE TOUR ");
     cargarTours();
-  }, []);
-
-  const clicFecha = (id) => {
-    localStorage.setItem("programacion_fecha_id", id);
-    setModalTourRegistroCliente(true);
-  };
-  const saltoLinea = (index, columnas) => {
-    return (index + 1) % columnas === 0 ? true : false;
-  };
-
-  const retornarArray = (cadena) => {
-    let lineas = mensaje.split("<br />");
-  };
+  }, [listaTours]);
 
   const cargarTours = async () => {
-    const jsonTours = await API.get("/tour/listado/tabla");
-    const Elementos = jsonTours.data.map((tour) => {
+    // const jsonTours = await API.get("/tour/listado/tabla");
+    const Elementos = listaTours.map((tour) => {
       return {
         lugarDestino: (
           <DestinoTour
@@ -104,9 +92,9 @@ export default function data() {
         noIncluye: (
           <MDTypography component="a" href="#" variant="caption" color="text" fontWeight="medium">
             <div dangerouslySetInnerHTML={{ __html: tour.noIncluye }}></div>
-            <div>
+            {/* <div>
               <strong style={{ color: "#1A73E8" }}>Ver mas</strong>
-            </div>
+            </div> */}
           </MDTypography>
         ),
         lugarSalida: (
@@ -155,6 +143,19 @@ export default function data() {
     });
     setFilas(Elementos);
   };
+
+  const clicFecha = (id) => {
+    localStorage.setItem("programacion_fecha_id", id);
+    setModalTourRegistroCliente(true);
+  };
+  const saltoLinea = (index, columnas) => {
+    return (index + 1) % columnas === 0 ? true : false;
+  };
+
+  const retornarArray = (cadena) => {
+    let lineas = mensaje.split("<br />");
+  };
+
   const acotarText = (text) => {
     if (text.length > 50) return text.substring(0, 50) + "...";
     return text;
@@ -224,8 +225,8 @@ export default function data() {
       { Header: "Incluye", accessor: "incluye", align: "left" },
       { Header: "no incluye", accessor: "noIncluye", align: "left" },
       { Header: "Lugares Salida", accessor: "lugarSalida", align: "left" },
-      { Header: "Costos", accessor: "costos", align: "left" },
-      { Header: "reservacion", accessor: "reservacion", align: "left" },
+      // { Header: "Costos", accessor: "costos", align: "left" },
+      // { Header: "reservacion", accessor: "reservacion", align: "left" },
       // { Header: "status", accessor: "status", align: "center" },
       // { Header: "employed", accessor: "employed", align: "center" },
       // { Header: "action", accessor: "action", align: "center" },

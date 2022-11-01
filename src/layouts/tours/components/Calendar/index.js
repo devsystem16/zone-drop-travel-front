@@ -3,7 +3,7 @@ import DatePicker from "react-multi-date-picker";
 import DatePanel from "react-multi-date-picker/plugins/date_panel";
 import { TourContext } from "../../context/TourContext";
 
-export default function Example() {
+export default function Calendar() {
   const today = new Date();
   const tomorrow = new Date();
   const weekDays = ["Dom", "Lun", "Mar", "Mie", "Jue", "Vie", "Sab"];

@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useState, useEffect } from "react";
 
 import Grid from "@mui/material/Grid";
 import Card from "@mui/material/Card";
@@ -18,28 +18,28 @@ import ModalNuevaReserva from "./components/TourRegistrarCliente/ModalNuevaReser
 import Modal from "./components/Modal/Modal";
 
 import { GlobalConfigContext } from "./context/GlobalConfigContext";
-const Ejemmplo2 = ({ text }) => {
-  return (
-    <div>
-      <h1> {text}</h1>
-    </div>
-  );
-};
+
+import { RegistroTourClienteContext } from "./context/RegistroTourClienteContext";
+
 function Tours() {
   const { setModalGlobal, setComponent } = useContext(GlobalConfigContext);
-  const { columns, rows } = toursTableData();
-
+  const { filtrarTours } = useContext(RegistroTourClienteContext);
   const nuevoTour = () => {
     setComponent(<NewTour />);
     setModalGlobal(true);
   };
 
+  const { columns, rows } = toursTableData();
+
+  const filtrar = (e) => {
+    filtrarTours(e);
+  };
   return (
     <DashboardLayout>
       <Modal Component={null}></Modal>
 
       {/* <DashboardNavbar /> */}
-      <h3>Listado de Tours</h3>
+      {/* <h3>Listado de Tours</h3> */}
       <ModalNuevaReserva />
 
       <MDBox pt={6} pb={3}>
@@ -68,6 +68,7 @@ function Tours() {
                     label="Buscar..."
                     type="search"
                     variant="standard"
+                    onChange={filtrar}
                   />
                   <Fab
                     title="Añadir Nuevo Tour"

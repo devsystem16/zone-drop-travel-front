@@ -63,7 +63,7 @@ const TourPrecios = ({ editing, dataTour }) => {
               name={tipo.descripcion}
               onChange={(event) => handleChange(event, tipo.id)}
               defaultValue={editing ? tiposAcompañantes.precio : 0}
-              value={editing ? tipo.precio : 0}
+              // value={editing ? tipo.precio : 0}
               variant="standard"
               style={{ width: 200 }}
               InputProps={{

@@ -1,5 +1,8 @@
 import React, { createContext, useState, useEffect } from "react";
 import API from "../../../Environment/config";
+
+import moment from "moment";
+
 export const RegistroTourClienteContext = createContext();
 
 const RegistroTourClienteProvider = (props) => {
@@ -26,6 +29,10 @@ const RegistroTourClienteProvider = (props) => {
   });
 
   // Acompañantes del cliente titular del registro.
+  const [originalListaTours, setOriginalListaTours] = useState([]);
+  const [listaTours, setListaTours] = useState([]);
+  const [reloadListaTours, setReloadListaTours] = useState(true);
+
   const [acompañantes, setAcompañantes] = useState([]);
   const [banco, setBanco] = useState(null);
   const [habitciones, setHabitaciones] = useState([]);
@@ -44,6 +51,38 @@ const RegistroTourClienteProvider = (props) => {
     fechaDeposito: "",
     observaciones: "",
   });
+
+  const eliminarTour = async (id) => {
+    const response = await API.post("/tour/eliminar/" + id);
+
+    if (response.data.existe_reserva) {
+      var mensaje = "";
+      response.data.reservas.map((reservas) => {
+        mensaje += `📆 ${moment(reservas.fechas).format(
+          "MMMM, D"
+        )}     <strong> Reservas:</strong>  ${reservas.cantidad}  <br /> `;
+      });
+
+      alertify
+        .confirm(
+          "No se pudo eliminar, ¡ya existen reservas realizadas!.",
+          `Fechas y cantidad de Reservas Registradas <br /> ` + mensaje,
+          function () {},
+          function () {}
+        )
+        .set("labels", { ok: "Aceptar", cancel: "Salir" });
+      return;
+    }
+
+    alertify.success(response.data.Message);
+    setReloadListaTours(true);
+  };
+
+  const loadTours = async () => {
+    const jsonTours = await API.get("/tour/listado/tabla");
+    setListaTours(jsonTours.data);
+    setOriginalListaTours(jsonTours.data);
+  };
 
   const resetear = (opcion) => {
     if (opcion === "cliente" || "all") {
@@ -193,6 +232,23 @@ const RegistroTourClienteProvider = (props) => {
     } catch (error) {}
   };
 
+  const filtrarTours = (e) => {
+    const results = originalListaTours.filter((dat) => {
+      const itemData = dat.titulo.toUpperCase();
+      const textData = e.target.value.toUpperCase();
+      return itemData.indexOf(textData) > -1;
+    });
+
+    setListaTours(results);
+  };
+
+  useEffect(() => {
+    console.log("LOAD CONEXT CLIENTE TOUR CONTEXT");
+    if (reloadListaTours) {
+      loadTours();
+      setReloadListaTours(false);
+    }
+  }, [reloadListaTours]);
   return (
     <RegistroTourClienteContext.Provider
       value={{
@@ -218,6 +274,10 @@ const RegistroTourClienteProvider = (props) => {
         validar,
         tipoTransaccion,
         setTipoTransaccion,
+        filtrarTours,
+        listaTours,
+        originalListaTours,
+        eliminarTour,
       }}
     >
       {props.children}
