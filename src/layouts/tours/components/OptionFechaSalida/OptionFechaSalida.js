@@ -11,6 +11,7 @@ import { GlobalConfigContext } from "../../context/GlobalConfigContext";
 
 import TablaListaReservas from "../../TablaListaReservas/TablaListaReservas";
 
+import Comprobante from "../../components/Comprobante/Comprobante";
 export default function OptionFechaSalida({ tour, fecha, onClick, onDelete }) {
   const { setModalTourRegistroCliente } = useContext(RegistroTourClienteContext);
   const { setComponent, setModalGlobal } = useContext(GlobalConfigContext);
@@ -28,8 +29,11 @@ export default function OptionFechaSalida({ tour, fecha, onClick, onDelete }) {
         localStorage.setItem("programacion_fecha_id", fecha.id);
         setModalTourRegistroCliente(true);
       }
-      if (e.target.textContent == "Ver Inscritos") {
-        // alert(JSON.stringify(tour));
+      if (e.target.textContent == "Generar Voucher") {
+        setComponent(<Comprobante />);
+        setModalGlobal(true);
+      }
+      if (e.target.textContent == "Ver Reservas") {
         setComponent(
           <TablaListaReservas
             tour={tour}
@@ -84,7 +88,8 @@ export default function OptionFechaSalida({ tour, fecha, onClick, onDelete }) {
         TransitionComponent={Fade}
       >
         <MenuItem onClick={handleClose}>Nueva Reserva</MenuItem>
-        <MenuItem onClick={handleClose}>Ver Inscritos</MenuItem>
+        <MenuItem onClick={handleClose}>Ver Reservas</MenuItem>
+        <MenuItem onClick={handleClose}>Generar Voucher</MenuItem>
         {/* <MenuItem onClick={handleClose}>Eliminar</MenuItem> */}
       </Menu>
     </>

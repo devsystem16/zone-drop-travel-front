@@ -179,7 +179,6 @@ function Sidenav({ color, brand, brandName, routes, ...rest }) {
         }
       />
       <List>{renderRoutes}</List>
-   
     </SidenavRoot>
   );
 }

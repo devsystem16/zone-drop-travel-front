@@ -9,6 +9,8 @@ import Profile from "layouts/profile";
 import SignIn from "layouts/authentication/sign-in";
 import SignUp from "layouts/authentication/sign-up";
 
+import Reservas from "layouts/Reservas";
+
 // @mui icons
 import Icon from "@mui/material/Icon";
 
@@ -28,6 +30,14 @@ const routes = [
     icon: <Icon fontSize="small">table_view</Icon>,
     route: "/tables",
     component: <Tour />,
+  },
+  {
+    type: "titles",
+    name: "Tours",
+    key: "tables",
+    icon: <Icon fontSize="small">table_view</Icon>,
+    route: "/tables/:contactId",
+    component: <Reservas />,
   },
   // {
   //   type: "collapse",

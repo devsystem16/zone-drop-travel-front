@@ -8,7 +8,7 @@ import DashboardLayout from "examples/LayoutContainers/DashboardLayout";
 import DataTable from "examples/Tables/DataTable";
 import NewTour from "../tours/components/NewTour";
 import TextField from "@mui/material/TextField";
-
+import DashboardNavbar from "examples/Navbars/DashboardNavbar";
 import Fab from "@mui/material/Fab";
 import AddIcon from "@mui/icons-material/Add";
 
@@ -37,7 +37,7 @@ function Tours() {
   return (
     <DashboardLayout>
       <Modal Component={null}></Modal>
-
+      <DashboardNavbar absolute isMini={false} />
       {/* <DashboardNavbar /> */}
       {/* <h3>Listado de Tours</h3> */}
       <ModalNuevaReserva />
