@@ -1,5 +1,6 @@
 import * as React from "react";
 import { useContext } from "react";
+import { redirect, Link } from "react-router-dom";
 import Button from "@mui/material/Button";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
@@ -34,15 +35,15 @@ export default function OptionFechaSalida({ tour, fecha, onClick, onDelete }) {
         setModalGlobal(true);
       }
       if (e.target.textContent == "Ver Reservas") {
-        setComponent(
-          <TablaListaReservas
-            tour={tour}
-            fecha={fecha}
-            titulo="Reporte de Inscritos"
-            fechaSalida={fecha.id}
-          ></TablaListaReservas>
-        );
-        setModalGlobal(true);
+        // setComponent(
+        //   <TablaListaReservas
+        //     tour={tour}
+        //     fecha={fecha}
+        //     titulo="Reporte de Inscritos"
+        //     fechaSalida={fecha.id}
+        //   ></TablaListaReservas>
+        // );
+        // setModalGlobal(true);
       }
     }
   };
@@ -88,7 +89,9 @@ export default function OptionFechaSalida({ tour, fecha, onClick, onDelete }) {
         TransitionComponent={Fade}
       >
         <MenuItem onClick={handleClose}>Nueva Reserva</MenuItem>
-        <MenuItem onClick={handleClose}>Ver Reservas</MenuItem>
+        <Link to={`/tables/${fecha.id}`}>
+          <MenuItem onClick={handleClose}>Ver Reservas</MenuItem>
+        </Link>
         <MenuItem onClick={handleClose}>Generar Voucher</MenuItem>
         {/* <MenuItem onClick={handleClose}>Eliminar</MenuItem> */}
       </Menu>

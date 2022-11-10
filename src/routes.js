@@ -37,6 +37,7 @@ const routes = [
     key: "tables",
     icon: <Icon fontSize="small">table_view</Icon>,
     route: "/tables/:contactId",
+    // route: "/tables/tour/:idTour/fecha/:idFecha",
     component: <Reservas />,
   },
   // {

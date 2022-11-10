@@ -113,7 +113,6 @@ function DashboardNavbar({ absolute, light, isMini }) {
       position={absolute ? "absolute" : navbarType}
       color="inherit"
       sx={(theme) => navbar(theme, { transparentNavbar, absolute, light, darkMode })}
-      style={{ paddingBottom: 50 }}
     >
       <Toolbar sx={(theme) => navbarContainer(theme)}>
         <MDBox color="inherit" mb={{ xs: 1, md: 0 }} sx={(theme) => navbarRow(theme, { isMini })}>
