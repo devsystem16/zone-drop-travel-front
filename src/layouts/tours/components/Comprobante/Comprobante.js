@@ -300,23 +300,6 @@ const RowMetodoPago = () => {
   );
 };
 
-{
-  /* <tr>
-<td  colspan="1">1</td>
-<td  colspan="1">2</td>
-<td  colspan="1">3</td>
-<td  colspan="1">4</td>
-<td  colspan="1">5</td>
-<td  colspan="1">6</td>
-<td  colspan="1">7</td>
-<td  colspan="1">8</td>
-<td  colspan="1">9</td>
-<td  colspan="1">10</td>
-<td  colspan="1">11</td>
-<td  colspan="1">12</td>
-</tr> */
-}
-
 const Componente = () => {
   return <h1>Esto se impirimira</h1>;
 };

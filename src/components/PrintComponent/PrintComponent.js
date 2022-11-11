@@ -1,5 +1,6 @@
 import React, { useRef, useEffect } from "react";
 import { useReactToPrint } from "react-to-print";
+import PrintIcon from "@mui/icons-material/Print";
 
 const PrintComponent = ({ ComponentToPrint }) => {
   const componentRef = useRef();
@@ -16,9 +17,7 @@ const PrintComponent = ({ ComponentToPrint }) => {
 
   return (
     <div>
-      <button type="button" onClick={fn_imprimir}>
-        Imprimir
-      </button>
+      <PrintIcon title="Imprimir" style={{ cursor: "pointer" }} onClick={fn_imprimir} />
 
       <div style={{ display: "none" }}>
         <ContenedorComponent ref={componentRef} component={ComponentToPrint} />

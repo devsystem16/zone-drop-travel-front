@@ -9,8 +9,12 @@ import Chip from "@mui/material/Chip";
 import moment from "moment";
 import { RegistroTourClienteContext } from "../../context/RegistroTourClienteContext";
 import { GlobalConfigContext } from "../../context/GlobalConfigContext";
-
+import Divider from "@mui/material/Divider";
 import TablaListaReservas from "../../TablaListaReservas/TablaListaReservas";
+
+import Stack from "@mui/material/Stack";
+import ContentPaste from "@mui/icons-material/ContentPaste";
+import ListItemIcon from "@mui/material/ListItemIcon";
 
 import Comprobante from "../../components/Comprobante/Comprobante";
 export default function OptionFechaSalida({ tour, fecha, onClick, onDelete }) {
@@ -24,7 +28,7 @@ export default function OptionFechaSalida({ tour, fecha, onClick, onDelete }) {
   };
   const handleClose = (e) => {
     setAnchorEl(null);
-    console.log(e.target);
+    console.log(e.target.textContent);
     if (e.target.innerText !== "") {
       if (e.target.textContent == "Nueva Reserva") {
         localStorage.setItem("programacion_fecha_id", fecha.id);
@@ -34,6 +38,19 @@ export default function OptionFechaSalida({ tour, fecha, onClick, onDelete }) {
         setComponent(<Comprobante />);
         setModalGlobal(true);
       }
+
+      if (e.target.textContent == "Pasajeros") {
+        setComponent(
+          <TablaListaReservas
+            tour={tour}
+            fecha={fecha}
+            titulo="DROP ZONE TRAVEL"
+            fechaSalida={fecha.id}
+          ></TablaListaReservas>
+        );
+        setModalGlobal(true);
+      }
+
       if (e.target.textContent == "Ver Reservas") {
         // setComponent(
         //   <TablaListaReservas
@@ -94,6 +111,21 @@ export default function OptionFechaSalida({ tour, fecha, onClick, onDelete }) {
         </Link>
         <MenuItem onClick={handleClose}>Generar Voucher</MenuItem>
         {/* <MenuItem onClick={handleClose}>Eliminar</MenuItem> */}
+        <Divider sx={{ my: 0.5 }} />
+        <strong>Informes</strong>
+        <MenuItem onClick={handleClose}>
+          <ListItemIcon>
+            <ContentPaste fontSize="small" />
+          </ListItemIcon>
+          Pasajeros
+        </MenuItem>
+
+        {/* <Stack direction="row" spacing={1}>
+          <Chip label="Reporte de Reservantes" />
+          <Chip color="primary" label="Soft" />
+          <Chip label="Medium" />
+          <Chip label="Hard" />
+        </Stack> */}
       </Menu>
     </>
   );

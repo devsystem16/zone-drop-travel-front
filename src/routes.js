@@ -11,6 +11,9 @@ import SignUp from "layouts/authentication/sign-up";
 
 import Reservas from "layouts/Reservas";
 
+import ReporteMensual from "layouts/reportes/ReporteMensual/";
+import ReporteAnual from "layouts/reportes/ReporteAnual/";
+
 // @mui icons
 import Icon from "@mui/material/Icon";
 
@@ -40,14 +43,34 @@ const routes = [
     // route: "/tables/tour/:idTour/fecha/:idFecha",
     component: <Reservas />,
   },
-  // {
-  //   type: "collapse",
-  //   name: "Reportes",
-  //   key: "billing",
-  //   icon: <Icon fontSize="small">receipt_long</Icon>,
-  //   route: "/billing",
-  //   component: <Billing />,
-  // },
+
+  {
+    type: "collapse",
+    name: "Reportes",
+    key: "reportes",
+    icon: <Icon fontSize="small">receipt_long</Icon>,
+    route: "/reportes",
+    component: <Billing />,
+  },
+
+  {
+    type: "titles",
+    name: "Reportes",
+    key: "reportes",
+    icon: <Icon fontSize="small">table_view</Icon>,
+    route: "/reportes/Mensual",
+
+    component: <ReporteMensual />,
+  },
+  {
+    type: "titles",
+    name: "Reportes",
+    key: "reportes",
+    icon: <Icon fontSize="small">table_view</Icon>,
+    route: "/reportes/Anual",
+
+    component: <ReporteAnual />,
+  },
   // {
   //   type: "collapse",
   //   name: "RTL",

@@ -25,7 +25,7 @@ function Tours() {
   const { setModalGlobal, setComponent } = useContext(GlobalConfigContext);
   const { filtrarTours } = useContext(RegistroTourClienteContext);
   const nuevoTour = () => {
-    setComponent(<NewTour />);
+    setComponent(<NewTour editing={false} tour={null} />);
     setModalGlobal(true);
   };
 

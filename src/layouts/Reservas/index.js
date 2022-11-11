@@ -20,6 +20,7 @@ import SummarizeIcon from "@mui/icons-material/Summarize";
 import ModalAbonar from "./ModalAbonar";
 import ModalListadoAbonos from "./ModalListadoAbonos";
 import ModalListadoAcompañantes from "./ModalListadoAcompañantes";
+import ModalVoucher from "./ModalVoucher";
 
 const Reservas = () => {
   const codigo = useLocation().pathname.split("/").slice(1);
@@ -35,6 +36,7 @@ const Reservas = () => {
   const [openAbonar, setOpenAbonar] = React.useState(false);
   const [openListadoAbonos, setOpenListadoAbonos] = React.useState(false);
   const [openListadoAcompañantes, setOpenListadoAcompañantes] = React.useState(false);
+  const [openModalVoucher, setOpenModalVoucher] = React.useState(false);
 
   const cargarReporte = async () => {
     const jsonTours = await API.get(`/reserva/listado/titulares/${codigo[codigo.length - 1]}`);
@@ -69,6 +71,13 @@ const Reservas = () => {
   const eventClickListadoAcompañantes = (acompañantes) => {
     setAcompañantesListado(acompañantes);
     setOpenListadoAcompañantes(true);
+  };
+
+  const eventClickGenerarVoucher = (data) => {
+    // alert(JSON.stringify(data));
+    setOpenModalVoucher(true);
+    // setAbonosListado(abonos);
+    // setOpenListadoAbonos(true);
   };
 
   if (reporte?.listadoClientes == null)
@@ -153,6 +162,14 @@ const Reservas = () => {
                       <SummarizeIcon fontSize="inherit" />
                     </IconButton>
 
+                    <IconButton
+                      onClick={() => eventClickGenerarVoucher(cliente)}
+                      title="Generar Voucher"
+                      aria-label="delete"
+                      size="small"
+                    >
+                      <SummarizeIcon fontSize="inherit" />
+                    </IconButton>
                     {/* <IconButton
                       onClick={() => eventClickListadoAcompañantes(cliente.acompañantes)}
                       title="Vér Acompañantes"
@@ -184,6 +201,8 @@ const Reservas = () => {
           setOpen={setOpenListadoAcompañantes}
           acompañantes={acompañantesListado}
         ></ModalListadoAcompañantes>
+
+        <ModalVoucher open={openModalVoucher} setOpen={setOpenModalVoucher}></ModalVoucher>
       </>
     </DashboardLayout>
   );

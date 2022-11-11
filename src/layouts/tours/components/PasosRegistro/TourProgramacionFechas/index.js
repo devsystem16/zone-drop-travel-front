@@ -18,7 +18,7 @@ const TourProgramacionFechas = ({ editing, dataTour }) => {
       Fechas
       <Calendar editing={editing} dataTour={dataTour} />
       <Stack direction="row" spacing={1}>
-        <FechasGuardadas fechas={dataTour.programacionFechas}></FechasGuardadas>
+        {/* <FechasGuardadas fechas={dataTour.programacionFechas}></FechasGuardadas> */}
       </Stack>
     </Box>
   );
@@ -27,7 +27,7 @@ const TourProgramacionFechas = ({ editing, dataTour }) => {
 export default TourProgramacionFechas;
 
 const FechasGuardadas = ({ fechas }) => {
-  return fechas.map((fecha) => {
-    return <MDOption label={`📆 ${moment(fecha.fecha).format("MMMM, D")}`}></MDOption>;
-  });
+  // return fechas.map((fecha) => {
+  //   return <MDOption label={`📆 ${moment(fecha.fecha).format("MMMM, D")}`}></MDOption>;
+  // });
 };
