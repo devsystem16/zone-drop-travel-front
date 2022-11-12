@@ -36,7 +36,7 @@ export default function ModalAbonar({ open, setOpen, setReload }) {
   //   alert(datos.reserva_id);
   const guardarAbono = async () => {
     datos = {
-      reserva_id: datos.reserva_id,
+      reserva_id: datos?.reserva_id,
       banco_id: banco?.id,
       tipo_transaccion_id: tipoTransaccion.id,
       valor: abono,
@@ -84,7 +84,7 @@ export default function ModalAbonar({ open, setOpen, setReload }) {
         <DialogContent>
           <DialogContentText id="alert-dialog-description">
             <div>
-              {`El cliente [${datos.nombres}] ha abonado $ ${datos.abonado} de un total de   $ ${datos.total} `}
+              {`El cliente [${datos?.nombres}] ha abonado $ ${datos?.abonado} de un total de   $ ${datos?.total} `}
             </div>
             <SelectTipoTransaccion
               titulo="Tipo de transacción"

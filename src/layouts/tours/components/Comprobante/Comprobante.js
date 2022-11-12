@@ -10,6 +10,8 @@ const Container = () => {
   );
 };
 
+export default Container;
+
 const Comprobante = () => {
   return (
     <>
@@ -266,8 +268,6 @@ const Comprobante = () => {
   );
 };
 
-export default Container;
-
 const RowTipoAcompañante = () => {
   return (
     <tr>
@@ -298,8 +298,4 @@ const RowMetodoPago = () => {
       </td>
     </tr>
   );
-};
-
-const Componente = () => {
-  return <h1>Esto se impirimira</h1>;
 };

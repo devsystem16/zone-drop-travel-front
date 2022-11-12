@@ -32,6 +32,8 @@ export default function OptionFechaSalida({ tour, fecha, onClick, onDelete }) {
     if (e.target.innerText !== "") {
       if (e.target.textContent == "Nueva Reserva") {
         localStorage.setItem("programacion_fecha_id", fecha.id);
+        localStorage.setItem("tour_id", tour.id);
+
         setModalTourRegistroCliente(true);
       }
       if (e.target.textContent == "Generar Voucher") {
@@ -91,7 +93,7 @@ export default function OptionFechaSalida({ tour, fecha, onClick, onDelete }) {
             fontSize: 11,
             cursor: "pointer",
           }}
-          onDelete={() => alert("Eliminar")}
+          // onDelete={() => alert("Eliminar")}
           //   onClick={() => alert("asdas")}
         />
       </nuevaEtiqueta>
@@ -109,7 +111,7 @@ export default function OptionFechaSalida({ tour, fecha, onClick, onDelete }) {
         <Link to={`/tables/${fecha.id}`}>
           <MenuItem onClick={handleClose}>Ver Reservas</MenuItem>
         </Link>
-        <MenuItem onClick={handleClose}>Generar Voucher</MenuItem>
+        {/* <MenuItem onClick={handleClose}>Generar Voucher</MenuItem> */}
         {/* <MenuItem onClick={handleClose}>Eliminar</MenuItem> */}
         <Divider sx={{ my: 0.5 }} />
         <strong>Informes</strong>

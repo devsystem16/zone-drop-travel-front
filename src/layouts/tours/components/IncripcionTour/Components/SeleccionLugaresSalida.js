@@ -24,7 +24,7 @@ export default function SeleccionLugaresSalida({ setValues }) {
   }, []);
   const cargarLugaresSalidaTour = async () => {
     try {
-      var response = await API.get("/lugar-salida-tour/obtener/2");
+      var response = await API.get("/lugar-salida-tour/obtener/" + localStorage.getItem("tour_id"));
       setLugaresSalidaTour(response.data);
     } catch (error) {
       alert("Ocurrió un error.", error);

@@ -278,6 +278,7 @@ const RegistroTourClienteProvider = (props) => {
         listaTours,
         originalListaTours,
         eliminarTour,
+        setReloadListaTours,
       }}
     >
       {props.children}

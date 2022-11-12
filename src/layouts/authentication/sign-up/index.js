@@ -19,7 +19,7 @@ import { useState } from "react";
 // @mui material components
 import Card from "@mui/material/Card";
 import Checkbox from "@mui/material/Checkbox";
-
+import API from "Environment/config";
 // Material Dashboard 2 React components
 import MDBox from "components/MDBox";
 import MDTypography from "components/MDTypography";
@@ -36,15 +36,22 @@ function Cover() {
   const [user, setUser] = useState("");
   const [password, setPassword] = useState("");
 
-  const login = () => {
-    // let navigate = useNavigate();
-    // navigate("/dashboard");
-    if (user === "marco" && password === "monta") {
-      localStorage.setItem("isLogin", true);
-      location.href = "/tables";
-    } else alertify.error("Credenciales incorrectas.");
-    // alert("Ingresar");
-    // history.push("/dashboard");
+  const login = async () => {
+    try {
+      const response = await API.post("/usuario/login", {
+        user: user,
+        pass: password,
+      });
+
+      if (response.data.acceso) {
+        localStorage.setItem("isLogin", true);
+        location.href = "/tables";
+      } else {
+        alertify.error(response.data.Message);
+      }
+    } catch (error) {
+      alertify.error("Error en las credenciales.");
+    }
   };
   return (
     <CoverLayout image={bgImage}>

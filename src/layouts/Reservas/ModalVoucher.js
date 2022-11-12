@@ -7,17 +7,14 @@ import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
-import TextField from "@mui/material/TextField";
-import NumberFormatCustom from "components/ValidationCurrency/ValidationCurrency";
-import SelectBancos from "../../components/SelectBancos/SelectBancos";
-import SelectTipoTransaccion from "../../components/SelectTipoTransaccion/SelectTipoTransaccion";
-import moment from "moment";
+
 import Backdrop from "@mui/material/Backdrop";
 import CircularProgress from "@mui/material/CircularProgress";
 import "./style.css";
-import API from "../../Environment/config";
 
-export default function ModalVoucher({ open, setOpen }) {
+import Voucher from "./Voucher";
+
+export default function ModalVoucher({ open, setOpen, datos }) {
   const [openLoading, setOpenLoading] = React.useState(false);
 
   const handleClose = () => {
@@ -35,13 +32,16 @@ export default function ModalVoucher({ open, setOpen }) {
 
       <Dialog
         open={open}
+        maxWidth="xl"
         onClose={handleClose}
         aria-labelledby="alert-dialog-title"
         aria-describedby="alert-dialog-description"
       >
-        <DialogTitle id="alert-dialog-title">{"Listado de abonos"}</DialogTitle>
+        <DialogTitle id="alert-dialog-title"> </DialogTitle>
         <DialogContent>
-          <DialogContentText id="alert-dialog-description"></DialogContentText>
+          <DialogContentText id="alert-dialog-description">
+            <Voucher datos={datos} />
+          </DialogContentText>
         </DialogContent>
         <DialogActions>
           <Button onClick={handleClose}>Cancelar</Button>

@@ -16,6 +16,8 @@ import PaidIcon from "@mui/icons-material/Paid";
 
 import SummarizeIcon from "@mui/icons-material/Summarize";
 
+import ReceiptIcon from "@mui/icons-material/Receipt";
+
 // Import Modals
 import ModalAbonar from "./ModalAbonar";
 import ModalListadoAbonos from "./ModalListadoAbonos";
@@ -73,11 +75,12 @@ const Reservas = () => {
     setOpenListadoAcompañantes(true);
   };
 
-  const eventClickGenerarVoucher = (data) => {
-    // alert(JSON.stringify(data));
+  const [datos, setDatos] = useState([]);
+  const eventClickGenerarVoucher = async (data) => {
+    const jsonTours = await API.get(`/reserva/voucher/genarar/${data.id}`);
+
+    setDatos(jsonTours.data);
     setOpenModalVoucher(true);
-    // setAbonosListado(abonos);
-    // setOpenListadoAbonos(true);
   };
 
   if (reporte?.listadoClientes == null)
@@ -168,7 +171,7 @@ const Reservas = () => {
                       aria-label="delete"
                       size="small"
                     >
-                      <SummarizeIcon fontSize="inherit" />
+                      <ReceiptIcon fontSize="inherit" />
                     </IconButton>
                     {/* <IconButton
                       onClick={() => eventClickListadoAcompañantes(cliente.acompañantes)}
@@ -202,7 +205,11 @@ const Reservas = () => {
           acompañantes={acompañantesListado}
         ></ModalListadoAcompañantes>
 
-        <ModalVoucher open={openModalVoucher} setOpen={setOpenModalVoucher}></ModalVoucher>
+        <ModalVoucher
+          datos={datos}
+          open={openModalVoucher}
+          setOpen={setOpenModalVoucher}
+        ></ModalVoucher>
       </>
     </DashboardLayout>
   );

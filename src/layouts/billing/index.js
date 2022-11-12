@@ -37,7 +37,7 @@ import MenuItem from "@mui/material/MenuItem";
 function Billing() {
   return (
     <DashboardLayout>
-      <DashboardNavbar absolute isMini />
+      <DashboardNavbar absolute isMini={false} />
       <br /> <br />
       <Link to={`/reportes/Mensual`}>
         <MenuItem>* Reporte Mensual</MenuItem>

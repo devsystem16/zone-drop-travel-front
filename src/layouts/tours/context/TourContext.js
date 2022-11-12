@@ -1,8 +1,12 @@
-import React, { createContext, useState, useEffect } from "react";
+import React, { createContext, useState, useEffect, useContext } from "react";
 import API from "../../../Environment/config";
+import { RegistroTourClienteContext } from "./RegistroTourClienteContext";
+
 export const TourContext = createContext();
 
 const TourProvider = (props) => {
+  const { setReloadListaTours } = useContext(RegistroTourClienteContext);
+
   const [modalTourRegistroCliente, setModalTourRegistroCliente] = useState(false);
   const [tour, setTour] = useState({
     titulo: "",
@@ -29,6 +33,7 @@ const TourProvider = (props) => {
     setTour(jsonDatos);
 
     const response = await API.post("/tour", jsonDatos);
+
     if (response.status === 200) {
       setTour({
         titulo: "",
@@ -44,10 +49,11 @@ const TourProvider = (props) => {
       });
       setPrecios({});
       setListLugaresSalida([]);
+      setReloadListaTours(true);
       alertify.success("Guardado correctamente.");
+    } else {
+      alertify.error("Error al guardar");
     }
-    alertify.error("Error al guardar");
-    console.log(response);
   };
 
   const validar = (option) => {
