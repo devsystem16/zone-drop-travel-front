@@ -26,7 +26,7 @@ export default function PasosRegistro({ editing, tour }) {
   };
 
   const handleNext = (e) => {
-    const data = validar(localStorage.getItem("current_component"));
+    const data = validar(localStorage.getItem("current_component"), editing);
     if (!data.estado) {
       alertify.error(data.mensaje);
       return;

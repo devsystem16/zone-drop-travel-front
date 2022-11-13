@@ -56,13 +56,13 @@ const TourProvider = (props) => {
     }
   };
 
-  const validar = (option) => {
+  const validar = (option, editing = false) => {
     switch (option) {
       case "component-informacion-tour":
         return validarInformacionTour();
 
       case "component-registro-precios":
-        return validarInformacionPrecios();
+        return validarInformacionPrecios(editing);
 
       case "component-programacion-fechas":
         return validarInformacionFechas();
@@ -84,7 +84,8 @@ const TourProvider = (props) => {
 
     return { estado: true, mensaje: "Datos correctos" };
   };
-  const validarInformacionPrecios = () => {
+  const validarInformacionPrecios = (editing = false) => {
+    if (editing) return { estado: true, mensaje: "Datos correctos" };
     if (Object.keys(precios).length === 0)
       return { estado: false, mensaje: "Configure con Mayor a 0 al menos 1 Precio." };
     return { estado: true, mensaje: "Datos correctos" };

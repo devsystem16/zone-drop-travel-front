@@ -15,9 +15,19 @@ const TourPrecios = ({ editing, dataTour }) => {
   useEffect(() => {
     localStorage.setItem("current_component", "component-registro-precios");
     if (editing) {
-      alert(JSON.stringify(dataTour.programacionFechas[0].precios));
+      // alert(JSON.stringify(dataTour.programacionFechas[0].precios));
       setTiposAcompañantes(dataTour.programacionFechas[0].precios);
       console.log("hola");
+
+      dataTour.programacionFechas[0].precios.map((precios) => {
+        // setPrecios({
+        //   ...precios,
+        //   [precios.descripcion]: {
+        //     id: precios.id,
+        //     valor: precios.precio,
+        //   },
+        // });
+      });
     } else {
       loadTipoAcompañantes();
     }
@@ -62,8 +72,8 @@ const TourPrecios = ({ editing, dataTour }) => {
               identificador={tipo.id}
               name={tipo.descripcion}
               onChange={(event) => handleChange(event, tipo.id)}
-              defaultValue={editing ? tiposAcompañantes.precio : 0}
-              // value={editing ? tipo.precio : 0}
+              placeholder={editing ? `Nuevo Precio` : null}
+              helperText={editing ? `Valor Actual $ ${tipo.precio}` : null}
               variant="standard"
               style={{ width: 200 }}
               InputProps={{

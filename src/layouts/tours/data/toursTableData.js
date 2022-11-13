@@ -100,7 +100,7 @@ export default function ToursTableData() {
         lugarSalida: (
           <MDTypography component="a" variant="caption" color="text" fontWeight="medium">
             {tour.lugaresSalidas.map((lugares, index) => {
-              if (saltoLinea(index, 3)) {
+              if (saltoLinea(index, 5)) {
                 return (
                   <>
                     <LugarSalida lugar={lugares} onClick={clicFecha} onDelete={clicFecha} /> <br />
@@ -212,8 +212,8 @@ export default function ToursTableData() {
           fontSize: 11,
           cursor: "pointer",
         }}
-        onClick={() => onClick(lugar.id)}
-        onDelete={() => onDelete(lugar.id)}
+        // onClick={() => onClick(lugar.id)}
+        // onDelete={() => onDelete(lugar.id)}
       />
     );
   };

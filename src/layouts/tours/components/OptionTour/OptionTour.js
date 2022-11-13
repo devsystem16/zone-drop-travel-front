@@ -111,7 +111,7 @@ export default function OptionTour({ tour, image }) {
         transformOrigin={{ horizontal: "right", vertical: "top" }}
         anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
       >
-        {/* <Divider /> */}
+        <Divider />
         {/* <MenuItem>
           <ListItemIcon>
             <Edit fontSize="small" />
