@@ -1,4 +1,5 @@
 import * as React from "react";
+
 import { useState, useContext, useEffect } from "react";
 import TextField from "@mui/material/TextField";
 import Box from "@mui/material/Box";
@@ -15,20 +16,33 @@ import { buscarAcompañante } from "../../../../Controllers/AcompañanteControll
 import { buscarCliente } from "../../../../Controllers/ClienteController";
 import Loading from "../../../../components/Loading/Loading";
 
-export default function FormularioRegistrarAcompañante() {
-  const { acompañantes, setHabitaciones } = useContext(RegistroTourClienteContext);
+export default function FormularioRegistrarAcompañante({ editing = false, dataReserva }) {
+  const { acompañantes, setAcompañantes, obtenerAcompañantes, setHabitaciones, habitciones } =
+    useContext(RegistroTourClienteContext);
 
   //
+
+  useEffect(() => {
+    if (editing) {
+      obtenerAcompañantes(dataReserva.id);
+
+      //setAcompañantes(dataReserva.acompañantes);
+    }
+  }, []);
 
   return (
     <Box sx={{ flexGrow: 1 }}>
       <Grid container spacing={2}>
         <Grid item xs={6}>
-          <FormularioAcompañante />
+          <FormularioAcompañante editing={editing} />
         </Grid>
         <Grid item xs={6}>
           <label>Habitaciones</label>
-          <SeleccionHabitaciones setValues={setHabitaciones} />
+          <SeleccionHabitaciones
+            setValues={setHabitaciones}
+            dataReserva={dataReserva}
+            editing={editing}
+          />
           <div>
             <label>Listado de Acompañantes</label>
           </div>
@@ -41,7 +55,7 @@ export default function FormularioRegistrarAcompañante() {
   );
 }
 
-const FormularioAcompañante = () => {
+const FormularioAcompañante = ({ editing = false }) => {
   const [isLoading, setIsLoading] = useState(false);
   const { acompañantes, setAcompañantes } = useContext(RegistroTourClienteContext);
   const [tipoAcompañante, setTipoAcompañante] = useState(null);
@@ -99,6 +113,7 @@ const FormularioAcompañante = () => {
       nombres: acompañante.nombres,
       apellidos: acompañante.apellidos,
       tipoAcompañante: tipoAcompañante,
+      añadirAlDetalle: editing,
     };
     setAcompañantes([...acompañantes, newAcom]);
 
@@ -116,6 +131,7 @@ const FormularioAcompañante = () => {
       telefono2: "",
       observaciones: "",
       existente: false,
+      añadirAlDetalle: false,
     });
   };
 

@@ -1,14 +1,38 @@
-import "./style.css";
+// import "./style.css";
 import React, { useEffect, useState, useRef } from "react";
 import API from "Environment/config";
 import PrintIcon from "@mui/icons-material/Print";
 import { useReactToPrint } from "react-to-print";
 
+import {
+  tablaInscritos,
+  tablaInscritos_th,
+  tablaInscritos_td_th,
+  tablaInscritos_th_vertical,
+} from "./Styles";
+
+import { Link } from "react-router-dom";
 const ReporteM = ({ mes }) => {
+  const pageStyle = `
+  @media print {
+    html,
+    body {
+      color-adjust: exact;
+      -webkit-print-color-adjust: exact;
+   }
+
+   .verticalText1 {
+    writing-mode: vertical-lr;
+    transform: rotate(180deg);
+    width: 3%;  
+    }
+`;
+
   // Print
   const componentRef = useRef();
   const fn_imprimir = useReactToPrint({
     content: () => componentRef.current,
+    pageStyle: pageStyle,
   });
 
   // END PRINTT
@@ -18,6 +42,7 @@ const ReporteM = ({ mes }) => {
 
   const cargarReporte = async () => {
     const jsonTours = await API.get(`/reporte/mensual/${mes}`);
+
     setReporte(jsonTours.data);
   };
 
@@ -60,32 +85,39 @@ const ReporteM = ({ mes }) => {
           <h3> {mensajeReporte}</h3>
         </center>
 
-        <table id="customers">
+        <table id="customersa" style={tablaInscritos}>
           <tr>
-            <th>N°</th>
-            <th>FECHAS</th>
-            <th>TOURS</th>
-            <th className="verticalText">INSCRITOS</th>
+            <th style={tablaInscritos_th}>N°</th>
+            <th style={tablaInscritos_th}>FECHAS</th>
+            <th style={tablaInscritos_th}>TOURS</th>
+            <th style={tablaInscritos_th_vertical}>INSCRITOS</th>
 
-            <th>ACCION</th>
-            <th>AGUA</th>
-            <th>BUS</th>
-            <th>FOTOS</th>
+            <th style={tablaInscritos_th}>ACCION</th>
+            <th style={tablaInscritos_th}>AGUA</th>
+            <th style={tablaInscritos_th}>BUS</th>
+            <th style={tablaInscritos_th}>FOTOS</th>
           </tr>
 
           {reporte.map((datos, index) => {
             return (
               <tr key={`reporteM${index}`}>
-                <td>{index + 1} </td>
-                <td> {datos.fecha} </td>
-                <td> {`${datos.tour.titulo}`} </td>
+                <td style={tablaInscritos_td_th}>{index + 1} </td>
+                <td style={tablaInscritos_td_th}> {datos.fecha} </td>
 
-                <td style={{ textAlign: "center" }}> {contarIncritors(datos.reservas)} </td>
+                <td style={tablaInscritos_td_th}>
+                  <Link
+                    to={`/reportes/Mensual/Detalle/${datos.id}`}
+                  >{`${datos?.tour?.titulo}`}</Link>
+                </td>
 
-                <td> </td>
-                <td> </td>
-                <td> </td>
-                <td> </td>
+                <td style={{ textAlign: "center", border: "1px solid #ddd" }}>
+                  {contarIncritors(datos.reservas)}{" "}
+                </td>
+
+                <td style={tablaInscritos_td_th}> </td>
+                <td style={tablaInscritos_td_th}> </td>
+                <td style={tablaInscritos_td_th}> </td>
+                <td style={tablaInscritos_td_th}> </td>
               </tr>
             );
           })}

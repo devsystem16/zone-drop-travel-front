@@ -14,11 +14,14 @@ import Tooltip from "@mui/material/Tooltip";
 
 import Edit from "@mui/icons-material/Edit";
 import Delete from "@mui/icons-material/Delete";
+import AddICON from "@mui/icons-material/Add";
 
 import Settings from "@mui/icons-material/Settings";
 import Logout from "@mui/icons-material/Logout";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import NewTour from "../NewTour";
+import AñadirFechaSalida from "./AñadirFechaSalida";
+
 import { GlobalConfigContext } from "../../context/GlobalConfigContext";
 import { RegistroTourClienteContext } from "../../context/RegistroTourClienteContext";
 
@@ -42,6 +45,12 @@ export default function OptionTour({ tour, image }) {
         setComponent(<NewTour editing={true} tour={tour} />);
         setModalGlobal(true);
       }
+
+      if (e.target.innerText === "Añadir Fecha Salida") {
+        setComponent(<AñadirFechaSalida tour={tour} />);
+        setModalGlobal(true);
+      }
+
       if (e.target.innerText === "Eliminar Tour") {
         alertify
           .confirm(
@@ -111,13 +120,20 @@ export default function OptionTour({ tour, image }) {
         transformOrigin={{ horizontal: "right", vertical: "top" }}
         anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
       >
-        <Divider />
-        {/* <MenuItem>
+        {/* <Divider /> */}
+        <MenuItem>
           <ListItemIcon>
             <Edit fontSize="small" />
           </ListItemIcon>
           Editar Tour
-        </MenuItem> */}
+        </MenuItem>
+
+        <MenuItem>
+          <ListItemIcon>
+            <AddICON fontSize="small" />
+          </ListItemIcon>
+          Añadir Fecha Salida
+        </MenuItem>
         <MenuItem>
           <ListItemIcon>
             <Delete fontSize="small" />

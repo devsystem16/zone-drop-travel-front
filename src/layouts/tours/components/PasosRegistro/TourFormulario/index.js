@@ -24,6 +24,7 @@ export default function TourFormulario({ editing, dataTour }) {
   }, []);
 
   function replaceAll(str, find, replace) {
+    if (str === null) return;
     return str.replace(new RegExp(escapeRegExp(find), "g"), replace);
   }
   function escapeRegExp(string) {

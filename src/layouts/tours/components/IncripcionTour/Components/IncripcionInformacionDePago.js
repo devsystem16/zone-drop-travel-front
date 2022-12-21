@@ -8,19 +8,22 @@ import Switch from "@mui/material/Switch";
 
 import { RegistroTourClienteContext } from "../../../context/RegistroTourClienteContext";
 
+import API from "../../../../../Environment/config";
+
 import SelectBancos from "../../../../../components/SelectBancos/SelectBancos";
 import SelectTipoTransaccion from "../../../../../components/SelectTipoTransaccion/SelectTipoTransaccion";
 import InputMoneda from "./InputMoneda";
-export default function IncripcionInformacionDePago() {
-  const [precioDistribuidor, setPrecioDistribuidor] = useState(0);
+import alertify from "alertifyjs";
+export default function IncripcionInformacionDePago({ editing = false, dataReserva }) {
   const {
     cliente,
     acompañantes,
     informacionPagos,
     setInformacionPagos,
-    banco,
     setBanco,
     setTipoTransaccion,
+    tipoTransaccion,
+    setExisteError,
   } = useContext(RegistroTourClienteContext);
 
   const [totalCalculado, setTotalCalculado] = useState(0);
@@ -36,6 +39,14 @@ export default function IncripcionInformacionDePago() {
     var totalDescuento =
       +informacionPagos.descuentoAgencia + +informacionPagos.descuento + +informacionPagos.abono;
     valorClientePrincipal = valorClientePrincipal - totalDescuento;
+    valorClientePrincipal = valorClientePrincipal + +informacionPagos.costoAdicional;
+
+    if (valorClientePrincipal < 0) {
+      alertify.error("Error en el precio");
+      setExisteError(true);
+    } else {
+      setExisteError(false);
+    }
     setTotalCalculado(valorClientePrincipal);
   };
 
@@ -49,10 +60,13 @@ export default function IncripcionInformacionDePago() {
 
   const handleChangeCheck = (event) => {
     setCheckIsAgencia(event.target.checked);
+
     setInformacionPagos({
       ...informacionPagos,
       esAgencia: event.target.checked,
+      descuentoAgencia: event.target.checked ? informacionPagos.descuentoAgencia : 0,
     });
+    setRecalcularValores(true);
   };
 
   const handleChange = (event) => {
@@ -62,7 +76,12 @@ export default function IncripcionInformacionDePago() {
       [name]: value,
     });
 
-    if (name === "descuentoAgencia" || name === "descuento" || name === "abono") {
+    if (
+      name === "descuentoAgencia" ||
+      name === "descuento" ||
+      name === "abono" ||
+      name === "costoAdicional"
+    ) {
       setRecalcularValores(true);
     }
   };
@@ -87,14 +106,15 @@ export default function IncripcionInformacionDePago() {
       <div>
         <FormGroup>
           <FormControlLabel
-            control={<Switch onChange={handleChangeCheck} />}
+            control={<Switch checked={informacionPagos.esAgencia} onChange={handleChangeCheck} />}
             title="Si esta reservación es recomendada por otra agencia, usted puede definir un valor de comisión para agradecimiento de la misma."
             label="Aplica Descuento por Agencia"
           />
-          {checkIsAgencia ? (
+          {informacionPagos.esAgencia ? (
             <InputMoneda
               label="$ Comisión Agencia"
               name="descuentoAgencia"
+              defaultValue={informacionPagos.descuentoAgencia}
               setValue={handleChange}
             ></InputMoneda>
           ) : null}
@@ -102,39 +122,76 @@ export default function IncripcionInformacionDePago() {
       </div>
 
       <div>
-        <InputMoneda label="Descuento" name="descuento" setValue={handleChange}></InputMoneda>
-        <InputMoneda label="Abono" name="abono" setValue={handleChange}></InputMoneda>
+        <InputMoneda
+          defaultValue={informacionPagos.descuento}
+          label="Descuento"
+          name="descuento"
+          setValue={handleChange}
+        ></InputMoneda>
+        <InputMoneda
+          defaultValue={informacionPagos.abono}
+          label="Abono"
+          name="abono"
+          inactivo={editing}
+          setValue={handleChange}
+        ></InputMoneda>
+        <div>
+          <InputMoneda
+            defaultValue={informacionPagos.costoAdicional}
+            label="Costos Adicionales"
+            name="costoAdicional"
+            setValue={handleChange}
+          ></InputMoneda>
+          <TextField
+            style={{ width: "20%" }}
+            id="standard-search"
+            defaultValue={informacionPagos.costoAdicionalMotivo}
+            label="Motivo"
+            name="costoAdicionalMotivo"
+            onChange={handleChange}
+            type="search"
+            variant="standard"
+          />
+        </div>
       </div>
-      <div>
-        <SelectBancos setBanco={setBanco} defaultValue="" />
-      </div>
+
       <SelectTipoTransaccion
+        inactivo={editing}
         titulo="Tipo de transacción"
         pathApi="/tipo-transacciones/list-select"
         setGlobalValue={setTipoTransaccion}
       ></SelectTipoTransaccion>
 
-      <TextField
-        id="standard-search"
-        name="numeroDeposito"
-        onChange={handleChange}
-        label="N° Deposito"
-        type="search"
-        variant="standard"
-      />
-      <TextField
-        id="standard-search"
-        name="fechaDeposito"
-        onChange={handleChange}
-        label="Fecha Deposito"
-        type="date"
-        variant="standard"
-      />
-      <div></div>
+      {tipoTransaccion?.descripcion === "TRANSFERENCIA" ||
+      tipoTransaccion?.descripcion === "DEPOSITO" ? (
+        <>
+          <div>
+            <SelectBancos setBanco={setBanco} defaultValue="" />
+          </div>
+          <TextField
+            id="standard-search"
+            name="numeroDeposito"
+            onChange={handleChange}
+            label="N° Deposito"
+            type="search"
+            variant="standard"
+          />
+          <TextField
+            id="standard-search"
+            name="fechaDeposito"
+            onChange={handleChange}
+            label="Fecha Deposito"
+            type="date"
+            variant="standard"
+          />
+          <div></div>
+        </>
+      ) : null}
+
       <TextField
         style={{ width: "50%" }}
         id="standard-search"
-        label="Observaciones"
+        label="Observaciones Generales"
         name="observaciones"
         onChange={handleChange}
         type="search"

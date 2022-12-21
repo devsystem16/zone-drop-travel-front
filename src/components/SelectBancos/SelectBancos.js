@@ -37,8 +37,9 @@ const SelectBancos = ({ setBanco, defaultValue = "" }) => {
       return;
     }
   };
-  const handleChangeSelect = (event) => {
-    setBanco(JSON.parse(event.explicitOriginalTarget.attributes.objetoatributos.value));
+  const handleChangeSelect = (event, dataset) => {
+    console.log(JSON.parse(dataset.props.objetoAtributos));
+    setBanco(JSON.parse(dataset.props.objetoAtributos));
     setDefaultBank(event.target.value);
   };
 

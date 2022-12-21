@@ -6,16 +6,23 @@ import Step from "@mui/material/Step";
 import StepLabel from "@mui/material/StepLabel";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
-
+import { GlobalConfigContext } from "../../context/GlobalConfigContext";
 import { TourContext } from "../../context/TourContext";
 import Switch from "./Switch";
-
-const steps = ["Información del Tour", "Precios", "Programación de Fechas", "Lugares de Salida"];
 
 export default function PasosRegistro({ editing, tour }) {
   const [activeStep, setActiveStep] = React.useState(0);
   const [skipped, setSkipped] = React.useState(new Set());
-  const { guardarTour, validar } = useContext(TourContext);
+  const { guardarTour, ActualizarTour, validar } = useContext(TourContext);
+
+  const { setModalGlobal } = useContext(GlobalConfigContext);
+
+  var steps;
+  if (editing) {
+    steps = ["Información del Tour", /* "Precios",*/ "Lugares de Salida"];
+  } else {
+    steps = ["Información del Tour", "Precios", "Programación de Fechas", "Lugares de Salida"];
+  }
 
   const isStepOptional = (step) => {
     return step === 1;
@@ -33,7 +40,12 @@ export default function PasosRegistro({ editing, tour }) {
     }
 
     if (e.target.firstChild.nodeValue == "Guardar") {
-      guardarTour();
+      if (editing) {
+        ActualizarTour();
+        setModalGlobal(false);
+      } else {
+        guardarTour();
+      }
     }
 
     let newSkipped = skipped;

@@ -8,12 +8,13 @@ import FormControl from "@mui/material/FormControl";
 import FormLabel from "@mui/material/FormLabel";
 import API from "../../../../../Environment/config";
 
-export default function SeleccionLugaresSalida({ setValues }) {
+export default function SeleccionLugaresSalida({ setValues, editing = false, dataReserva }) {
   const [lugaresSalidaTour, setLugaresSalidaTour] = useState([]);
 
-  const [value, setValue] = React.useState("female");
+  const [value, setValue] = React.useState(0);
 
   const handleChange = (event) => {
+    // alert(JSON.stringify(event.target.value));
     setValue(event.target.value);
     setValues(event.target.value);
   };
@@ -21,11 +22,27 @@ export default function SeleccionLugaresSalida({ setValues }) {
   useEffect(() => {
     localStorage.setItem("current_component", "component-lugares-salida");
     cargarLugaresSalidaTour();
+    if (editing) {
+      loadLugarSalidaDefault();
+    }
   }, []);
   const cargarLugaresSalidaTour = async () => {
     try {
       var response = await API.get("/lugar-salida-tour/obtener/" + localStorage.getItem("tour_id"));
       setLugaresSalidaTour(response.data);
+    } catch (error) {
+      alert("Ocurrió un error.", error);
+      console.error(error);
+      return;
+    }
+  };
+
+  const loadLugarSalidaDefault = async () => {
+    try {
+      var response = await API.get("/reserva/lugar-salida/obtener/" + dataReserva.id);
+      // alert(JSON.stringify(response.data));
+      setValue(response.data.lugar_salida_tours_id);
+      setValues(response.data.lugar_salida_tours_id);
     } catch (error) {
       alert("Ocurrió un error.", error);
       console.error(error);

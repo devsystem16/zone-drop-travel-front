@@ -26,7 +26,10 @@ const RegistroTourClienteProvider = (props) => {
     tipoCliente: null,
     tipo_acompanante_id: -1,
     existente: false,
+    añadirAlDetalle: false,
   });
+
+  const [existeError, setExisteError] = useState(false);
 
   // Acompañantes del cliente titular del registro.
   const [originalListaTours, setOriginalListaTours] = useState([]);
@@ -34,10 +37,10 @@ const RegistroTourClienteProvider = (props) => {
   const [reloadListaTours, setReloadListaTours] = useState(true);
 
   const [acompañantes, setAcompañantes] = useState([]);
-  const [banco, setBanco] = useState(null);
+  const [banco, setBanco] = useState({ id: 1, descripcion: "- SELECCIONE -" });
   const [habitciones, setHabitaciones] = useState([]);
   const [lugarSalida, SetLugarSalida] = useState(null);
-  const [tipoTransaccion, setTipoTransaccion] = useState(null);
+  const [tipoTransaccion, setTipoTransaccion] = useState({ id: 2, descripcion: "EFECTIVO" });
   const [currentComponent, setCurrentComponent] = useState({
     complete: false,
     component: "not load",
@@ -47,10 +50,20 @@ const RegistroTourClienteProvider = (props) => {
     descuentoAgencia: 0,
     abono: 0,
     descuento: 0,
+    costoAdicional: 0,
+    costoAdicionalMotivo: "",
     numeroDeposito: "",
     fechaDeposito: "",
     observaciones: "",
   });
+
+  const [openModalVoucher, setOpenModalVoucher] = useState(false);
+  const [datosVoucher, setDatosVoucher] = useState([]);
+
+  const obtenerAcompañantes = async (id) => {
+    const response = await API.get("reserva/acompaniante/obtener/" + id);
+    setAcompañantes(response.data);
+  };
 
   const eliminarTour = async (id) => {
     const response = await API.post("/tour/eliminar/" + id);
@@ -101,22 +114,26 @@ const RegistroTourClienteProvider = (props) => {
         observaciones: "",
         estado: true,
         tipoCliente: null,
+        existente: false,
+        añadirAlDetalle: false,
       });
     }
     if (opcion === "informacionPagos" || "all") {
-      setTipoTransaccion(null);
+      setTipoTransaccion({ id: 2, descripcion: "EFECTIVO" });
       setInformacionPagos({
         esAgencia: false,
         descuentoAgencia: 0,
         abono: 0,
         descuento: 0,
+        costoAdicional: 0,
+        costoAdicionalMotivo: "",
         numeroDeposito: "",
         fechaDeposito: "",
         observaciones: "",
       });
     }
     if (opcion === "banco" || "all") {
-      setBanco(null);
+      setBanco({ id: 1, descripcion: "- SELECCIONE -" });
     }
     if (opcion === "acompañantes" || "all") {
       setAcompañantes([]);
@@ -128,10 +145,10 @@ const RegistroTourClienteProvider = (props) => {
     // if (opcion === "informacionPagos" || "all") {
     // }
   };
-  const validar = (option) => {
+  const validar = (option, editing = false) => {
     switch (option) {
       case "component-registro-titular":
-        return validarCliente();
+        return validarCliente(editing);
 
       case "component-acompañantes":
         break;
@@ -144,16 +161,17 @@ const RegistroTourClienteProvider = (props) => {
     return { estado: true, mensaje: "Datos correctos" };
   };
 
-  const validarCliente = () => {
+  const validarCliente = (editing) => {
+    //  if (editing) return { estado: true, mensaje: "Datos correctos" };
     if (cliente.documento === "")
       return { estado: false, mensaje: "Ingrese el documento del cliente" };
     if (cliente.nombres === "")
       return { estado: false, mensaje: "Ingrese los nombres del cliente" };
     if (cliente.apellidos === "")
       return { estado: false, mensaje: "Ingrese los apellidos del cliente" };
-    if (cliente.fechaNacimiento === "")
-      return { estado: false, mensaje: "Seleccione la fecha de nacimiento" };
-    if (cliente.correo === "") return { estado: false, mensaje: "Ingrese un correo" };
+    // if (cliente.fechaNacimiento === "")
+    //   return { estado: false, mensaje: "Seleccione la fecha de nacimiento" };
+    // if (cliente.correo === "") return { estado: false, mensaje: "Ingrese un correo" };
     if (cliente.direccion === "") return { estado: false, mensaje: "Falta la dirección" };
     if (cliente.telefono1 === "") return { estado: false, mensaje: "El teléfono 1 es obligatorio" };
 
@@ -202,6 +220,39 @@ const RegistroTourClienteProvider = (props) => {
     alert("Cliente Guardado");
   };
 
+  const editarInscripcion = async (idReserva) => {
+    setModalTourRegistroCliente(false);
+
+    var infoPagos = {
+      ...informacionPagos,
+      tipoTransaccion: tipoTransaccion,
+    };
+    var reserva = {
+      cliente: cliente,
+      programacion_fecha_id: localStorage.getItem("programacion_fecha_id"),
+      acompaniantes: acompañantes,
+      informacionPagos: infoPagos,
+      banco: banco,
+      habitaciones: habitciones,
+      lugarSalida: lugarSalida,
+    };
+
+    try {
+      var response = await API.post("/reserva/editar/" + idReserva, reserva);
+
+      if (response.status === 200) {
+        resetear("all");
+        alertify.success(response.data.sussesMessage);
+        return { status: 200, datos: response.data };
+      } else {
+        alertify.error(response.data.errorMessage);
+        return { status: 500, errorMessage: "Error al Actualizar" };
+      }
+    } catch (error) {
+      return { status: 500, errorMessage: "Error al Actualizar" };
+    }
+    //
+  };
   const registrarInscripcion = async () => {
     setModalTourRegistroCliente(false);
 
@@ -226,10 +277,14 @@ const RegistroTourClienteProvider = (props) => {
         resetear("all");
 
         alertify.success(response.data.sussesMessage);
+        return { status: 200, datos: response.data };
       } else {
         alertify.error(response.data.errorMessage);
+        return { status: 500, errorMessage: "Error al guardar" };
       }
-    } catch (error) {}
+    } catch (error) {
+      return { status: 500, errorMessage: "Error al guardar" };
+    }
   };
 
   const filtrarTours = (e) => {
@@ -242,6 +297,12 @@ const RegistroTourClienteProvider = (props) => {
     setListaTours(results);
   };
 
+  const loadDataVoucher = async (idReserva) => {
+    const jsonTours = await API.get(`/reserva/voucher/generar/${idReserva}`);
+    setDatosVoucher(jsonTours.data);
+    setOpenModalVoucher(true);
+  };
+
   useEffect(() => {
     console.log("LOAD CONEXT CLIENTE TOUR CONTEXT");
     if (reloadListaTours) {
@@ -249,6 +310,7 @@ const RegistroTourClienteProvider = (props) => {
       setReloadListaTours(false);
     }
   }, [reloadListaTours]);
+
   return (
     <RegistroTourClienteContext.Provider
       value={{
@@ -279,6 +341,17 @@ const RegistroTourClienteProvider = (props) => {
         originalListaTours,
         eliminarTour,
         setReloadListaTours,
+
+        loadDataVoucher,
+        openModalVoucher,
+        setOpenModalVoucher,
+
+        datosVoucher,
+        setDatosVoucher,
+        existeError,
+        setExisteError,
+        obtenerAcompañantes,
+        editarInscripcion,
       }}
     >
       {props.children}

@@ -17,6 +17,8 @@ import Voucher from "./Voucher";
 export default function ModalVoucher({ open, setOpen, datos }) {
   const [openLoading, setOpenLoading] = React.useState(false);
 
+  if (datos.length === 0) return null;
+
   const handleClose = () => {
     setOpen(false);
   };
@@ -44,7 +46,7 @@ export default function ModalVoucher({ open, setOpen, datos }) {
           </DialogContentText>
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleClose}>Cancelar</Button>
+          <Button onClick={handleClose}>Cerrar</Button>
         </DialogActions>
       </Dialog>
     </div>

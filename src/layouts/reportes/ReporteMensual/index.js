@@ -7,7 +7,7 @@ import SelectMeses from "../Components/SelectMeses";
 import PrintComponent from "components/PrintComponent/PrintComponent";
 
 const ReporteMensual = () => {
-  const [mes, setMes] = useState("Enero");
+  const [mes, setMes] = useState(1);
 
   const [Component, setComponent] = useState(Reporte.defaultComponent);
 

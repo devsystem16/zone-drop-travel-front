@@ -8,10 +8,24 @@ import { useReactToPrint } from "react-to-print";
 import moment from "moment";
 const TablaListaReservas = ({ tour, fecha, titulo, fechaSalida = -1 }) => {
   //   if (fechaSalida == -1) return <div>Cargando datos...</div>;
+  const pageStyle = `
+  @media print {
+    html,
+    body {
+      color-adjust: exact;
+      -webkit-print-color-adjust: exact;
+   }
 
+   .verticalText1 {
+    writing-mode: vertical-lr;
+    transform: rotate(180deg);
+    width: 3%;  
+    }
+`;
   const componentRef = useRef();
   const fn_imprimir = useReactToPrint({
     content: () => componentRef.current,
+    pageStyle: pageStyle,
   });
 
   const [reporte, setReporte] = useState([]);
@@ -25,6 +39,11 @@ const TablaListaReservas = ({ tour, fecha, titulo, fechaSalida = -1 }) => {
     cargarReporte();
   }, []);
 
+  const isNull = (dato) => {
+    if (dato === null) return "";
+    if (dato === undefined) return "";
+    return dato;
+  };
   if (reporte?.listadoClientes == null) return <div>Cargando Datos</div>;
   return (
     <>
@@ -34,12 +53,20 @@ const TablaListaReservas = ({ tour, fecha, titulo, fechaSalida = -1 }) => {
         <center>
           <h1>{titulo} </h1>
         </center>
+
+        <div>
+          <strong>FECHA DE SALIDA:</strong>{" "}
+          {`📆 ${moment(fecha.fecha).format("dddd, D MMMM, yyyy")}`}
+        </div>
+
+        <div>
+          <strong>FECHA DE RETORNO:</strong>{" "}
+        </div>
         <div>
           <strong>RUTA:</strong> {tour.titulo}{" "}
         </div>
         <div>
-          <strong>FECHA DE SALIDA:</strong>{" "}
-          {`📆 ${moment(fecha.fecha).format("dddd, D MMMM, yyyy")}`}
+          <strong>PLACA DE BUS:</strong>{" "}
         </div>
         <div style={{ width: "100%" }}>
           <table id="customers">
@@ -55,7 +82,9 @@ const TablaListaReservas = ({ tour, fecha, titulo, fechaSalida = -1 }) => {
                   <td>{index + 1}</td>
                   <td> {`${cliente.nombres}  ${cliente.apellidos}  `}</td>
                   <td class="center"> {cliente.documento} </td>
-                  <td class="center"> {`${cliente.telefono1} - ${cliente.telefono2}  `}</td>
+                  <td class="center">
+                    {`${isNull(cliente.telefono1)} - ${isNull(cliente.telefono2)}  `}
+                  </td>
                 </tr>
               );
             })}

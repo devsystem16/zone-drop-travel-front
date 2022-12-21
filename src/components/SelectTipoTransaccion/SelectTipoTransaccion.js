@@ -7,7 +7,13 @@ import FormControl from "@mui/material/FormControl";
 
 import API from "../../Environment/config";
 
-const SelectTipoTransaccion = ({ titulo, pathApi, setGlobalValue, globalDefaultValue = "" }) => {
+const SelectTipoTransaccion = ({
+  titulo,
+  pathApi,
+  setGlobalValue,
+  globalDefaultValue = "",
+  inactivo = false,
+}) => {
   const [listValues, setListValues] = useState([]);
   const [defaultValue, setDefaultValue] = useState("");
 
@@ -37,8 +43,9 @@ const SelectTipoTransaccion = ({ titulo, pathApi, setGlobalValue, globalDefaultV
       return;
     }
   };
-  const handleChangeSelect = (event) => {
-    setGlobalValue(JSON.parse(event.explicitOriginalTarget.attributes.objetoatributos.value));
+
+  const handleChangeSelect = (event, dataset) => {
+    setGlobalValue(JSON.parse(dataset.props.objetoAtributos));
     setDefaultValue(event.target.value);
   };
 
@@ -54,6 +61,7 @@ const SelectTipoTransaccion = ({ titulo, pathApi, setGlobalValue, globalDefaultV
             value={defaultValue}
             label="listValues"
             onChange={handleChangeSelect}
+            disabled={inactivo}
           >
             {listValues.map((obj) => {
               return (

@@ -43,7 +43,9 @@ export default function ToursTableData() {
             tour={tour}
             image={zone_drop_travel_icon}
             titulo={tour.titulo}
-            descripcion={`${tour.duracion} ${tour.detalles}`}
+            descripcion={` (${tour?.duracion == null ? "" : tour?.duracion})   ${
+              tour?.detalles == null ? "" : tour?.detalles
+            }`}
           />
         ),
         fechas_salida: (
@@ -84,17 +86,12 @@ export default function ToursTableData() {
               dangerouslySetInnerHTML={{ __html: acotarText(tour.incluye) }}
             ></div>
 
-            <div>
-              <strong style={{ color: "#1A73E8" }}>Ver mas</strong>
-            </div>
+            <div>{/* <strong style={{ color: "#1A73E8" }}>Ver mas</strong> */}</div>
           </MDTypography>
         ),
         noIncluye: (
           <MDTypography component="a" href="#" variant="caption" color="text" fontWeight="medium">
             <div dangerouslySetInnerHTML={{ __html: tour.noIncluye }}></div>
-            {/* <div>
-              <strong style={{ color: "#1A73E8" }}>Ver mas</strong>
-            </div> */}
           </MDTypography>
         ),
         lugarSalida: (

@@ -3,9 +3,25 @@ import { useReactToPrint } from "react-to-print";
 import PrintIcon from "@mui/icons-material/Print";
 
 const PrintComponent = ({ ComponentToPrint }) => {
+  const pageStyle = `
+  @media print {
+    html,
+    body {
+      color-adjust: exact;
+      -webkit-print-color-adjust: exact;
+   }
+
+   .verticalText1 {
+    writing-mode: vertical-lr;
+    transform: rotate(180deg);
+    width: 3%;  
+    }
+`;
+
   const componentRef = useRef();
   const fn_imprimir = useReactToPrint({
     content: () => componentRef.current,
+    pageStyle: pageStyle,
   });
 
   useEffect(() => {

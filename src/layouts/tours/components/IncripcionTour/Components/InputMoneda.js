@@ -53,7 +53,14 @@ NumberFormatCustom.propTypes = {
   onChange: PropTypes.func.isRequired,
 };
 
-export default function InputMoneda({ label, name, setValue, width = "140px" }) {
+export default function InputMoneda({
+  label,
+  name,
+  setValue,
+  width = "140px",
+  defaultValue = "",
+  inactivo = false,
+}) {
   const [values, setValues] = React.useState({
     name: "0",
   });
@@ -72,6 +79,8 @@ export default function InputMoneda({ label, name, setValue, width = "140px" }) 
       style={{ width: width }}
       value={values.numberformat}
       onChange={handleChange}
+      disabled={inactivo}
+      defaultValue={defaultValue}
       name={name}
       id="formatted-numberformat-input"
       InputProps={{

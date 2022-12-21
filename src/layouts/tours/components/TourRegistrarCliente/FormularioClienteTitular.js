@@ -11,11 +11,14 @@ import SelectTipoAcompañante from "../SelectTipoAcompañante/SelectTipoAcompañ
 import Loading from "../../../../components/Loading/Loading";
 import { buscarCliente } from "../../../../Controllers/ClienteController";
 import iziToast from "izitoast";
-
-export default function FormularioClienteTitular() {
-  const { cliente, setCliente, guardarCliente, resetear } = useContext(RegistroTourClienteContext);
+import API from "../../../../Environment/config";
+export default function FormularioClienteTitular({ editing = false, dataReserva }) {
+  const { cliente, setCliente, guardarCliente, resetear, setInformacionPagos } = useContext(
+    RegistroTourClienteContext
+  );
   const [tipoAcompañante, setTipoAcompañante] = useState({ descripcion: "adulto", id: -1 });
   const [isLoading, setIsLoading] = useState(false);
+  const [textEditing, setTextEditing] = useState("");
 
   const handleChange = (event) => {
     const { name, value } = event.target;
@@ -32,12 +35,25 @@ export default function FormularioClienteTitular() {
       find();
     }
   };
+
   const find = async () => {
     if (cliente.documento === "") return;
     setIsLoading(true);
     const data = await buscarCliente(cliente.documento);
     if (data.encontro) {
-      setCliente(data.cliente);
+      if (editing) {
+        if (data.cliente.documento === dataReserva.documento) {
+          var tipoCliente = cliente.tipoCliente;
+          var clienteTemp = data.cliente;
+          clienteTemp.tipoCliente = tipoCliente;
+
+          setCliente(clienteTemp);
+        } else {
+          setCliente(data.cliente);
+        }
+      } else {
+        setCliente(data.cliente);
+      }
     } else {
       // alertify.error("No encontrado");
       // resetear("cliente");
@@ -50,11 +66,67 @@ export default function FormularioClienteTitular() {
       tipoCliente: event.target.value,
     };
     setCliente(newValues);
+
     setTipoAcompañante(event.target.value);
   };
   useEffect(() => {
     localStorage.setItem("current_component", "component-registro-titular");
+    // alert("Rseteo");
+    // resetear("all");
+    if (editing) {
+      dataReserva.acompañantes.map((acompa) => {
+        if (acompa.tipo_cliente === "Titular") {
+          setTextEditing(`¿Desea cambiar el actual valor? ${acompa.categoria} $ ${acompa.precio} `);
+        }
+      });
+      cargarDatos(dataReserva.documento);
+    }
   }, []);
+
+  const obtenerPreciosDB = async () => {
+    const response = await API.get("/reserva/precios/obtener/" + dataReserva.id);
+
+    setInformacionPagos({
+      esAgencia: response.data.esAgencia,
+      descuentoAgencia: response.data.comisionAgencia,
+      abono: response.data.totalAbonos,
+      descuento: response.data.descuento,
+      costoAdicional: response.data.costoAdicional,
+      costoAdicionalMotivo: response.data.costoAdicionalMotivo,
+      numeroDeposito: "",
+      fechaDeposito: "",
+      observaciones: response.data.observaciones,
+    });
+  };
+
+  const cargarDatos = async (documento) => {
+    if (documento === "") return;
+    setIsLoading(true);
+    var dataClienteR = null;
+    const data = await buscarCliente(documento);
+
+    if (data.encontro) {
+      obtenerPreciosDB();
+
+      dataReserva.acompañantes.map((acompa) => {
+        if (acompa.tipo_cliente === "Titular") {
+          dataClienteR = data.cliente;
+          dataClienteR.tipoCliente = {
+            descripcion: acompa.categoria,
+            precio: acompa.precio,
+            estado: 1,
+            aplicapago: 1,
+          };
+        }
+      });
+
+      setCliente(dataClienteR);
+    } else {
+      // alertify.error("No encontrado");
+      // resetear("cliente");
+    }
+    setIsLoading(false);
+  };
   return (
     <Box
       component="form"
@@ -79,6 +151,9 @@ export default function FormularioClienteTitular() {
           defaultValue={cliente.documento}
           variant="standard"
           helperText="Ingrese una Cédula o RUC "
+          inputProps={{
+            maxLength: 15,
+          }}
         />
         <Button
           variant="outlined"
@@ -99,6 +174,9 @@ export default function FormularioClienteTitular() {
         defaultValue={cliente.nombres}
         variant="standard"
         helperText="Nombres del Titular de la reserva"
+        inputProps={{
+          maxLength: 100,
+        }}
       />{" "}
       <TextField
         required
@@ -111,17 +189,21 @@ export default function FormularioClienteTitular() {
         value={cliente.apellidos}
         variant="standard"
         helperText="Apellidos del Titular de la reserva"
+        inputProps={{
+          maxLength: 100,
+        }}
       />{" "}
       <div></div>
       <ListaGenero></ListaGenero>
       <SelectTipoAcompañante
+        editing={editing}
+        textEditing={textEditing}
         handleChange={handleChangeSelect}
         value={cliente.tipoCliente}
         ProgramacionFechaId={localStorage.getItem("programacion_fecha_id")}
       />
       <div></div>
       <TextField
-        required
         id="standard-required"
         label="Fecha Nacimiento"
         name="fechaNacimiento"
@@ -134,13 +216,15 @@ export default function FormularioClienteTitular() {
         helperText="Fecha Nacimiento"
       />
       <TextField
-        required
         id="standard-required"
         label="Correo"
         name="correo"
         value={cliente.correo}
         onChange={handleChange}
         style={{ width: 250 }}
+        inputProps={{
+          maxLength: 100,
+        }}
         defaultValue={cliente.correo}
         variant="standard"
         helperText="Correo P. Ej: zonedroptravel@outlook.com"
@@ -154,6 +238,9 @@ export default function FormularioClienteTitular() {
         onChange={handleChange}
         style={{ width: 500 }}
         defaultValue={cliente.direccion}
+        inputProps={{
+          maxLength: 499,
+        }}
         variant="standard"
         helperText="Dirección del Titular de la reserva"
       />
@@ -162,6 +249,9 @@ export default function FormularioClienteTitular() {
         required
         id="standard-required"
         label="Teléfono 1"
+        inputProps={{
+          maxLength: 15,
+        }}
         value={cliente.telefono1}
         name="telefono1"
         onChange={handleChange}
@@ -174,6 +264,9 @@ export default function FormularioClienteTitular() {
         id="standard-required"
         label="Teléfono 2"
         name="telefono2"
+        inputProps={{
+          maxLength: 15,
+        }}
         value={cliente.telefono2}
         onChange={handleChange}
         style={{ width: 160 }}
@@ -188,6 +281,9 @@ export default function FormularioClienteTitular() {
         onChange={handleChange}
         value={cliente.telefono3}
         style={{ width: 160 }}
+        inputProps={{
+          maxLength: 15,
+        }}
         defaultValue={cliente.telefono3}
         variant="standard"
         helperText="Teléfono 3"
@@ -202,6 +298,9 @@ export default function FormularioClienteTitular() {
         defaultValue={cliente.observaciones}
         variant="standard"
         helperText="¿Alguna observación?"
+        inputProps={{
+          maxLength: 500,
+        }}
       />
       <div></div>
       <center>

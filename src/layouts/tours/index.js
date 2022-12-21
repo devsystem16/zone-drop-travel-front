@@ -21,9 +21,15 @@ import { GlobalConfigContext } from "./context/GlobalConfigContext";
 
 import { RegistroTourClienteContext } from "./context/RegistroTourClienteContext";
 
+import ModalVoucher from "../Reservas/ModalVoucher";
+
 function Tours() {
   const { setModalGlobal, setComponent } = useContext(GlobalConfigContext);
-  const { filtrarTours } = useContext(RegistroTourClienteContext);
+
+  const { filtrarTours, openModalVoucher, setOpenModalVoucher, datosVoucher } = useContext(
+    RegistroTourClienteContext
+  );
+
   const nuevoTour = () => {
     setComponent(<NewTour editing={false} tour={null} />);
     setModalGlobal(true);
@@ -34,6 +40,7 @@ function Tours() {
   const filtrar = (e) => {
     filtrarTours(e);
   };
+
   return (
     <DashboardLayout>
       <Modal Component={null}></Modal>
@@ -41,6 +48,12 @@ function Tours() {
       {/* <DashboardNavbar /> */}
       {/* <h3>Listado de Tours</h3> */}
       <ModalNuevaReserva />
+
+      <ModalVoucher
+        datos={datosVoucher}
+        open={openModalVoucher}
+        setOpen={setOpenModalVoucher}
+      ></ModalVoucher>
 
       <MDBox pt={6} pb={3}>
         <Grid container spacing={6}>

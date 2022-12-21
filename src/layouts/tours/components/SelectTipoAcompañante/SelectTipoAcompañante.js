@@ -3,7 +3,13 @@ import API from "../../../../Environment/config";
 import MenuItem from "@mui/material/MenuItem";
 import TextField from "@mui/material/TextField";
 
-const SelectTipoAcompañante = ({ handleChange, value, ProgramacionFechaId }) => {
+const SelectTipoAcompañante = ({
+  handleChange,
+  value,
+  ProgramacionFechaId,
+  editing = false,
+  textEditing = "",
+}) => {
   const [listTipoAcompañante, setListTipoAcompañante] = useState([]);
 
   useEffect(() => {
@@ -13,6 +19,7 @@ const SelectTipoAcompañante = ({ handleChange, value, ProgramacionFechaId }) =>
   const cargarTiposAcompañantePrecio = async () => {
     try {
       var response = await API.get("/costo-tour/obtener-precios/" + ProgramacionFechaId);
+
       setListTipoAcompañante(response.data);
     } catch (error) {
       alert("Ocurrió un error.", error);
@@ -30,7 +37,7 @@ const SelectTipoAcompañante = ({ handleChange, value, ProgramacionFechaId }) =>
         value={value}
         onChange={handleChange}
         defaultValue={value}
-        helperText="El tipo de cliente define el precio."
+        helperText={editing ? textEditing : "El tipo de cliente define el precio."}
         variant="standard"
       >
         {listTipoAcompañante.map((option) => (

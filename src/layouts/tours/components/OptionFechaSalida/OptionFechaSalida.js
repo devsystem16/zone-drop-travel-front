@@ -9,16 +9,23 @@ import Chip from "@mui/material/Chip";
 import moment from "moment";
 import { RegistroTourClienteContext } from "../../context/RegistroTourClienteContext";
 import { GlobalConfigContext } from "../../context/GlobalConfigContext";
+
+import TourProvider from "../../context/TourContext";
+
 import Divider from "@mui/material/Divider";
 import TablaListaReservas from "../../TablaListaReservas/TablaListaReservas";
 
 import Stack from "@mui/material/Stack";
 import ContentPaste from "@mui/icons-material/ContentPaste";
+import ContentEdit from "@mui/icons-material/Edit";
 import ListItemIcon from "@mui/material/ListItemIcon";
 
-import Comprobante from "../../components/Comprobante/Comprobante";
+import TourPrecios from "../PasosRegistro/TourPrecios";
+
+// import Comprobante from "../../components/Comprobante/Comprobante";
+
 export default function OptionFechaSalida({ tour, fecha, onClick, onDelete }) {
-  const { setModalTourRegistroCliente } = useContext(RegistroTourClienteContext);
+  const { setModalTourRegistroCliente, resetear } = useContext(RegistroTourClienteContext);
   const { setComponent, setModalGlobal } = useContext(GlobalConfigContext);
 
   const [anchorEl, setAnchorEl] = React.useState(null);
@@ -31,14 +38,13 @@ export default function OptionFechaSalida({ tour, fecha, onClick, onDelete }) {
     console.log(e.target.textContent);
     if (e.target.innerText !== "") {
       if (e.target.textContent == "Nueva Reserva") {
+        resetear("all");
         localStorage.setItem("programacion_fecha_id", fecha.id);
         localStorage.setItem("tour_id", tour.id);
 
         setModalTourRegistroCliente(true);
       }
       if (e.target.textContent == "Generar Voucher") {
-        setComponent(<Comprobante />);
-        setModalGlobal(true);
       }
 
       if (e.target.textContent == "Pasajeros") {
@@ -53,16 +59,13 @@ export default function OptionFechaSalida({ tour, fecha, onClick, onDelete }) {
         setModalGlobal(true);
       }
 
-      if (e.target.textContent == "Ver Reservas") {
-        // setComponent(
-        //   <TablaListaReservas
-        //     tour={tour}
-        //     fecha={fecha}
-        //     titulo="Reporte de Inscritos"
-        //     fechaSalida={fecha.id}
-        //   ></TablaListaReservas>
-        // );
-        // setModalGlobal(true);
+      if (e.target.textContent == "Editar Precios") {
+        setComponent(
+          <TourProvider>
+            <TourPrecios dataTour={fecha} editing={true} />
+          </TourProvider>
+        );
+        setModalGlobal(true);
       }
     }
   };
@@ -122,6 +125,14 @@ export default function OptionFechaSalida({ tour, fecha, onClick, onDelete }) {
           Pasajeros
         </MenuItem>
 
+        <Divider sx={{ my: 0.5 }} />
+        <strong>Opciones</strong>
+        <MenuItem onClick={handleClose}>
+          <ListItemIcon>
+            <ContentEdit fontSize="small" />
+          </ListItemIcon>
+          Editar Precios
+        </MenuItem>
         {/* <Stack direction="row" spacing={1}>
           <Chip label="Reporte de Reservantes" />
           <Chip color="primary" label="Soft" />

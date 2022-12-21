@@ -4,7 +4,7 @@ import ListaLugaresSalida from "../../ListaLugaresSalida/ListaLugaresSalida";
 import OptionLugarSalida from "../../OptionLugarSalida/OptionLugarSalida";
 import API from "../../../../../Environment/config";
 
-export default function TourLugaresSalida() {
+export default function TourLugaresSalida({ editing, dataTour }) {
   const [lugaresSalida, setLugaresSalida] = useState([]);
 
   const cargarLugaresSalida = async () => {
@@ -22,7 +22,15 @@ export default function TourLugaresSalida() {
     <div>
       <ListaLugaresSalida lugaresSalida={lugaresSalida}></ListaLugaresSalida>
       <br></br>
-      <OptionLugarSalida></OptionLugarSalida>
+      {editing ? (
+        <>
+          <OptionLugarSalida editing={editing} data={dataTour.lugaresSalidas} />{" "}
+        </>
+      ) : (
+        <>
+          <OptionLugarSalida editing={editing} data={null}></OptionLugarSalida>
+        </>
+      )}
     </div>
   );
 }

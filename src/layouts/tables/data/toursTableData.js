@@ -90,9 +90,7 @@ export default function data() {
             <div>🚌 Transporte de Turismo.</div>
             <div>⛑ Seguro de Accidente Vial.</div>
             <div>🦠 Protocolo de Bioseguridad.</div>
-            <div>
-              <strong style={{ color: "#1A73E8" }}>Ver mas</strong>
-            </div>
+            <div>{/* <strong style={{ color: "#1A73E8" }}>Ver mas</strong> */}</div>
           </MDTypography>
         ),
         noIncluye: (
@@ -107,9 +105,7 @@ export default function data() {
             <div>🅿️ 03:00 am: Valle Chillos, Centro Comercial San Luis. </div>
             <div> 🅿️ 03:05 am: Triangulo, parada de los buses.</div>
             <div> 🅿️ 03:35 am: Centro Comercial Quicentro Sur.</div>
-            <div>
-              <strong style={{ color: "#1A73E8" }}>Ver mas</strong>
-            </div>
+            <div>{/* <strong style={{ color: "#1A73E8" }}>Ver mas</strong> */}</div>
           </MDTypography>
         ),
 

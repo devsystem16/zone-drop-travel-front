@@ -1,6 +1,12 @@
-import "./style.css";
+// import "./style.css";
 import React, { useEffect, useState } from "react";
 import API from "Environment/config";
+import {
+  tablaInscritos,
+  tablaInscritos_th,
+  tablaInscritos_td_th,
+  tablaInscritos_th_vertical,
+} from "./Styles";
 
 const ReporteAnual = ({ año = 2023 }) => {
   const [reporte, setReporte] = useState([]);
@@ -33,15 +39,15 @@ const ReporteAnual = ({ año = 2023 }) => {
   var contador = 1;
   return (
     <div style={{ width: "100%" }}>
-      <table id="customers">
+      <table style={tablaInscritos}>
         <tr>
-          <th>RESERVA</th>
-          <th>FECHAS</th>
-          <th>N° PAX</th>
-          <th>TOURS</th>
+          <th style={tablaInscritos_th}>RESERVA</th>
+          <th style={tablaInscritos_th}>FECHAS</th>
+          <th style={tablaInscritos_th}>N° PAX</th>
+          <th style={tablaInscritos_th}>TOURS</th>
 
-          <th>NOMBRES</th>
-          <th>OBSERVACION</th>
+          <th style={tablaInscritos_th}>NOMBRES</th>
+          <th style={tablaInscritos_th}>OBSERVACION</th>
         </tr>
 
         {reporte.map((datos, index) => {
@@ -50,12 +56,15 @@ const ReporteAnual = ({ año = 2023 }) => {
 
             return (
               <tr key={`reporteM${contador}`}>
-                <td> {reserva.id} </td>
-                <td> {datos.fecha} </td>
-                <td style={{ textAlign: "center" }}> {contarInscritos(reserva)} </td>
-                <td> {`${datos.tour.titulo}`} </td>
-                <td> {getTitular(reserva)} </td>
-                <td> </td>
+                <td style={tablaInscritos_td_th}> {reserva.id} </td>
+                <td style={tablaInscritos_td_th}> {datos.fecha} </td>
+                <td style={{ textAlign: "center", border: "1px solid #ddd" }}>
+                  {" "}
+                  {contarInscritos(reserva)}{" "}
+                </td>
+                <td style={tablaInscritos_td_th}> {`${datos.tour.titulo}`} </td>
+                <td style={tablaInscritos_td_th}> {getTitular(reserva)} </td>
+                <td style={tablaInscritos_td_th}> </td>
               </tr>
             );
           });

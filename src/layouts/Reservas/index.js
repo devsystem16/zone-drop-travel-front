@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import DashboardLayout from "examples/LayoutContainers/DashboardLayout";
 import DashboardNavbar from "examples/Navbars/DashboardNavbar";
 import { useLocation, Link } from "react-router-dom";
@@ -8,11 +8,12 @@ import Chip from "@mui/material/Chip";
 import Button from "@mui/material/Button";
 import API from "Environment/config";
 import moment from "moment";
-import "./style.css";
+// import "./Style2.css";
 
 import IconButton from "@mui/material/IconButton";
 import AcompañanteIcon from "@mui/icons-material/Wc";
 import PaidIcon from "@mui/icons-material/Paid";
+import EditIcon from "@mui/icons-material/Edit";
 
 import SummarizeIcon from "@mui/icons-material/Summarize";
 
@@ -23,8 +24,15 @@ import ModalAbonar from "./ModalAbonar";
 import ModalListadoAbonos from "./ModalListadoAbonos";
 import ModalListadoAcompañantes from "./ModalListadoAcompañantes";
 import ModalVoucher from "./ModalVoucher";
+import ModalEditarReserva from "./ModalEditarReserva";
+
+import { RegistroTourClienteContext } from "../tours/context/RegistroTourClienteContext";
 
 const Reservas = () => {
+  const { modalTourRegistroCliente, setModalTourRegistroCliente } = useContext(
+    RegistroTourClienteContext
+  );
+
   const codigo = useLocation().pathname.split("/").slice(1);
   const [reporte, setReporte] = useState([]);
 
@@ -39,6 +47,8 @@ const Reservas = () => {
   const [openListadoAbonos, setOpenListadoAbonos] = React.useState(false);
   const [openListadoAcompañantes, setOpenListadoAcompañantes] = React.useState(false);
   const [openModalVoucher, setOpenModalVoucher] = React.useState(false);
+  const [openModalEditarReserva, setOpenModalEditarReserva] = React.useState(false);
+  const [dataReserva, setDataReserva] = React.useState(null);
 
   const cargarReporte = async () => {
     const jsonTours = await API.get(`/reserva/listado/titulares/${codigo[codigo.length - 1]}`);
@@ -77,10 +87,18 @@ const Reservas = () => {
 
   const [datos, setDatos] = useState([]);
   const eventClickGenerarVoucher = async (data) => {
-    const jsonTours = await API.get(`/reserva/voucher/genarar/${data.id}`);
+    const jsonTours = await API.get(`/reserva/voucher/generar/${data.id}`);
 
     setDatos(jsonTours.data);
     setOpenModalVoucher(true);
+  };
+
+  const fn_editarReserva = (reserva) => {
+    //alert(JSON.stringify(reserva));
+    setDataReserva(reserva);
+    // setOpenModalEditarReserva(true);
+
+    setModalTourRegistroCliente(true);
   };
 
   if (reporte?.listadoClientes == null)
@@ -90,10 +108,28 @@ const Reservas = () => {
         <div>Cargando Datos</div>
       </DashboardLayout>
     );
+
+  const isNull = (dato) => {
+    if (dato === null) return "0";
+    if (dato === undefined) return "0";
+    return dato;
+  };
+
+  const verificarNull = (dato) => {
+    if (dato === null) return "";
+    else return dato;
+  };
   return (
     <DashboardLayout>
       <DashboardNavbar absolute isMini={false} />
-
+      <ModalEditarReserva
+        setReload={setReload}
+        // openModal={openModalEditarReserva}
+        openModal={modalTourRegistroCliente}
+        // setOpenModal={setOpenModalEditarReserva}
+        setOpenModal={setModalTourRegistroCliente}
+        dataReserva={dataReserva}
+      ></ModalEditarReserva>
       <>
         <center>
           <h1>Reservas</h1>
@@ -113,6 +149,9 @@ const Reservas = () => {
               <th>NOMBRES Y APELLIDOS</th>
 
               <th>N° TELEFÓNICOS</th>
+              <th>(-)Descuentos</th>
+              <th>(-)Comisión Ag.</th>
+              <th>(+)Costo Adicional</th>
               <th>Abonado</th>
               <th>Total</th>
               <th>Acompañantes</th>
@@ -126,10 +165,21 @@ const Reservas = () => {
                   <td class="center"> {cliente.documento} </td>
                   <td> {`${cliente.nombres}  ${cliente.apellidos}  `}</td>
 
-                  <td class="center"> {`${cliente.telefono1} - ${cliente.telefono2}  `}</td>
+                  <td class="center">
+                    {`${verificarNull(cliente.telefono1)} - ${verificarNull(cliente.telefono2)}  `}
+                  </td>
+
+                  <td class="center"> {` $ ${cliente.descuento}   `} </td>
+                  <td class="center"> {` $ ${cliente.comisionAgencia}  `} </td>
+                  <td class="center"> {` $ ${isNull(cliente.costoAdicional)}  `} </td>
 
                   <td class="center"> $ {CalcularAbonos(cliente.abonos)} </td>
-                  <td class="center"> {`$ ${cliente.totalCalculado}`}</td>
+                  <td class="center">
+                    {" "}
+                    {`$ ${
+                      cliente.totalCalculado - cliente.totalDescuento + cliente.costoAdicional
+                    }`}
+                  </td>
                   <td style={{ textAlign: "center" }}>
                     <Chip
                       onClick={() => eventClickListadoAcompañantes(cliente.acompañantes)}
@@ -141,6 +191,12 @@ const Reservas = () => {
                   </td>
                   <td class="center">
                     <IconButton
+                      disabled={
+                        CalcularAbonos(cliente.abonos) ==
+                        cliente.totalCalculado - cliente.totalDescuento
+                          ? true
+                          : false
+                      }
                       onClick={() =>
                         eventClickAbonar(
                           cliente.id,
@@ -173,6 +229,16 @@ const Reservas = () => {
                     >
                       <ReceiptIcon fontSize="inherit" />
                     </IconButton>
+
+                    <IconButton
+                      onClick={() => fn_editarReserva(cliente)}
+                      title="Editar Reserva"
+                      aria-label="delete"
+                      size="small"
+                    >
+                      <EditIcon fontSize="inherit" />
+                    </IconButton>
+
                     {/* <IconButton
                       onClick={() => eventClickListadoAcompañantes(cliente.acompañantes)}
                       title="Vér Acompañantes"

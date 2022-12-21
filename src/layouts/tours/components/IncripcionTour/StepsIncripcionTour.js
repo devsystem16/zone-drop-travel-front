@@ -8,8 +8,16 @@ import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import { RegistroTourClienteContext } from "../../context/RegistroTourClienteContext";
 
+import API from "../../../../Environment/config";
+
 import Switch from "./Switch";
 import alertify from "alertifyjs";
+
+import Dialog from "@mui/material/Dialog";
+import DialogActions from "@mui/material/DialogActions";
+import DialogContent from "@mui/material/DialogContent";
+import DialogContentText from "@mui/material/DialogContentText";
+import DialogTitle from "@mui/material/DialogTitle";
 
 const steps = [
   "Registro/busqueda Titular",
@@ -18,8 +26,16 @@ const steps = [
   "Información de Pago",
 ];
 
-export default function StepsIncripcionTour() {
-  const { registrarInscripcion, validar } = useContext(RegistroTourClienteContext);
+export default function StepsIncripcionTour({ editing = false, dataReserva, setReload }) {
+  const {
+    editarInscripcion,
+    editgarInscripcion,
+    validar,
+    loadDataVoucher,
+    existeError,
+    setExisteError,
+  } = useContext(RegistroTourClienteContext);
+
   const [activeStep, setActiveStep] = React.useState(0);
   const [skipped, setSkipped] = React.useState(new Set());
 
@@ -31,16 +47,28 @@ export default function StepsIncripcionTour() {
     return skipped.has(step);
   };
 
-  const handleNext = (e) => {
-    const data = validar(localStorage.getItem("current_component"));
-
+  const handleNext = async (e) => {
+    const data = validar(localStorage.getItem("current_component"), editing);
+    setExisteError(false);
     if (!data.estado) {
       alertify.error(data.mensaje);
       return;
     }
 
     if (e.target.firstChild.nodeValue == "Guardar") {
-      registrarInscripcion();
+      if (editing) {
+        const response = await editarInscripcion(dataReserva.id);
+        setReload(true);
+        return;
+      }
+
+      const response = await registrarInscripcion();
+
+      if (response.status === 200) {
+        loadDataVoucher(response.datos.reserva.id);
+      } else {
+        alertify.error("Ocurrió un error al guardar la reservación.");
+      }
     }
 
     let newSkipped = skipped;
@@ -54,6 +82,7 @@ export default function StepsIncripcionTour() {
   };
 
   const handleBack = () => {
+    setExisteError(false);
     setActiveStep((prevActiveStep) => prevActiveStep - 1);
   };
 
@@ -91,7 +120,7 @@ export default function StepsIncripcionTour() {
       ) : (
         <React.Fragment>
           <Typography sx={{ mt: 2, mb: 1 }}>
-            <Switch step={activeStep + 1} />
+            <Switch editing={editing} dataReserva={dataReserva} step={activeStep + 1} />
           </Typography>
           <Box sx={{ display: "flex", flexDirection: "row", pt: 2 }}>
             <Button color="inherit" disabled={activeStep === 0} onClick={handleBack} sx={{ mr: 1 }}>
@@ -99,7 +128,7 @@ export default function StepsIncripcionTour() {
             </Button>
             <Box sx={{ flex: "1 1 auto" }} />
 
-            <Button onClick={handleNext}>
+            <Button disabled={existeError} onClick={handleNext}>
               {activeStep === steps.length - 1 ? "Guardar" : "Siguiente"}
             </Button>
           </Box>
@@ -108,3 +137,43 @@ export default function StepsIncripcionTour() {
     </Box>
   );
 }
+
+const AlertDialog = () => {
+  const [open, setOpen] = React.useState(false);
+
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+
+  return (
+    <div>
+      <Button variant="outlined" onClick={handleClickOpen}>
+        Open alert dialog
+      </Button>
+      <Dialog
+        open={open}
+        onClose={handleClose}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+      >
+        <DialogTitle id="alert-dialog-title">{"Use Google's location service?"}</DialogTitle>
+        <DialogContent>
+          <DialogContentText id="alert-dialog-description">
+            Let Google help apps determine location. This means sending anonymous location data to
+            Google, even when no apps are running.
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleClose}>Disagree</Button>
+          <Button onClick={handleClose} autoFocus>
+            Agree
+          </Button>
+        </DialogActions>
+      </Dialog>
+    </div>
+  );
+};

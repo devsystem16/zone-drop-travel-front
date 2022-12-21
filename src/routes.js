@@ -3,7 +3,7 @@ import Dashboard from "layouts/dashboard";
 import Tables from "layouts/tables";
 import Tour from "layouts/tours";
 import Billing from "layouts/billing";
-import RTL from "layouts/rtl";
+
 import Notifications from "layouts/notifications";
 import Profile from "layouts/profile";
 import SignIn from "layouts/authentication/sign-in";
@@ -13,6 +13,8 @@ import Reservas from "layouts/Reservas";
 
 import ReporteMensual from "layouts/reportes/ReporteMensual/";
 import ReporteAnual from "layouts/reportes/ReporteAnual/";
+
+import ReporteIncritos from "layouts/reportes/ReporteIncritos/";
 
 // @mui icons
 import Icon from "@mui/material/Icon";
@@ -62,6 +64,16 @@ const routes = [
 
     component: <ReporteMensual />,
   },
+
+  {
+    type: "titles",
+    name: "Tours",
+    key: "tables",
+    icon: <Icon fontSize="small">table_view</Icon>,
+    route: "/reportes/Mensual/Detalle/:idFecha",
+    component: <ReporteIncritos />,
+  },
+
   {
     type: "titles",
     name: "Reportes",

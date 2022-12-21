@@ -25,13 +25,17 @@ export default function ListaLugaresSalida({ lugaresSalida }) {
   });
 
   const handleClose = () => {
-    setDialogValue({ id: "", descripcion: "", hora: "", new: false });
+    setDialogValue({ id: "", descripcion: "", hora: "00:00", new: false });
     toggleOpen(false);
   };
 
   const handleSubmit = (event) => {
     event.preventDefault();
 
+    if (dialogValue.hora === undefined) {
+      alertify.error("Hora de salida NO especificada.");
+      return;
+    }
     setValue({
       descripcion: dialogValue.descripcion,
       id: dialogValue.id,
@@ -130,11 +134,14 @@ export default function ListaLugaresSalida({ lugaresSalida }) {
           <DialogTitle>Nuevo Lugar de salida</DialogTitle>
           <DialogContent>
             <DialogContentText>
-              ¿No existe este lugar de salida? {<br></br>}¡Por favor, añádelo!
+              {dialogValue.new && (
+                <>¿No existe este lugar de salida? {<br></br>}¡Por favor, añádelo! </>
+              )}
             </DialogContentText>
             <TextField
               autoFocus
               margin="dense"
+              disabled={!dialogValue.new}
               style={{ width: 500 }}
               id="name"
               value={dialogValue.descripcion}
