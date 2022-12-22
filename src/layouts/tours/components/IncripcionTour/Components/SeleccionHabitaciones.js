@@ -10,7 +10,7 @@ import Select from "@mui/material/Select";
 import Chip from "@mui/material/Chip";
 import API from "../../../../../Environment/config";
 import ModalSelectCantidadHabitacion from "./ModalSelectCantidadHabitacion";
-// import { RegistroTourClienteContext } from "../../../context/RegistroTourClienteContext";
+import { RegistroTourClienteContext } from "../../../context/RegistroTourClienteContext";
 
 import FormHelperText from "@mui/material/FormHelperText";
 
@@ -34,7 +34,9 @@ export default function SeleccionHabitaciones({ setValues, editing = false, data
   const [currentHabitacion, setCurrentHabitacion] = React.useState("");
   const [listHabitaciones, setListHabitaciones] = useState([]);
 
-  // const { habitciones, obtenerHabitaciones } = useContext(RegistroTourClienteContext);
+  const { habitcionesEliminadas, setHabitacionesEliminadas } = useContext(
+    RegistroTourClienteContext
+  );
 
   const handleChangeSelect = (event) => {
     if (existeHabitacion(event.target.value, listHabitaciones)) {
@@ -61,6 +63,8 @@ export default function SeleccionHabitaciones({ setValues, editing = false, data
     cargarHabitaciones();
     if (editing) {
       obtenerHabitacionesBD(dataReserva.id);
+
+      setHabitacionesEliminadas([]);
     }
   }, []);
   const cargarHabitaciones = async () => {
@@ -104,6 +108,10 @@ export default function SeleccionHabitaciones({ setValues, editing = false, data
   };
 
   const eliminarHabitacionListado = (habitacion) => {
+    if (habitacion?.existente) {
+      setHabitacionesEliminadas([...habitcionesEliminadas, habitacion]);
+    }
+
     const filteredLibraries = listHabitaciones.filter((item) => item.tipo !== habitacion.tipo);
 
     setListHabitaciones(filteredLibraries);

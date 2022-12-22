@@ -17,15 +17,23 @@ import { buscarCliente } from "../../../../Controllers/ClienteController";
 import Loading from "../../../../components/Loading/Loading";
 
 export default function FormularioRegistrarAcompañante({ editing = false, dataReserva }) {
-  const { acompañantes, setAcompañantes, obtenerAcompañantes, setHabitaciones, habitciones } =
-    useContext(RegistroTourClienteContext);
+  const {
+    acompañantes,
+    setAcompañantes,
+    obtenerAcompañantes,
+    setHabitaciones,
+    habitciones,
+    setAcompañantesEliminados,
+    habitcionesEliminadas,
+    setHabitacionesEliminadas,
+  } = useContext(RegistroTourClienteContext);
 
   //
 
   useEffect(() => {
     if (editing) {
       obtenerAcompañantes(dataReserva.id);
-
+      setAcompañantesEliminados([]);
       //setAcompañantes(dataReserva.acompañantes);
     }
   }, []);
@@ -39,6 +47,8 @@ export default function FormularioRegistrarAcompañante({ editing = false, dataR
         <Grid item xs={6}>
           <label>Habitaciones</label>
           <SeleccionHabitaciones
+            // habitcionesEliminadas={habitcionesEliminadas}
+            // setHabitacionesEliminadas={setHabitacionesEliminadas}
             setValues={setHabitaciones}
             dataReserva={dataReserva}
             editing={editing}
@@ -47,7 +57,7 @@ export default function FormularioRegistrarAcompañante({ editing = false, dataR
             <label>Listado de Acompañantes</label>
           </div>
           {acompañantes.map((persona) => {
-            return <ItemAcompañante key={persona.documento} acompañante={persona} />;
+            return <ItemAcompañante key={persona.id} acompañante={persona} />;
           })}
         </Grid>
       </Grid>
@@ -75,10 +85,13 @@ const FormularioAcompañante = ({ editing = false }) => {
     existente: false,
   });
   const [listaTiposAcompañante, setListaTiposAcompañante] = useState([]);
-
+  const [listLugaresSalida, setListLugaresSalida] = useState([]);
+  const [lugarSalida, setLugarSalida] = useState({});
+  const [lugarSalidaId, setLugarSalidaId] = useState(2);
   useEffect(() => {
     localStorage.setItem("current_component", "component-acompañantes");
     cargarTiposAcompañantePrecio();
+    cargarLugaresSalidaTour();
   }, []);
 
   const cargarTiposAcompañantePrecio = async () => {
@@ -114,6 +127,7 @@ const FormularioAcompañante = ({ editing = false }) => {
       apellidos: acompañante.apellidos,
       tipoAcompañante: tipoAcompañante,
       añadirAlDetalle: editing,
+      lugarSalida: lugarSalida,
     };
     setAcompañantes([...acompañantes, newAcom]);
 
@@ -139,7 +153,11 @@ const FormularioAcompañante = ({ editing = false }) => {
     console.log("TARGET", event.target.value);
     setTipoAcompañante(event.target.value);
   };
-
+  const handleChangeSelectLugarSalida = (event, dataset) => {
+    var lugarSalidaSelected = JSON.parse(dataset.props.objetoAtributos);
+    setLugarSalida(lugarSalidaSelected);
+    setLugarSalidaId(event.target.value);
+  };
   const handleChange = (event) => {
     const { name, value } = event.target;
 
@@ -148,13 +166,6 @@ const FormularioAcompañante = ({ editing = false }) => {
       [name]: value,
     });
   };
-
-  // const find = async () => {
-  //   const data = await buscarAcompañante(acompañante.documento);
-  //   if (data.encontro) {
-  //     setAcompañante(data.acompañante);
-  //   }
-  // };
 
   const find = async () => {
     if (acompañante.documento === "") return;
@@ -169,6 +180,17 @@ const FormularioAcompañante = ({ editing = false }) => {
     setIsLoading(false);
   };
 
+  const cargarLugaresSalidaTour = async () => {
+    try {
+      var response = await API.get("/lugar-salida-tour/obtener/" + localStorage.getItem("tour_id"));
+
+      setListLugaresSalida(response.data);
+    } catch (error) {
+      alert("Ocurrió un error.", error);
+      console.error(error);
+      return;
+    }
+  };
   return (
     <Box
       component="form"
@@ -249,6 +271,26 @@ const FormularioAcompañante = ({ editing = false }) => {
               </MenuItem>
             ))}
           </TextField>
+
+          <TextField
+            id="standard-select-currency"
+            select
+            label="Lugar de Salida"
+            value={lugarSalidaId}
+            onChange={handleChangeSelectLugarSalida}
+            helperText="Lugar de Salida del Acompañante."
+            variant="standard"
+          >
+            {listLugaresSalida.map((lugarSalida) => (
+              <MenuItem
+                key={lugarSalida.id}
+                value={lugarSalida.id}
+                objetoAtributos={JSON.stringify(lugarSalida)}
+              >
+                <TextLugarSalida lugarSalida={lugarSalida} />
+              </MenuItem>
+            ))}
+          </TextField>
         </div>
         <center>
           <Button
@@ -265,19 +307,61 @@ const FormularioAcompañante = ({ editing = false }) => {
   );
 };
 
+const TextLugarSalida = ({ lugarSalida }) => {
+  var html = (
+    <div>
+      <div>
+        {`${lugarSalida.descripcion} (${lugarSalida.hora})  `}
+        <b style={{ color: "blue", fontSize: "10px" }}>
+          {lugarSalida.siguienteDia ? "(sig. día)" : ""}
+        </b>
+      </div>
+    </div>
+  );
+  return html;
+};
+
 const ItemAcompañante = ({ acompañante }) => {
-  const { acompañantes, setAcompañantes } = useContext(RegistroTourClienteContext);
+  const { acxompañantes, setAcompañantes, acompañantesEliminados, setAcompañantesEliminados } =
+    useContext(RegistroTourClienteContext);
 
   const EliminarAcompañante = (acompañante) => {
+    if (!acompañante?.añadirAlDetalle) {
+      setAcompañantesEliminados([...acompañantesEliminados, acompañante]);
+    }
+
     const results = acompañantes.filter((itemAcompañante) => {
-      return !(itemAcompañante.documento === acompañante.documento);
+      return !(itemAcompañante.id === acompañante.id);
     });
     setAcompañantes(results);
   };
 
+  const isNull = (dato) => {
+    if (dato === null) return "";
+    if (dato === undefined) return "";
+    return dato;
+  };
+
+  var html = (
+    <div style={{ margin: 5, fontSize: "11px" }}>
+      <div>
+        <strong>CI: </strong>
+        {`${acompañante.documento} - ${acompañante.nombres} ${acompañante.apellidos}   (${acompañante.tipoAcompañante.descripcion})  $ ${acompañante.tipoAcompañante.precio}  `}
+      </div>
+      <div style={{ fontSize: "9px", color: "rgb(26, 115, 232)" }}>
+        <strong>
+          {` ${isNull(acompañante?.lugarSalida?.descripcion)} ${isNull(
+            acompañante?.lugarSalida?.hora
+          )}`}
+        </strong>
+        {acompañante?.lugarSalida?.siguienteDia ? " (sig. día)" : ""}
+      </div>
+    </div>
+  );
+
   return (
     <Chip
-      label={`CI: ${acompañante.documento} - ${acompañante.nombres} ${acompañante.apellidos}  (${acompañante.tipoAcompañante.descripcion} )  $ ${acompañante.tipoAcompañante.precio}  `}
+      label={html}
       variant="outlined"
       // onClick={handleClick}
       onDelete={() => EliminarAcompañante(acompañante)}

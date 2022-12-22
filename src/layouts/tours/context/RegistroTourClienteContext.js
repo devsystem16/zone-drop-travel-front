@@ -37,8 +37,11 @@ const RegistroTourClienteProvider = (props) => {
   const [reloadListaTours, setReloadListaTours] = useState(true);
 
   const [acompañantes, setAcompañantes] = useState([]);
+  const [acompañantesEliminados, setAcompañantesEliminados] = useState([]);
   const [banco, setBanco] = useState({ id: 1, descripcion: "- SELECCIONE -" });
   const [habitciones, setHabitaciones] = useState([]);
+  const [habitcionesEliminadas, setHabitacionesEliminadas] = useState([]);
+
   const [lugarSalida, SetLugarSalida] = useState(null);
   const [tipoTransaccion, setTipoTransaccion] = useState({ id: 2, descripcion: "EFECTIVO" });
   const [currentComponent, setCurrentComponent] = useState({
@@ -235,7 +238,10 @@ const RegistroTourClienteProvider = (props) => {
       banco: banco,
       habitaciones: habitciones,
       lugarSalida: lugarSalida,
+      habitcionesEliminadas: habitcionesEliminadas,
+      acompañantesEliminados: acompañantesEliminados,
     };
+    console.log("EDCION RESERVa", reserva);
 
     try {
       var response = await API.post("/reserva/editar/" + idReserva, reserva);
@@ -352,6 +358,10 @@ const RegistroTourClienteProvider = (props) => {
         setExisteError,
         obtenerAcompañantes,
         editarInscripcion,
+        habitcionesEliminadas,
+        setHabitacionesEliminadas,
+        acompañantesEliminados,
+        setAcompañantesEliminados,
       }}
     >
       {props.children}

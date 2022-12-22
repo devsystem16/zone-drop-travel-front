@@ -9,7 +9,8 @@ import DialogActions from "@mui/material/DialogActions";
 import Button from "@mui/material/Button";
 import Autocomplete, { createFilterOptions } from "@mui/material/Autocomplete";
 import { TourContext } from "../../context/TourContext";
-
+import FormControlLabel from "@mui/material/FormControlLabel";
+import Switch from "@mui/material/Switch";
 const filter = createFilterOptions();
 
 export default function ListaLugaresSalida({ lugaresSalida }) {
@@ -41,6 +42,7 @@ export default function ListaLugaresSalida({ lugaresSalida }) {
       id: dialogValue.id,
       hora: dialogValue.hora,
       new: dialogValue.new,
+      siguienteDia: checkIsDiaSiguiente,
     });
 
     setListLugaresSalida([
@@ -50,9 +52,16 @@ export default function ListaLugaresSalida({ lugaresSalida }) {
         descripcion: dialogValue.descripcion,
         hora: dialogValue.hora,
         new: dialogValue.new,
+        siguienteDia: checkIsDiaSiguiente,
       },
     ]);
+    setCheckIsDiaSiguiente(false);
     handleClose();
+  };
+
+  const [checkIsDiaSiguiente, setCheckIsDiaSiguiente] = useState(false);
+  const handleChangeCheck = (event) => {
+    setCheckIsDiaSiguiente(event.target.checked);
   };
 
   return (
@@ -132,12 +141,22 @@ export default function ListaLugaresSalida({ lugaresSalida }) {
       <Dialog open={open} onClose={handleClose}>
         <form onSubmit={handleSubmit}>
           <DialogTitle>Nuevo Lugar de salida</DialogTitle>
+
           <DialogContent>
             <DialogContentText>
               {dialogValue.new && (
                 <>¿No existe este lugar de salida? {<br></br>}¡Por favor, añádelo! </>
               )}
             </DialogContentText>
+            <div style={{ textAlign: "right" }}>
+              {" "}
+              <FormControlLabel
+                control={<Switch checked={checkIsDiaSiguiente} onChange={handleChangeCheck} />}
+                title="Aplique esta opción cuando la hora de salida del tour sea al día siguiente."
+                label="Aplicar al día Siguiente"
+              />
+            </div>
+
             <TextField
               autoFocus
               margin="dense"
