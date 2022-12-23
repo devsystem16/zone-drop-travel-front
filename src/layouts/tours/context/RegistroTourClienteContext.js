@@ -181,6 +181,9 @@ const RegistroTourClienteProvider = (props) => {
     if (cliente?.tipoCliente === null || cliente?.tipoCliente === undefined)
       return { estado: false, mensaje: "Seleccione el tipo de cliente" };
 
+    if (lugarSalida === null)
+      return { estado: false, mensaje: "Seleccionar un lugar de salida es obligatorio" };
+
     return { estado: true, mensaje: "Datos correctos" };
   };
 
@@ -241,6 +244,7 @@ const RegistroTourClienteProvider = (props) => {
       habitcionesEliminadas: habitcionesEliminadas,
       acompañantesEliminados: acompañantesEliminados,
     };
+
     console.log("EDCION RESERVa", reserva);
 
     try {
@@ -277,6 +281,7 @@ const RegistroTourClienteProvider = (props) => {
     };
 
     console.log("DATOS DE RESERVA", reserva);
+
     try {
       var response = await API.post("/reserva", reserva);
       if (response.status === 200) {

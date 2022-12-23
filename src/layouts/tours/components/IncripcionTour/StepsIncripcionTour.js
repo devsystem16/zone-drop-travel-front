@@ -22,14 +22,14 @@ import DialogTitle from "@mui/material/DialogTitle";
 const steps = [
   "Registro/busqueda Titular",
   "Registro Acompañantes",
-  "Lugar de Salida",
+  // "Lugar de Salida",
   "Información de Pago",
 ];
 
 export default function StepsIncripcionTour({ editing = false, dataReserva, setReload }) {
   const {
     editarInscripcion,
-    editgarInscripcion,
+    registrarInscripcion,
     validar,
     loadDataVoucher,
     existeError,

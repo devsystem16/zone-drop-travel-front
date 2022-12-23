@@ -196,7 +196,14 @@ const Voucher = ({ datos }) => {
             Fecha Salida
           </td>
           <td colspan="3" style={{ width: tamañoColumna }}>
-            {`📆 ${moment(datos.programacion_fecha.fecha).format("dddd, D MMMM, yyyy")}`}
+            {datos.lugar_salida_tour.siguienteDia == true ? (
+              <b>
+                `📆 $
+                {moment(datos.programacion_fecha.fecha).add(1, "days").format("dddd, D MMMM, yyyy")}
+              </b>
+            ) : (
+              `📆 ${moment(datos.programacion_fecha.fecha).format("dddd, D MMMM, yyyy")}`
+            )}
           </td>
           <td colspan="1" style={{ width: tamañoColumna }}>
             Hora
@@ -622,7 +629,11 @@ const RowTitularReserva = ({ detalles }) => {
       cliente = det.cliente;
     }
   });
-
+  const isNull1 = (dato) => {
+    if (dato === null) return "";
+    if (dato === undefined) return "";
+    return dato;
+  };
   return (
     <>
       <tr style={tabla_tr_td}>
@@ -645,7 +656,7 @@ const RowTitularReserva = ({ detalles }) => {
           Número Celular
         </td>
         <td colspan="3" style={{ width: tamañoColumna, textAlign: "left" }}>
-          {`${cliente.telefono1} - ${cliente.telefono2}`}
+          {`${cliente.telefono1} - ${isNull1(cliente.telefono2)}`}
         </td>
       </tr>
       <tr style={tabla_tr_td}>

@@ -10,16 +10,20 @@ import { GlobalConfigContext } from "../../context/GlobalConfigContext";
 import SelectTipoAcompañante from "../SelectTipoAcompañante/SelectTipoAcompañante.js";
 import Loading from "../../../../components/Loading/Loading";
 import { buscarCliente } from "../../../../Controllers/ClienteController";
-import iziToast from "izitoast";
+import MenuItem from "@mui/material/MenuItem";
 import API from "../../../../Environment/config";
 export default function FormularioClienteTitular({ editing = false, dataReserva }) {
-  const { cliente, setCliente, guardarCliente, resetear, setInformacionPagos } = useContext(
+  const { cliente, setCliente, SetLugarSalida, resetear, setInformacionPagos } = useContext(
     RegistroTourClienteContext
   );
+
   const [tipoAcompañante, setTipoAcompañante] = useState({ descripcion: "adulto", id: -1 });
   const [isLoading, setIsLoading] = useState(false);
   const [textEditing, setTextEditing] = useState("");
+  const [listLugaresSalida, setListLugaresSalida] = useState([]);
+  const [lugarSalidaId, setLugarSalidaId] = useState(0);
 
+  //
   const handleChange = (event) => {
     const { name, value } = event.target;
 
@@ -71,9 +75,11 @@ export default function FormularioClienteTitular({ editing = false, dataReserva 
   };
   useEffect(() => {
     localStorage.setItem("current_component", "component-registro-titular");
-    // alert("Rseteo");
-    // resetear("all");
+    cargarLugaresSalidaTour();
     if (editing) {
+      setLugarSalidaId(dataReserva.lugar_salida_tours_id);
+      SetLugarSalida(dataReserva.lugar_salida_tours_id);
+
       dataReserva.acompañantes.map((acompa) => {
         if (acompa.tipo_cliente === "Titular") {
           setTextEditing(`¿Desea cambiar el actual valor? ${acompa.categoria} $ ${acompa.precio} `);
@@ -126,6 +132,29 @@ export default function FormularioClienteTitular({ editing = false, dataReserva 
       // resetear("cliente");
     }
     setIsLoading(false);
+  };
+
+  const cargarLugaresSalidaTour = async () => {
+    try {
+      var idTour = 0;
+      if (editing) idTour = dataReserva.tour_id;
+      else idTour = localStorage.getItem("tour_id");
+      //
+
+      var response = await API.get("/lugar-salida-tour/obtener/" + idTour);
+
+      setListLugaresSalida(response.data);
+    } catch (error) {
+      alert("Ocurrió un error.", error);
+      console.error(error);
+      return;
+    }
+  };
+  const handleChangeSelectLugarSalida = (event, dataset) => {
+    var lugarSalidaSelected = JSON.parse(dataset.props.objetoAtributos);
+    // setLugarSalida(lugarSalidaSelected);
+    setLugarSalidaId(event.target.value);
+    SetLugarSalida(event.target.value);
   };
   return (
     <Box
@@ -195,13 +224,35 @@ export default function FormularioClienteTitular({ editing = false, dataReserva 
       />{" "}
       <div></div>
       <ListaGenero></ListaGenero>
-      <SelectTipoAcompañante
-        editing={editing}
-        textEditing={textEditing}
-        handleChange={handleChangeSelect}
-        value={cliente.tipoCliente}
-        ProgramacionFechaId={localStorage.getItem("programacion_fecha_id")}
-      />
+      <div>
+        <SelectTipoAcompañante
+          editing={editing}
+          textEditing={textEditing}
+          handleChange={handleChangeSelect}
+          value={cliente.tipoCliente}
+          ProgramacionFechaId={localStorage.getItem("programacion_fecha_id")}
+        />{" "}
+        <TextField
+          style={{ marginLeft: "15px" }}
+          id="standard-select-currency"
+          select
+          label="Lugar de Salida"
+          value={lugarSalidaId}
+          onChange={handleChangeSelectLugarSalida}
+          helperText="Lugar de Salida del titular."
+          variant="standard"
+        >
+          {listLugaresSalida.map((lugarSalida) => (
+            <MenuItem
+              key={lugarSalida.id}
+              value={lugarSalida.id}
+              objetoAtributos={JSON.stringify(lugarSalida)}
+            >
+              <TextLugarSalida lugarSalida={lugarSalida} />
+            </MenuItem>
+          ))}
+        </TextField>
+      </div>
       <div></div>
       <TextField
         id="standard-required"
@@ -316,3 +367,17 @@ export default function FormularioClienteTitular({ editing = false, dataReserva 
     </Box>
   );
 }
+
+const TextLugarSalida = ({ lugarSalida }) => {
+  var html = (
+    <div>
+      <div>
+        {`${lugarSalida.descripcion} (${lugarSalida.hora})  `}
+        <b style={{ color: "blue", fontSize: "10px" }}>
+          {lugarSalida.siguienteDia ? "(sig. día)" : ""}
+        </b>
+      </div>
+    </div>
+  );
+  return html;
+};

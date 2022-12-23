@@ -80,8 +80,10 @@ const TablaListaReservas = ({ tour, fecha, titulo, fechaSalida = -1 }) => {
               return (
                 <tr key={"list" + index}>
                   <td>{index + 1}</td>
-                  <td> {`${cliente.nombres}  ${cliente.apellidos}  `}</td>
-                  <td class="center"> {cliente.documento} </td>
+                  <td>
+                    {`${cliente.nombres.toUpperCase()}  ${cliente.apellidos.toUpperCase()}  `}
+                  </td>
+                  <td class="center"> {cliente.documento.toUpperCase()} </td>
                   <td class="center">
                     {`${isNull(cliente.telefono1)} - ${isNull(cliente.telefono2)}  `}
                   </td>

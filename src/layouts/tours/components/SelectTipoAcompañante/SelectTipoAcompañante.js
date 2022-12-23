@@ -29,7 +29,7 @@ const SelectTipoAcompañante = ({
   };
 
   return (
-    <div>
+    <>
       <TextField
         id="standard-select-currency"
         select
@@ -46,7 +46,7 @@ const SelectTipoAcompañante = ({
           </MenuItem>
         ))}
       </TextField>
-    </div>
+    </>
   );
 };
 

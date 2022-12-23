@@ -32,7 +32,9 @@ export default function ModalSelectCantidadHabitacion({
     setOpen(true);
   };
 
-  const handleClose = () => {
+  const handleClose = (e) => {
+    if (e.target.textContent !== "Aceptar") return;
+
     var dato = {
       tipo: currentHabitacion,
       cantidad: value,

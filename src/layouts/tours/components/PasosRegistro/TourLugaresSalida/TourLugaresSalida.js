@@ -24,7 +24,7 @@ export default function TourLugaresSalida({ editing, dataTour }) {
       <br></br>
       {editing ? (
         <>
-          <OptionLugarSalida editing={editing} data={dataTour.lugaresSalidas} />{" "}
+          <OptionLugarSalida editing={editing} data={dataTour.lugaresSalidas} />
         </>
       ) : (
         <>

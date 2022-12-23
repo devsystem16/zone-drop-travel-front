@@ -25,7 +25,7 @@ export default function ListaLugaresSalida({ lugaresSalida }) {
     new: false,
   });
 
-  const handleClose = () => {
+  const handleClose = (e) => {
     setDialogValue({ id: "", descripcion: "", hora: "00:00", new: false });
     toggleOpen(false);
   };

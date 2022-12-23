@@ -42,7 +42,7 @@ export default function FormularioRegistrarAcompañante({ editing = false, dataR
     <Box sx={{ flexGrow: 1 }}>
       <Grid container spacing={2}>
         <Grid item xs={6}>
-          <FormularioAcompañante editing={editing} />
+          <FormularioAcompañante editing={editing} dataReserva={dataReserva} />
         </Grid>
         <Grid item xs={6}>
           <label>Habitaciones</label>
@@ -65,9 +65,9 @@ export default function FormularioRegistrarAcompañante({ editing = false, dataR
   );
 }
 
-const FormularioAcompañante = ({ editing = false }) => {
+const FormularioAcompañante = ({ editing = false, dataReserva }) => {
   const [isLoading, setIsLoading] = useState(false);
-  const { acompañantes, setAcompañantes } = useContext(RegistroTourClienteContext);
+  const { acompañantes, setAcompañantes, lugarSalida } = useContext(RegistroTourClienteContext);
   const [tipoAcompañante, setTipoAcompañante] = useState(null);
   const [acompañante, setAcompañante] = useState({
     id: -1,
@@ -86,8 +86,8 @@ const FormularioAcompañante = ({ editing = false }) => {
   });
   const [listaTiposAcompañante, setListaTiposAcompañante] = useState([]);
   const [listLugaresSalida, setListLugaresSalida] = useState([]);
-  const [lugarSalida, setLugarSalida] = useState({});
-  const [lugarSalidaId, setLugarSalidaId] = useState(2);
+  const [lugarSalidaLocal, setLugarSalidaLocal] = useState({});
+  const [lugarSalidaId, setLugarSalidaId] = useState(lugarSalida);
   useEffect(() => {
     localStorage.setItem("current_component", "component-acompañantes");
     cargarTiposAcompañantePrecio();
@@ -127,7 +127,7 @@ const FormularioAcompañante = ({ editing = false }) => {
       apellidos: acompañante.apellidos,
       tipoAcompañante: tipoAcompañante,
       añadirAlDetalle: editing,
-      lugarSalida: lugarSalida,
+      lugarSalida: lugarSalidaLocal,
     };
     setAcompañantes([...acompañantes, newAcom]);
 
@@ -150,12 +150,11 @@ const FormularioAcompañante = ({ editing = false }) => {
   };
 
   const handleChangeSelect = (event) => {
-    console.log("TARGET", event.target.value);
     setTipoAcompañante(event.target.value);
   };
   const handleChangeSelectLugarSalida = (event, dataset) => {
     var lugarSalidaSelected = JSON.parse(dataset.props.objetoAtributos);
-    setLugarSalida(lugarSalidaSelected);
+    setLugarSalidaLocal(lugarSalidaSelected);
     setLugarSalidaId(event.target.value);
   };
   const handleChange = (event) => {
@@ -182,7 +181,27 @@ const FormularioAcompañante = ({ editing = false }) => {
 
   const cargarLugaresSalidaTour = async () => {
     try {
-      var response = await API.get("/lugar-salida-tour/obtener/" + localStorage.getItem("tour_id"));
+      var idTour = 0;
+      if (editing) idTour = dataReserva.tour_id;
+      else idTour = localStorage.getItem("tour_id");
+
+      var response = await API.get("/lugar-salida-tour/obtener/" + idTour);
+
+      if (editing) {
+        response.data.map((lugSalid) => {
+          if (lugSalid.id === dataReserva.lugar_salida_tours_id) {
+            setLugarSalidaLocal(lugSalid);
+            setLugarSalidaId(lugSalid.id);
+          }
+        });
+      } else {
+        response.data.map((lugSalid) => {
+          if (lugSalid.id === lugarSalida) {
+            setLugarSalidaId(lugSalid.id);
+            setLugarSalidaLocal(lugSalid);
+          }
+        });
+      }
 
       setListLugaresSalida(response.data);
     } catch (error) {
@@ -322,7 +341,7 @@ const TextLugarSalida = ({ lugarSalida }) => {
 };
 
 const ItemAcompañante = ({ acompañante }) => {
-  const { acxompañantes, setAcompañantes, acompañantesEliminados, setAcompañantesEliminados } =
+  const { acompañantes, setAcompañantes, acompañantesEliminados, setAcompañantesEliminados } =
     useContext(RegistroTourClienteContext);
 
   const EliminarAcompañante = (acompañante) => {

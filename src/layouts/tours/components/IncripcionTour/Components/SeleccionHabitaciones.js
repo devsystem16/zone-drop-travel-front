@@ -80,6 +80,7 @@ export default function SeleccionHabitaciones({ setValues, editing = false, data
 
   const obtenerHabitacionesBD = async (id) => {
     const response = await API.get("reserva/habitaciones/obtener/" + id);
+
     setListHabitaciones(response.data);
   };
 
