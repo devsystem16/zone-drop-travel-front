@@ -27,7 +27,7 @@ const MenuProps = {
 
 export default function SeleccionHabitaciones({ setValues, editing = false, dataReserva = [] }) {
   const [habitacionName, setHabitacionName] = React.useState([]);
-  const [habitacionNameTEMP, setHabitacionNameTEMP] = React.useState([]);
+
   const [habitaciones, setHabitaciones] = useState([]);
   const [open, setOpen] = React.useState(false);
 
@@ -45,6 +45,18 @@ export default function SeleccionHabitaciones({ setValues, editing = false, data
     }
     if (event.target.value === "No Aplica") {
       setCurrentHabitacion(event.target.value);
+
+      var habitacionNoAplica = {
+        tipo: event.target.value,
+        cantidad: 0,
+      };
+
+      setValues([habitacionNoAplica]);
+      setListHabitaciones([]);
+      setHabitacionesEliminadas([]);
+
+      // alert(JSON.stringify(habitacionNoAplica));
+
       return;
     }
     setOpen(true);

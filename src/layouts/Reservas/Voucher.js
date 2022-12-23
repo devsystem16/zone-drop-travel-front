@@ -42,6 +42,7 @@ const Voucher = ({ datos }) => {
   const isNull = (dato) => {
     if (dato === null) return "";
     if (dato === undefined) return "";
+    if (dato == 0) return "";
     return dato;
   };
 
@@ -387,7 +388,7 @@ const Voucher = ({ datos }) => {
         {datos?.habitaciones_reservas.map((hab) => {
           return (
             <tr style={tabla_tr_td}>
-              <td colspan="12"> {`(${isNull(hab.cantidad)}) ${hab.habitacion.descripcion}`}</td>
+              <td colspan="12"> {`(${isNull(hab?.cantidad)}) ${hab.habitacion.descripcion}`}</td>
             </tr>
           );
         })}
