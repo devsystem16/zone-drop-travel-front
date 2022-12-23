@@ -43,6 +43,19 @@ export default function SeleccionHabitaciones({ setValues, editing = false, data
       alertify.error("Ya Existe la habitacion.");
       return;
     }
+
+    var borrarNOAplica = false;
+    listHabitaciones.map((hab) => {
+      if (hab.tipo == "No Aplica") {
+        borrarNOAplica = true;
+      }
+    });
+
+    if (borrarNOAplica) {
+      alertify.error("Primero Elimine el NO APLICA");
+      return;
+    }
+
     if (event.target.value === "No Aplica") {
       setCurrentHabitacion(event.target.value);
 
@@ -176,7 +189,9 @@ export default function SeleccionHabitaciones({ setValues, editing = false, data
             return (
               <Chip
                 key="data"
-                label={`(${habitacion.cantidad}) ${habitacion.tipo}`}
+                label={`(${habitacion.cantidad == 0 ? "-" : habitacion.cantidad}) ${
+                  habitacion.tipo
+                }`}
                 onDelete={() => eliminarHabitacionListado(habitacion)}
               />
             );

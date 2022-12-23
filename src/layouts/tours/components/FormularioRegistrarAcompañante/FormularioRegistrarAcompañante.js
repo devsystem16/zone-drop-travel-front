@@ -47,8 +47,6 @@ export default function FormularioRegistrarAcompañante({ editing = false, dataR
         <Grid item xs={6}>
           <label>Habitaciones</label>
           <SeleccionHabitaciones
-            // habitcionesEliminadas={habitcionesEliminadas}
-            // setHabitacionesEliminadas={setHabitacionesEliminadas}
             setValues={setHabitaciones}
             dataReserva={dataReserva}
             editing={editing}
