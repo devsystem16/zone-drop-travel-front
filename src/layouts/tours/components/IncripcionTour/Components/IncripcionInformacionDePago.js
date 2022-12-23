@@ -193,6 +193,7 @@ export default function IncripcionInformacionDePago({ editing = false, dataReser
         id="standard-search"
         label="Observaciones Generales"
         name="observaciones"
+        defaultValue={informacionPagos.observaciones}
         onChange={handleChange}
         type="search"
         variant="standard"
