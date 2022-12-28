@@ -153,9 +153,14 @@ const ReporteInscritos = () => {
                 <td style={tablaInscritos_td_th}>{`${isNull(
                   datos.cliente_titular.telefono1
                 )} - ${isNull(datos.cliente_titular.telefono2)}`}</td>
-                <td
-                  style={tablaInscritos_td_th}
-                >{`${datos.lugar_salida_tour.lugar_salida.descripcion}  `}</td>
+                <td style={tablaInscritos_td_th}>
+                  <LugarSalidatext
+                    lugarSalidaTitular={datos.lugar_salida_tour.lugar_salida.descripcion}
+                    detallesReservas={datos.detalles_reservas}
+                  />
+
+                  {/* {`${datos.lugar_salida_tour.lugar_salida.descripcion}  `} */}
+                </td>
 
                 <ContarTiposCliente
                   key={`tiposAcom ${datos.id}`}
@@ -180,6 +185,32 @@ const ReporteInscritos = () => {
         </table>
       </div>
     </div>
+  );
+};
+
+const LugarSalidatext = ({ lugarSalidaTitular, detallesReservas = null }) => {
+  var arrayLugaresSalida = [];
+  arrayLugaresSalida.push(lugarSalidaTitular);
+
+  detallesReservas.map((detalle) => {
+    if (detalle?.lugar_salida_tour !== null) {
+      if (arrayLugaresSalida.indexOf(detalle?.lugar_salida_tour?.lugar_salida?.descripcion) == -1) {
+        arrayLugaresSalida.push(detalle?.lugar_salida_tour?.lugar_salida?.descripcion);
+      }
+    }
+  });
+
+  return (
+    <>
+      {arrayLugaresSalida.map((lugar, index) => {
+        return (
+          <div>
+            {" "}
+            {index + 1} .- {lugar}
+          </div>
+        );
+      })}
+    </>
   );
 };
 

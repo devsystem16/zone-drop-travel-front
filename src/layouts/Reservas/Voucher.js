@@ -210,7 +210,7 @@ const Voucher = ({ datos }) => {
           <td colspan="3" style={{ width: tamañoColumna }}>
             {datos.lugar_salida_tour.siguienteDia == true ? (
               <b>
-                `📆 $
+                📆
                 {moment(datos.programacion_fecha.fecha).add(1, "days").format("dddd, D MMMM, yyyy")}
               </b>
             ) : (

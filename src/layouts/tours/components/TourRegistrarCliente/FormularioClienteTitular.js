@@ -74,6 +74,7 @@ export default function FormularioClienteTitular({ editing = false, dataReserva 
     setTipoAcompañante(event.target.value);
   };
   useEffect(() => {
+    resetear("all");
     localStorage.setItem("current_component", "component-registro-titular");
     cargarLugaresSalidaTour();
     if (editing) {
@@ -87,6 +88,10 @@ export default function FormularioClienteTitular({ editing = false, dataReserva 
       });
       cargarDatos(dataReserva.documento);
     }
+
+    // return () => {
+    //   resetear("all");
+    // };
   }, []);
 
   const obtenerPreciosDB = async () => {
@@ -107,6 +112,7 @@ export default function FormularioClienteTitular({ editing = false, dataReserva 
 
   const cargarDatos = async (documento) => {
     if (documento === "") return;
+
     setIsLoading(true);
     var dataClienteR = null;
     const data = await buscarCliente(documento);
@@ -223,7 +229,7 @@ export default function FormularioClienteTitular({ editing = false, dataReserva 
         }}
       />{" "}
       <div></div>
-      <ListaGenero></ListaGenero>
+      <ListaGenero editing={editing} generoDefault={cliente.genero}></ListaGenero>
       <div>
         <SelectTipoAcompañante
           editing={editing}

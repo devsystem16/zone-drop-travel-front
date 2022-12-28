@@ -144,6 +144,11 @@ export default function SeleccionHabitaciones({ setValues, editing = false, data
     setValues(filteredLibraries);
   };
 
+  const isNull = (dato) => {
+    if (dato === null) return "-";
+    if (dato === undefined) return "-";
+    return dato;
+  };
   return (
     <div>
       <ModalSelectCantidadHabitacion
@@ -189,9 +194,9 @@ export default function SeleccionHabitaciones({ setValues, editing = false, data
             return (
               <Chip
                 key="data"
-                label={`(${habitacion.cantidad == 0 ? "-" : habitacion.cantidad}) ${
-                  habitacion.tipo
-                }`}
+                label={`(${
+                  isNull(habitacion?.cantidad) == 0 ? "-" : isNull(habitacion?.cantidad)
+                }) ${habitacion.tipo}`}
                 onDelete={() => eliminarHabitacionListado(habitacion)}
               />
             );

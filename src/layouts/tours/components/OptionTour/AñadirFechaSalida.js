@@ -46,6 +46,7 @@ const AñadirFechaSalida = ({ tour }) => {
         precios: precios,
       };
       setIsLoading(true);
+
       const response = await API.post(`/tour/add-fecha-salida/id/${tour.id}`, parametros);
       setIsLoading(false);
       if (response.status !== 200) {

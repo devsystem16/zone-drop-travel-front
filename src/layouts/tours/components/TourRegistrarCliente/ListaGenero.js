@@ -1,5 +1,5 @@
 import * as React from "react";
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 
 import Radio from "@mui/material/Radio";
 import RadioGroup from "@mui/material/RadioGroup";
@@ -8,8 +8,10 @@ import FormControl from "@mui/material/FormControl";
 import FormLabel from "@mui/material/FormLabel";
 import { RegistroTourClienteContext } from "../../context/RegistroTourClienteContext";
 
-export default function ListaGenero() {
+export default function ListaGenero({ editing = false, generoDefault }) {
   const { cliente, setCliente } = useContext(RegistroTourClienteContext);
+
+  if (editing) if (!cliente.existente) return null;
 
   const handleRadioChange = (event) => {
     const newValues = {
@@ -28,7 +30,7 @@ export default function ListaGenero() {
         row
         aria-labelledby="demo-row-radio-buttons-group-label"
         name="row-radio-buttons-group"
-        defaultValue="Masculino"
+        defaultValue={editing === true ? generoDefault : "Masculino"}
         onChange={handleRadioChange}
       >
         <FormControlLabel value="Masculino" control={<Radio />} label="Masculino" />

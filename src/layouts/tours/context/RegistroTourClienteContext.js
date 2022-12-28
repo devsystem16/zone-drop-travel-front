@@ -48,6 +48,7 @@ const RegistroTourClienteProvider = (props) => {
     complete: false,
     component: "not load",
   });
+
   const [informacionPagos, setInformacionPagos] = useState({
     esAgencia: false,
     descuentoAgencia: 0,
@@ -101,6 +102,12 @@ const RegistroTourClienteProvider = (props) => {
   };
 
   const resetear = (opcion) => {
+    if (opcion === "cliente-existente" || "all") {
+      setCliente({
+        ...cliente,
+        existente: false,
+      });
+    }
     if (opcion === "cliente" || "all") {
       setCliente({
         documento: "",
@@ -143,6 +150,11 @@ const RegistroTourClienteProvider = (props) => {
     }
     if (opcion === "lugarSalida" || "all") {
       SetLugarSalida(null);
+    }
+
+    if (opcion === "habitaciones" || "all") {
+      setHabitaciones([]);
+      setHabitacionesEliminadas([]);
     }
 
     // if (opcion === "informacionPagos" || "all") {
