@@ -12,7 +12,7 @@ import {
 } from "./Styles";
 
 import { Link } from "react-router-dom";
-const ReporteM = ({ mes }) => {
+const ReporteM = ({ mes, año }) => {
   const pageStyle = `
   @media print {
     html,
@@ -41,7 +41,7 @@ const ReporteM = ({ mes }) => {
   const [mensajeReporte, setMensajeReporte] = useState("Reporte Mensual: ");
 
   const cargarReporte = async () => {
-    const jsonTours = await API.get(`/reporte/mensual/${mes}`);
+    const jsonTours = await API.get(`/reporte/mensual/${mes}/${año}`);
 
     setReporte(jsonTours.data);
   };
@@ -50,7 +50,7 @@ const ReporteM = ({ mes }) => {
     cargarReporte();
 
     setMensajeReporte("Reporte Mensual: " + getMes(mes));
-  }, [mes]);
+  }, [mes, año]);
 
   const contarIncritors = (reservas) => {
     var suma = 0;

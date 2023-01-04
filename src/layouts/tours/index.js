@@ -11,7 +11,7 @@ import TextField from "@mui/material/TextField";
 import DashboardNavbar from "examples/Navbars/DashboardNavbar";
 import Fab from "@mui/material/Fab";
 import AddIcon from "@mui/icons-material/Add";
-
+import SelectAño from "../reportes/Components/SelectAño";
 // Data
 import toursTableData from "layouts/tours/data/toursTableData";
 import ModalNuevaReserva from "./components/TourRegistrarCliente/ModalNuevaReserva";
@@ -22,13 +22,24 @@ import { GlobalConfigContext } from "./context/GlobalConfigContext";
 import { RegistroTourClienteContext } from "./context/RegistroTourClienteContext";
 
 import ModalVoucher from "../Reservas/ModalVoucher";
+import moment from "moment";
+
+import FormGroup from "@mui/material/FormGroup";
+import FormControlLabel from "@mui/material/FormControlLabel";
+import Switch from "@mui/material/Switch";
 
 function Tours() {
   const { setModalGlobal, setComponent } = useContext(GlobalConfigContext);
-
-  const { filtrarTours, openModalVoucher, setOpenModalVoucher, datosVoucher } = useContext(
-    RegistroTourClienteContext
-  );
+  const [año, setAño] = useState(moment().year());
+  const {
+    filtrarTours,
+    openModalVoucher,
+    setOpenModalVoucher,
+    datosVoucher,
+    mostrarFechasOld,
+    setMostrarFechasOld,
+    setReloadListaTours,
+  } = useContext(RegistroTourClienteContext);
 
   const nuevoTour = () => {
     setComponent(<NewTour editing={false} tour={null} />);
@@ -41,6 +52,10 @@ function Tours() {
     filtrarTours(e);
   };
 
+  const handleChange = (event) => {
+    setMostrarFechasOld(event.target.checked);
+    setReloadListaTours(true);
+  };
   return (
     <DashboardLayout>
       <Modal Component={null}></Modal>
@@ -54,8 +69,16 @@ function Tours() {
         open={openModalVoucher}
         setOpen={setOpenModalVoucher}
       ></ModalVoucher>
+      <br />
 
-      <MDBox pt={6} pb={3}>
+      {/* <SelectAño value={año} setValue={setAño} /> */}
+      <FormGroup>
+        <FormControlLabel
+          control={<Switch defaultChecked={mostrarFechasOld} onChange={handleChange} />}
+          label="Mostrar Fechas vencidas"
+        />
+      </FormGroup>
+      <MDBox pt={2} pb={3}>
         <Grid container spacing={6}>
           <Grid item xs={12}>
             <Card>
@@ -83,6 +106,7 @@ function Tours() {
                     variant="standard"
                     onChange={filtrar}
                   />
+
                   <Fab
                     title="Añadir Nuevo Tour"
                     style={{ marginLeft: "78%" }}

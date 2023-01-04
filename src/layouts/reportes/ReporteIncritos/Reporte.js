@@ -48,7 +48,9 @@ const ReporteInscritos = () => {
   const [reporte, setReporte] = useState([]);
 
   const cargarReporte = async () => {
-    const jsonReporte = await API.get(`/reporte/mensual/pasajeros/${codigo[codigo.length - 1]}`);
+    const jsonReporte = await API.get(
+      `/reporte/mensual/pasajeros/codigo-fecha/${codigo[codigo.length - 1]}`
+    );
     setReporte(jsonReporte.data);
   };
 

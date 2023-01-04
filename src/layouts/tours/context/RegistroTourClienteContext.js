@@ -41,6 +41,7 @@ const RegistroTourClienteProvider = (props) => {
   const [banco, setBanco] = useState({ id: 1, descripcion: "- SELECCIONE -" });
   const [habitciones, setHabitaciones] = useState([]);
   const [habitcionesEliminadas, setHabitacionesEliminadas] = useState([]);
+  const [mostrarFechasOld, setMostrarFechasOld] = useState(false);
 
   const [lugarSalida, SetLugarSalida] = useState(null);
   const [tipoTransaccion, setTipoTransaccion] = useState({ id: 2, descripcion: "EFECTIVO" });
@@ -96,7 +97,10 @@ const RegistroTourClienteProvider = (props) => {
   };
 
   const loadTours = async () => {
-    const jsonTours = await API.get("/tour/listado/tabla");
+    var parameters = {
+      mostrarFechasOld: mostrarFechasOld,
+    };
+    const jsonTours = await API.post("/tour/listado/tabla", parameters);
     setListaTours(jsonTours.data);
     setOriginalListaTours(jsonTours.data);
   };
@@ -379,6 +383,8 @@ const RegistroTourClienteProvider = (props) => {
         setHabitacionesEliminadas,
         acompañantesEliminados,
         setAcompañantesEliminados,
+        mostrarFechasOld,
+        setMostrarFechasOld,
       }}
     >
       {props.children}
