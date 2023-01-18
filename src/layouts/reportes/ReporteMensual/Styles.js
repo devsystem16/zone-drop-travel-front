@@ -11,6 +11,15 @@ export const tablaInscritos_td_th = {
   padding: "1px",
 };
 
+export const tablaInscritos_td_th_right = {
+  border: "1px solid #ddd",
+  padding: "1px",
+  fontSize: "15px",
+  textAlign: "right",
+  paddingRight: "8px",
+  fontWeight: "bold",
+};
+
 export const tablaInscritos_th = {
   paddingTop: "4px",
   paddingBottom: "4px",

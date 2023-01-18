@@ -131,10 +131,12 @@ const Voucher = ({ datos }) => {
 
         <tr style={tabla_tr_td}>
           <td colspan="8" style={{ width: tamañoColumna }}>
-            <div style={{ color: "#2E75B5", fontWeight: "bold" }}>
+            <div style={{ color: "#2E75B5", fontWeight: "bold", paddingLeft: "5px" }}>
               Registro Turistico PUIO00I - 00001491
             </div>
-            <div style={{ color: "#2E75B5", fontWeight: "bold" }}>RUC: 0502771199</div>
+            <div style={{ color: "#2E75B5", fontWeight: "bold", paddingLeft: "5px" }}>
+              RUC: 1792767407001
+            </div>
           </td>
           <td colspan="2" style={{ width: tamañoColumna }}>
             <center style={{ fontWeight: "bold", fontSize: "15px" }}>N°</center>
@@ -190,7 +192,11 @@ const Voucher = ({ datos }) => {
           </td>
         </tr>
         <tr style={tabla_tr_td}>
-          <td colspan="3" rowspan="2" style={{ width: tamañoColumna, textAlign: "left" }}>
+          <td
+            colspan="3"
+            rowspan="2"
+            style={{ width: tamañoColumna, textAlign: "left", paddingLeft: "5px" }}
+          >
             Duración
           </td>
           <td colspan="1" rowspan="2" style={{ width: tamañoColumna, textAlign: "center" }}>
@@ -200,7 +206,12 @@ const Voucher = ({ datos }) => {
             Lugar de Salida
           </td>
           <td colspan="6" style={{ width: tamañoColumna }}>
-            {datos.lugar_salida_tour.lugar_salida.descripcion}
+            <LugarSalidatext
+              lugarSalidaTitular={datos.lugar_salida_tour.lugar_salida.descripcion}
+              horatitular={datos.lugar_salida_tour.hora}
+              detallesReservas={datos.detalles_reservas}
+            />
+            {/* {datos.lugar_salida_tour.lugar_salida.descripcion} */}
           </td>
         </tr>
         <tr style={tabla_tr_td}>
@@ -220,7 +231,7 @@ const Voucher = ({ datos }) => {
           <td colspan="1" style={{ width: tamañoColumna }}>
             Hora
           </td>
-          <td colspan="2" style={{ width: tamañoColumna }}>
+          <td colspan="2" style={{ width: tamañoColumna, textAlign: "center" }}>
             {" "}
             {datos.lugar_salida_tour.hora}
           </td>
@@ -233,7 +244,7 @@ const Voucher = ({ datos }) => {
             El pasajero se compromete a estar en el lugar ya la hora indicada para salir, el
             transporte abrirá sus puertas cinco minutos antes de la hora indicada para recibir el
             equipaje y esperará 5 minutos después de la hora de salida, si algún pasajero no llega
-            su reserva NO SERÁ REEMBOLSABLE NI TRANSFERIBLE para otra fecha o destino.s
+            su reserva NO SERÁ REEMBOLSABLE NI TRANSFERIBLE para otra fecha o destinos.
           </td>
         </tr>
 
@@ -367,7 +378,11 @@ const Voucher = ({ datos }) => {
           <td colspan="4" style={{ width: tamañoColumna, textAlign: "left" }}></td>
           <td colspan="2" style={{ width: tamañoColumna, textAlign: "center" }}></td>
 
-          <td colspan="6" rowspan={datos.abonos.length + 1} style={{ width: tamañoColumna }}>
+          <td
+            colspan="6"
+            rowspan={datos.abonos.length + 1}
+            style={{ width: tamañoColumna, padding: "2px 7px 0px 7px" }}
+          >
             El Contratante se compromete a cancelar el saldo total del tour que solicitó, el cual
             cubrirá los servicios contratados en el tipo dde reservación que solicitó
           </td>
@@ -399,7 +414,10 @@ const Voucher = ({ datos }) => {
         {datos?.habitaciones_reservas.map((hab) => {
           return (
             <tr style={tabla_tr_td}>
-              <td colspan="12"> {`(${isNull(hab?.cantidad)}) ${hab.habitacion.descripcion}`}</td>
+              <td colspan="12" style={{ paddingLeft: "5px" }}>
+                {" "}
+                {`(${isNull(hab?.cantidad)}) ${hab.habitacion.descripcion}`}
+              </td>
             </tr>
           );
         })}
@@ -422,7 +440,7 @@ const Voucher = ({ datos }) => {
         </tr>
 
         <tr style={tabla_tr_td}>
-          <td colspan="12" style={{ width: tamañoColumna }}>
+          <td colspan="12" style={{ width: tamañoColumna, padding: "2px 7px 0px 7px" }}>
             <p style={{ textAlign: "justify" }}>
               {/* La Agencia de viajes Drop Zone Travel, se compromete a prestar los servicios
               turísticos indicados en la publicidad y los miembros que el cliente ha solicitado, así
@@ -526,7 +544,10 @@ const RowTipoAcompañante = ({ detalles_reservas, DESCUENTO, costoAdicional }) =
             <td colspan="3" style={{ width: tamañoColumna, textAlign: "right" }}>
               $ {dato.costo}
             </td>
-            <td colspan="3" style={{ width: tamañoColumna, textAlign: "right" }}>
+            <td
+              colspan="3"
+              style={{ width: tamañoColumna, textAlign: "right", paddingRight: "5px" }}
+            >
               $ {dato.total}
             </td>
           </tr>
@@ -543,7 +564,7 @@ const RowTipoAcompañante = ({ detalles_reservas, DESCUENTO, costoAdicional }) =
         <td colspan="3" style={{ width: tamañoColumna, textAlign: "right" }}>
           DESCUENTO
         </td>
-        <td colspan="3" style={{ width: tamañoColumna, textAlign: "right" }}>
+        <td colspan="3" style={{ width: tamañoColumna, textAlign: "right", paddingRight: "5px" }}>
           $ {DESCUENTO}
         </td>
       </tr>
@@ -554,7 +575,7 @@ const RowTipoAcompañante = ({ detalles_reservas, DESCUENTO, costoAdicional }) =
         <td colspan="3" style={{ width: tamañoColumna, textAlign: "right" }}>
           COSTOS ADICIONALES
         </td>
-        <td colspan="3" style={{ width: tamañoColumna, textAlign: "right" }}>
+        <td colspan="3" style={{ width: tamañoColumna, textAlign: "right", paddingRight: "5px" }}>
           $ {costoAdicional}{" "}
         </td>
       </tr>
@@ -564,7 +585,7 @@ const RowTipoAcompañante = ({ detalles_reservas, DESCUENTO, costoAdicional }) =
           TOTAL A PAGAR
         </td>
 
-        <td colspan="3" style={{ width: tamañoColumna, textAlign: "right" }}>
+        <td colspan="3" style={{ width: tamañoColumna, textAlign: "right", paddingRight: "5px" }}>
           <strong> $ {totalGeneral - DESCUENTO + costoAdicional}</strong>
         </td>
       </tr>
@@ -649,15 +670,15 @@ const RowTitularReserva = ({ detalles }) => {
   return (
     <>
       <tr style={tabla_tr_td}>
-        <td colspan="3" style={{ width: tamañoColumna, textAlign: "left" }}>
+        <td colspan="3" style={{ width: tamañoColumna, textAlign: "left", paddingLeft: "5px" }}>
           Reserva a Nombre de:
         </td>
-        <td colspan="9" style={{ width: tamañoColumna, textAlign: "left" }}>
+        <td colspan="9" style={{ width: tamañoColumna, textAlign: "left", paddingLeft: "5px" }}>
           {`${cliente.nombres} ${cliente.apellidos}`}
         </td>
       </tr>
       <tr style={tabla_tr_td}>
-        <td colspan="3" style={{ width: tamañoColumna, textAlign: "left" }}>
+        <td colspan="3" style={{ width: tamañoColumna, textAlign: "left", paddingLeft: "5px" }}>
           Número de Cédula:
         </td>
         <td colspan="3" style={{ width: tamañoColumna, textAlign: "center" }}>
@@ -667,12 +688,12 @@ const RowTitularReserva = ({ detalles }) => {
         <td colspan="3" style={{ width: tamañoColumna, textAlign: "center" }}>
           Número Celular
         </td>
-        <td colspan="3" style={{ width: tamañoColumna, textAlign: "left" }}>
+        <td colspan="3" style={{ width: tamañoColumna, textAlign: "center" }}>
           {`${cliente.telefono1} - ${isNull1(cliente.telefono2)}`}
         </td>
       </tr>
       <tr style={tabla_tr_td}>
-        <td colspan="3" style={{ width: tamañoColumna, textAlign: "left" }}>
+        <td colspan="3" style={{ width: tamañoColumna, textAlign: "left", paddingLeft: "5px" }}>
           Correo Electronico
         </td>
         <td colspan="3" style={{ width: tamañoColumna, textAlign: "center" }}>
@@ -691,3 +712,29 @@ const RowTitularReserva = ({ detalles }) => {
 };
 
 export default Voucher;
+
+const LugarSalidatext = ({ lugarSalidaTitular, horatitular, detallesReservas = null }) => {
+  var arrayLugaresSalida = [];
+  arrayLugaresSalida.push(lugarSalidaTitular);
+
+  detallesReservas.map((detalle) => {
+    if (detalle?.lugar_salida_tour !== null) {
+      if (arrayLugaresSalida.indexOf(detalle?.lugar_salida_tour?.lugar_salida?.descripcion) == -1) {
+        arrayLugaresSalida.push(detalle?.lugar_salida_tour?.lugar_salida?.descripcion);
+      }
+    }
+  });
+
+  return (
+    <>
+      {arrayLugaresSalida.map((lugar, index) => {
+        return (
+          <div>
+            {" "}
+            {index + 1} .- {lugar}
+          </div>
+        );
+      })}
+    </>
+  );
+};

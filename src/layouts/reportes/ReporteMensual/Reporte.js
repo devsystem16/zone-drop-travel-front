@@ -8,6 +8,7 @@ import {
   tablaInscritos,
   tablaInscritos_th,
   tablaInscritos_td_th,
+  tablaInscritos_td_th_right,
   tablaInscritos_th_vertical,
 } from "./Styles";
 
@@ -52,11 +53,14 @@ const ReporteM = ({ mes, año }) => {
     setMensajeReporte("Reporte Mensual: " + getMes(mes));
   }, [mes, año]);
 
+  var totalInscritos = 0;
+
   const contarIncritors = (reservas) => {
     var suma = 0;
     reservas.map((reserv) => {
       suma += reserv.DetallesReservas.length;
     });
+    totalInscritos += suma;
     return suma;
   };
 
@@ -92,10 +96,10 @@ const ReporteM = ({ mes, año }) => {
             <th style={tablaInscritos_th}>TOURS</th>
             <th style={tablaInscritos_th_vertical}>INSCRITOS</th>
 
-            <th style={tablaInscritos_th}>ACCION</th>
+            {/* <th style={tablaInscritos_th}>ACCION</th>
             <th style={tablaInscritos_th}>AGUA</th>
             <th style={tablaInscritos_th}>BUS</th>
-            <th style={tablaInscritos_th}>FOTOS</th>
+            <th style={tablaInscritos_th}>FOTOS</th> */}
           </tr>
 
           {reporte.map((datos, index) => {
@@ -114,13 +118,35 @@ const ReporteM = ({ mes, año }) => {
                   {contarIncritors(datos.reservas)}{" "}
                 </td>
 
+                {/* <td style={tablaInscritos_td_th}> </td>
                 <td style={tablaInscritos_td_th}> </td>
                 <td style={tablaInscritos_td_th}> </td>
-                <td style={tablaInscritos_td_th}> </td>
-                <td style={tablaInscritos_td_th}> </td>
+                <td style={tablaInscritos_td_th}> </td> */}
               </tr>
             );
           })}
+
+          <tr>
+            <td colSpan={3} style={tablaInscritos_td_th_right}>
+              Total Inscritos
+            </td>
+
+            <td
+              style={{
+                textAlign: "center",
+                border: "1px solid #ddd",
+                fontWeight: "bold",
+                fontSize: "15px",
+              }}
+            >
+              {totalInscritos}
+            </td>
+
+            {/* <td style={tablaInscritos_td_th}> </td>
+                <td style={tablaInscritos_td_th}> </td>
+                <td style={tablaInscritos_td_th}> </td>
+                <td style={tablaInscritos_td_th}> </td> */}
+          </tr>
         </table>
       </div>
     </div>
