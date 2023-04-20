@@ -51,6 +51,7 @@ const ReporteInscritos = () => {
     const jsonReporte = await API.get(
       `/reporte/mensual/pasajeros/codigo-fecha/${codigo[codigo.length - 1]}`
     );
+
     setReporte(jsonReporte.data);
   };
 
@@ -67,7 +68,7 @@ const ReporteInscritos = () => {
       total += detalle.precio;
     });
 
-    return total - obtenerDescuento(reserva);
+    return total - obtenerDescuento(reserva) + reserva.costoAdicional;
   };
 
   const SaldoPendiente = (reserva, abonos) => {
@@ -124,7 +125,7 @@ const ReporteInscritos = () => {
             <th style={tablaInscritos_th}>NOMBRES Y APELLIDOS</th>
             <th style={tablaInscritos_th}>Nº MOVIL</th>
             <th style={tablaInscritos_th}>LUGAR SALIDA</th>
-
+            <th style={tablaInscritos_th}>HABITACIÓN</th>
             {reporte.costosTour.costo_tour.map((tipos) => {
               return (
                 <th style={tablaInscritos_th_vertical}>{tipos.tipo_acompañante.descripcion}</th>
@@ -135,9 +136,9 @@ const ReporteInscritos = () => {
 
             <th style={tablaInscritos_th}>DESCUENTO</th>
             <th style={tablaInscritos_th}>TOTALPAGAR </th>
-            <th style={tablaInscritos_th}> BONO</th>
+            <th style={tablaInscritos_th}>ABONO</th>
             <th style={tablaInscritos_th}>SALDO </th>
-
+            <th style={tablaInscritos_th}>$ Adicional </th>
             <th style={tablaInscritos_th}> BANCO </th>
             <th style={tablaInscritos_th}> TIPO TRANSACCION</th>
             <th style={tablaInscritos_th}> N° DEPOSITO </th>
@@ -155,6 +156,7 @@ const ReporteInscritos = () => {
                 <td style={tablaInscritos_td_th}>{`${isNull(
                   datos.cliente_titular.telefono1
                 )} - ${isNull(datos.cliente_titular.telefono2)}`}</td>
+
                 <td style={tablaInscritos_td_th}>
                   <LugarSalidatext
                     lugarSalidaTitular={datos.lugar_salida_tour.lugar_salida.descripcion}
@@ -163,7 +165,11 @@ const ReporteInscritos = () => {
 
                   {/* {`${datos.lugar_salida_tour.lugar_salida.descripcion}  `} */}
                 </td>
-
+                <td style={tablaInscritos_td_th}>
+                  <Habitacionestext
+                    habitaciones_reservas={datos.habitaciones_reservas}
+                  ></Habitacionestext>
+                </td>
                 <ContarTiposCliente
                   key={`tiposAcom ${datos.id}`}
                   detallesReserva={datos.detalles_reservas}
@@ -174,7 +180,7 @@ const ReporteInscritos = () => {
                 <td style={tablaInscritos_td_th}>$ {ObtenerTotalPagar(datos)} </td>
                 <td style={tablaInscritos_td_th}>$ {ValorAbonado(datos.abonos)}</td>
                 <td style={tablaInscritos_td_th}>$ {SaldoPendiente(datos, datos.abonos)} </td>
-
+                <td style={tablaInscritos_td_th}>$ {datos.costoAdicional} </td>
                 <InformacionPago abonos={datos.abonos} />
 
                 <td style={tablaInscritos_td_th}> {datos.observaciones} </td>
@@ -211,6 +217,21 @@ const LugarSalidatext = ({ lugarSalidaTitular, detallesReservas = null }) => {
             {index + 1} .- {lugar}
           </div>
         );
+      })}
+    </>
+  );
+};
+
+const Habitacionestext = ({ habitaciones_reservas }) => {
+  var arrayHabitaciones = [];
+  habitaciones_reservas.map((habitacion) => {
+    arrayHabitaciones.push(` ${habitacion.habitacion.descripcion}(${habitacion.cantidad})`);
+  });
+
+  return (
+    <>
+      {arrayHabitaciones.map((hab, index) => {
+        return <div> {hab}</div>;
       })}
     </>
   );
@@ -320,8 +341,12 @@ const TotalesGenerales = ({ reservas, costosTours }) => {
   var totalporCobrar = 0;
   var totalCobrado = 0;
   var totalSaldo = 0;
+  var totalAdicional = 0;
   // alert(JSON.stringify(reservas));
   // alert(JSON.stringify(costosTours));
+  reservas.map((reserva) => {
+    totalAdicional += reserva.costoAdicional;
+  });
 
   reservas.map((reserva) => {
     cantidadPersonas += reserva.detalles_reservas.length;
@@ -349,11 +374,12 @@ const TotalesGenerales = ({ reservas, costosTours }) => {
     });
   });
 
-  totalSaldo = totalporCobrar - totalCobrado;
+  totalSaldo = totalporCobrar - totalCobrado + totalAdicional;
 
   return (
     <>
       <tr style={{ fontWeight: "bold", fontSize: "11px" }}>
+        <td style={tablaInscritos_td_th}></td>
         <td style={tablaInscritos_td_th}></td>
         <td style={tablaInscritos_td_th}></td>
         <td style={tablaInscritos_td_th}></td>
@@ -368,8 +394,8 @@ const TotalesGenerales = ({ reservas, costosTours }) => {
         <td style={{ backgroundColor: "yellow", border: "1px solid #ddd" }}>$ {totalporCobrar}</td>
         <td style={{ backgroundColor: "yellow", border: "1px solid #ddd" }}>$ {totalCobrado}</td>
         <td style={{ backgroundColor: "yellow", border: "1px solid #ddd" }}>$ {totalSaldo}</td>
+        <td style={{ backgroundColor: "yellow", border: "1px solid #ddd" }}>$ {totalAdicional} </td>
 
-        <td style={tablaInscritos_td_th}> </td>
         <td style={tablaInscritos_td_th}> </td>
         <td style={tablaInscritos_td_th}> </td>
         <td style={tablaInscritos_td_th}> </td>

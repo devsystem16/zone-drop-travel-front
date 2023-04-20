@@ -326,6 +326,7 @@ const Voucher = ({ datos }) => {
           detalles_reservas={datos.detalles_reservas}
           DESCUENTO={datos.descuento + datos.comisionAgencia}
           costoAdicional={datos.costoAdicional}
+          costoAdicionalMotivo={datos.costoAdicionalMotivo}
         />
 
         <tr style={tabla_tr_td}>
@@ -384,7 +385,7 @@ const Voucher = ({ datos }) => {
             style={{ width: tamañoColumna, padding: "2px 7px 0px 7px" }}
           >
             El Contratante se compromete a cancelar el saldo total del tour que solicitó, el cual
-            cubrirá los servicios contratados en el tipo dde reservación que solicitó
+            cubrirá los servicios contratados en el tipo de reservación que solicitó
           </td>
         </tr>
         <RowMetodoPago
@@ -501,7 +502,12 @@ const existe = (array, value) => {
   return exists;
 };
 
-const RowTipoAcompañante = ({ detalles_reservas, DESCUENTO, costoAdicional }) => {
+const RowTipoAcompañante = ({
+  detalles_reservas,
+  DESCUENTO,
+  costoAdicional,
+  costoAdicionalMotivo,
+}) => {
   var arrayTipos = [];
   var arrayReservasPersonas = [];
   detalles_reservas.map((detalle) => {
@@ -580,6 +586,16 @@ const RowTipoAcompañante = ({ detalles_reservas, DESCUENTO, costoAdicional }) =
         </td>
       </tr>
 
+      <tr style={tabla_tr_td}>
+        <td colspan="6" style={{ width: tamañoColumna, textAlign: "right" }}></td>
+
+        <td colspan="3" style={{ width: tamañoColumna, textAlign: "right" }}>
+          MOTIVO COSTO ADICIONAL
+        </td>
+        <td colspan="3" style={{ width: tamañoColumna, textAlign: "right", paddingRight: "5px" }}>
+          {costoAdicionalMotivo}{" "}
+        </td>
+      </tr>
       <tr style={tabla_tr_td}>
         <td colspan="9" style={{ width: tamañoColumna, textAlign: "right" }}>
           TOTAL A PAGAR

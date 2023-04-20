@@ -5,6 +5,8 @@ import TextField from "@mui/material/TextField";
 
 import { TourContext } from "../../../context/TourContext";
 
+import UploadImage from "./UploadImage";
+
 export default function TourFormulario({ editing, dataTour }) {
   const { tour, setTour } = useContext(TourContext);
 
@@ -40,7 +42,7 @@ export default function TourFormulario({ editing, dataTour }) {
       autoComplete="off"
     >
       <div></div>
-
+      <UploadImage></UploadImage>
       <div>
         <TextField
           required
@@ -57,7 +59,7 @@ export default function TourFormulario({ editing, dataTour }) {
         <TextField
           required
           id="standard-required"
-          label="Duracion"
+          label="Duración"
           name="duracion"
           onChange={handleChange}
           defaultValue={replaceAll(tour.duracion, "<br />", "\n")}
@@ -66,6 +68,7 @@ export default function TourFormulario({ editing, dataTour }) {
           variant="standard"
           helperText="Duración del Tour, P. Ej: 2 días."
         />
+
         <div></div>
         <TextField
           required
@@ -105,7 +108,9 @@ export default function TourFormulario({ editing, dataTour }) {
           variant="standard"
           helperText="¿Qué NO incluye en el Tour? P. Ej: Gastos personales, Comidas extras, etc."
         />
+
         <div></div>
+
         <TextField
           required
           id="standard-required"

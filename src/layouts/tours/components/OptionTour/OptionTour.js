@@ -63,7 +63,7 @@ export default function OptionTour({ tour, image }) {
               // alertify.error("Cancel");
             }
           )
-          .set("labels", { ok: "Si, elinar", cancel: "Cancelar" });
+          .set("labels", { ok: "Si, eliminar", cancel: "Cancelar" });
       }
     }
   };

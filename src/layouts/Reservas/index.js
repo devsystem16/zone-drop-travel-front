@@ -14,6 +14,7 @@ import IconButton from "@mui/material/IconButton";
 import AcompañanteIcon from "@mui/icons-material/Wc";
 import PaidIcon from "@mui/icons-material/Paid";
 import EditIcon from "@mui/icons-material/Edit";
+import DeleteIcon from "@mui/icons-material/Delete";
 
 import SummarizeIcon from "@mui/icons-material/Summarize";
 
@@ -97,11 +98,30 @@ const Reservas = () => {
   };
 
   const [datos, setDatos] = useState([]);
+
   const eventClickGenerarVoucher = async (data) => {
     const jsonTours = await API.get(`/reserva/voucher/generar/${data.id}`);
 
     setDatos(jsonTours.data);
     setOpenModalVoucher(true);
+  };
+
+  const eliminarReserva = async (id) => {
+    const jsonTours = await API.post(`/reserva/procesos/eliminar/${id}`);
+
+    setReload(true);
+  };
+  const eventClickElimnar = async (data) => {
+    alertify
+      .confirm(
+        "",
+        `Sel eliminará la reserva del Sr/a: <br></br> <strong> ${data.nombres}  ${data.apellidos}  </strong>   <br></br>  ¿Está seguro?`,
+        function () {
+          eliminarReserva(data.id);
+        },
+        function () {}
+      )
+      .set("labels", { ok: "Si, eliminar", cancel: "Cancelar" });
   };
 
   const fn_editarReserva = (reserva) => {
@@ -162,7 +182,7 @@ const Reservas = () => {
               <th>N° TELEFÓNICOS</th>
               <th>(-)Descuentos</th>
               <th>(-)Comisión Ag.</th>
-              <th>(+)Costo Adicional</th>
+              <th>(+)Costo adic.</th>
               <th>Abonado</th>
               <th>Total</th>
               <th>Acompañantes</th>
@@ -253,14 +273,14 @@ const Reservas = () => {
                       <EditIcon fontSize="inherit" />
                     </IconButton>
 
-                    {/* <IconButton
-                      onClick={() => eventClickListadoAcompañantes(cliente.acompañantes)}
-                      title="Vér Acompañantes"
+                    <IconButton
+                      onClick={() => eventClickElimnar(cliente)}
+                      title="Eliminar"
                       aria-label="delete"
                       size="small"
                     >
-                      <AcompañanteIcon fontSize="inherit" />
-                    </IconButton> */}
+                      <DeleteIcon fontSize="inherit" />
+                    </IconButton>
                   </td>
                 </tr>
               );
