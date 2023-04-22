@@ -8,7 +8,7 @@ import { TourContext } from "../../../context/TourContext";
 import UploadImage from "./UploadImage";
 
 export default function TourFormulario({ editing, dataTour }) {
-  const { tour, setTour } = useContext(TourContext);
+  const { tour, setTour, image, setImage } = useContext(TourContext);
 
   const handleChange = (event) => {
     const { name, value } = event.target;
@@ -42,7 +42,8 @@ export default function TourFormulario({ editing, dataTour }) {
       autoComplete="off"
     >
       <div></div>
-      <UploadImage></UploadImage>
+
+      <UploadImage image={image} setImage={setImage}></UploadImage>
       <div>
         <TextField
           required

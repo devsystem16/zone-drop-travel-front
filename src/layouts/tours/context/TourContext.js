@@ -8,6 +8,9 @@ const TourProvider = (props) => {
   const { setReloadListaTours } = useContext(RegistroTourClienteContext);
 
   const [modalTourRegistroCliente, setModalTourRegistroCliente] = useState(false);
+
+  const [image, setImage] = useState(null);
+
   const [tour, setTour] = useState({
     titulo: "",
     duracion: "",
@@ -32,7 +35,13 @@ const TourProvider = (props) => {
     const jsonDatos = JSON.parse(cadena.replace(/\\n/g, "<br />"));
     setTour(jsonDatos);
 
-    const response = await API.post("/tour", jsonDatos);
+    const formData = new FormData();
+    formData.append("image", image);
+    formData.append("data", JSON.stringify(jsonDatos));
+
+    const response = await API.post("/tour", formData);
+
+    // const response = await API.post("/tour", jsonDatos);
 
     if (response.status === 200) {
       setTour({
@@ -187,6 +196,8 @@ const TourProvider = (props) => {
         modalTourRegistroCliente,
         setModalTourRegistroCliente,
         ActualizarPrecios,
+        image,
+        setImage,
       }}
     >
       {props.children}

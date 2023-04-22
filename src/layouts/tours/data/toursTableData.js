@@ -35,7 +35,6 @@ export default function ToursTableData() {
   }, [listaTours]);
 
   const cargarTours = async () => {
-    // const jsonTours = await API.get("/tour/listado/tabla");
     const Elementos = listaTours.map((tour) => {
       return {
         lugarDestino: (

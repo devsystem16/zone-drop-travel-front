@@ -28,7 +28,7 @@ import MDBox from "components/MDBox";
 import MDAlertRoot from "components/MDAlert/MDAlertRoot";
 import MDAlertCloseIcon from "components/MDAlert/MDAlertCloseIcon";
 
-function MDAlert({ color, dismissible, children, ...rest }) {
+function MDAlert({ texto = "", color, dismissible, children, ...rest }) {
   const [alertStatus, setAlertStatus] = useState("mount");
 
   const handleAlertStatus = () => setAlertStatus("fadeOut");
@@ -37,8 +37,8 @@ function MDAlert({ color, dismissible, children, ...rest }) {
   const alertTemplate = (mount = true) => (
     <Fade in={mount} timeout={300}>
       <MDAlertRoot ownerState={{ color }} {...rest}>
-        <MDBox display="flex" alignItems="center" color="white">
-          {children}
+        <MDBox display="flex" alignItems="center" color="white" style={{ cursor: "pointer" }}>
+          {texto}
         </MDBox>
         {dismissible ? (
           <MDAlertCloseIcon onClick={mount ? handleAlertStatus : null}>&times;</MDAlertCloseIcon>

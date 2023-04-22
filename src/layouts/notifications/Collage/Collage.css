@@ -1,0 +1,58 @@
+.collage {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.main-img {
+   
+  width: 100%;
+  height: auto;
+  max-height: 200px;
+  /* object-fit: cover; */
+}
+
+.thumbnails {
+  display: flex;
+  /* justify-content: center; */
+  align-items: center;
+  margin-top: 5px;
+  max-width: 500px;
+  overflow-x: auto;
+}
+
+/* .thumbnail {
+  width: 50px;
+  height: 50px;
+  margin-right: 10px;
+  cursor: pointer;
+} */
+.thumbnail {
+  width: 60px;
+  height: 60px;
+ 
+  /* object-fit: cover; */
+  margin-right: 10px;
+  border: 2px solid transparent;
+  transition: border-color 0.3s ease-in-out;
+}
+
+.thumbnail-icon-delete{
+  cursor: pointer;
+   
+}
+.thumbnail:hover {
+  opacity: 0.7;
+}
+
+.thumbnail:hover {
+  border-color: #ff6600;
+}
+
+.thumbnail:last-child {
+  margin-right: 0;
+}
+
+button {
+  margin-top: 10px;
+}

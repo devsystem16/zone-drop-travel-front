@@ -2,10 +2,11 @@ import React, { useState } from "react";
 // import axios from "axios";
 import API from "Environment/config";
 
-const UploadImage = () => {
+const UploadImage = ({ image = null, setImage }) => {
   const [selectedFile, setSelectedFile] = useState(null);
 
   const fileSelectedHandler = (event) => {
+    setImage(event.target.files[0]);
     setSelectedFile(event.target.files[0]);
   };
 

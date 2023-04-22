@@ -54,6 +54,14 @@ const routes = [
     route: "/reportes",
     component: <Billing />,
   },
+  {
+    type: "collapse",
+    name: "Imagenes",
+    key: "imagenes",
+    icon: <Icon fontSize="small">format_textdirection_r_to_l</Icon>,
+    route: "/imagenes",
+    component: <Notifications />,
+  },
 
   {
     type: "titles",
