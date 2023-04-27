@@ -1,13 +1,5 @@
 import axios from "axios";
 
-const BASE_URL = "http://zone-drop-travel-back.test/api";
-// const BASE_URL = "https://dropxonetravel.herokuapp.com/api";
-//PRODUCCION
-// const BASE_URL = "https://reserva.dropzonetravel.com.ec/api";
-const API = axios.create({
-  baseURL: BASE_URL,
-});
-
 export const validarImagen = (event, file) => {
   const allowedTypes = ["image/jpeg", "image/jpg", "image/png", "image/gif"];
   const maxFileSize = MAX_LEN_IMAGE * 1024 * 1024; // 2MB
@@ -28,4 +20,4 @@ export const validarImagen = (event, file) => {
 };
 
 export const MAX_LEN_IMAGE = 2;
-export default API;
+// export default API;

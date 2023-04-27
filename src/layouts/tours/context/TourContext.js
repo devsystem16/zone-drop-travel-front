@@ -99,6 +99,7 @@ const TourProvider = (props) => {
       return { codigo: 500, mensaje: "Ocurrió un error" };
     }
   };
+
   const ActualizarTour = async () => {
     const datos = {
       ...tour,
@@ -108,8 +109,12 @@ const TourProvider = (props) => {
     const jsonDatos = JSON.parse(cadena.replace(/\\n/g, "<br />"));
     setTour(jsonDatos);
 
-    const response = await API.post(`/tour/actualizar/${jsonDatos.id}`, jsonDatos);
+    const formData = new FormData();
+    formData.append("image", image);
+    formData.append("data", JSON.stringify(jsonDatos));
 
+    // const response = await API.post(`/tour/actualizar/${jsonDatos.id}`, jsonDatos);
+    const response = await API.post(`/tour/actualizar/${jsonDatos.id}`, formData);
     if (response.status === 200) {
       setTour({
         titulo: "",

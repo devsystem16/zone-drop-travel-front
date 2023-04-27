@@ -43,7 +43,6 @@ export default function TourFormulario({ editing, dataTour }) {
     >
       <div></div>
 
-      <UploadImage image={image} setImage={setImage}></UploadImage>
       <div>
         <TextField
           required
@@ -109,9 +108,7 @@ export default function TourFormulario({ editing, dataTour }) {
           variant="standard"
           helperText="¿Qué NO incluye en el Tour? P. Ej: Gastos personales, Comidas extras, etc."
         />
-
         <div></div>
-
         <TextField
           required
           id="standard-required"
@@ -126,6 +123,20 @@ export default function TourFormulario({ editing, dataTour }) {
           helperText="Añada aqui la información Adicional que desee, por Ej: los costos para reservar."
         />
       </div>
+      <UploadImage initialImage={dataTour?.imagen} image={image} setImage={setImage}></UploadImage>
+
+      {/* <img
+        style={{
+          height: "10%",
+          width: "40%",
+          paddingLeft: "20px",
+          // display: "block",
+          // position: "absolute",
+          // top: "150px",
+          // left: "75%",
+        }}
+        src={initialImage}
+      ></img> */}
     </Box>
   );
 }

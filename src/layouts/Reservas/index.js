@@ -115,7 +115,7 @@ const Reservas = () => {
     alertify
       .confirm(
         "",
-        `Sel eliminará la reserva del Sr/a: <br></br> <strong> ${data.nombres}  ${data.apellidos}  </strong>   <br></br>  ¿Está seguro?`,
+        `Se eliminará la reserva del Sr/a: <br></br> <strong> ${data.nombres}  ${data.apellidos}  </strong>   <br></br>  ¿Está seguro?`,
         function () {
           eliminarReserva(data.id);
         },

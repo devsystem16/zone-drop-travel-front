@@ -27,8 +27,11 @@ import API from "../../Environment/config";
 function Notifications() {
   const [toursList, setToursList] = useState([]);
   const [toursListOrigi, setToursListOrigi] = useState([]);
-
+  const [imagenPortada, setImagenPortada] = useState(null);
+  const [imagenminiaturas, setImagenminiaturas] = useState([]);
+  const [tourId, setTourid] = useState(null);
   const [open, setOpen] = React.useState(false);
+  const [miniaturas, setMiniaturas] = useState([]);
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -58,6 +61,23 @@ function Notifications() {
   ];
 
   const cargarImagenes = async (id) => {
+    setTourid(id);
+    const miniaturas = [];
+    const responseImages = await API.get("tour/experiency/getimages/" + id);
+
+    setImagenPortada(null);
+    setImagenminiaturas([]);
+    setMiniaturas([]);
+    setImagenPortada(responseImages?.data?.principal?.paths3);
+    if (responseImages?.data?.miniaturas?.length > 0) {
+      setMiniaturas(responseImages.data.miniaturas);
+
+      responseImages.data.miniaturas.map((mini) => {
+        miniaturas.push(mini.paths3);
+      });
+      setImagenminiaturas(miniaturas);
+    }
+
     setOpen(true);
   };
   useEffect(() => {
@@ -67,7 +87,6 @@ function Notifications() {
   return (
     <DashboardLayout>
       <DashboardNavbar />
-
       <MDBox mt={6} mb={3}>
         <Grid container spacing={3} justifyContent="center">
           <Grid item xs={12} lg={8}>
@@ -93,7 +112,7 @@ function Notifications() {
           </Grid>
         </Grid>
       </MDBox>
-
+      {/* VENTANA MODAL */}
       <div>
         <Dialog
           open={open}
@@ -106,16 +125,19 @@ function Notifications() {
           </DialogTitle>
           <DialogContent>
             <Collage
-              initialMainImage={initialMainImage}
-              initialThumbnailImages={initialThumbnailImages}
+              Thumbnails={miniaturas}
+              setThumbnails={setMiniaturas}
+              initialMainImage={imagenPortada}
+              setOpen={setOpen}
+              tourId={tourId}
             />
           </DialogContent>
-          <DialogActions>
-            <Button onClick={handleClose}>Disagree</Button>
+          {/* <DialogActions>
+            <Button onClick={handleClose}>Cancelar</Button>
             <Button onClick={handleClose} autoFocus>
-              Agree
+              Guardar
             </Button>
-          </DialogActions>
+          </DialogActions> */}
         </Dialog>
       </div>
     </DashboardLayout>
