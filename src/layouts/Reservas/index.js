@@ -125,7 +125,6 @@ const Reservas = () => {
   };
 
   const fn_editarReserva = (reserva) => {
-    //alert(JSON.stringify(reserva));
     setDataReserva(reserva);
     // setOpenModalEditarReserva(true);
 

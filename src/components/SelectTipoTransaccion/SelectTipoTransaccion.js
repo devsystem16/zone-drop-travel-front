@@ -9,29 +9,59 @@ import API from "../../Environment/config";
 
 const SelectTipoTransaccion = ({
   titulo,
+  tituloSmall = null,
   pathApi,
   setGlobalValue,
   globalDefaultValue = "",
   inactivo = false,
+  defaultById = null,
+  editing = false,
 }) => {
+  if (editing) {
+    if (defaultById === null) return null;
+  }
   const [listValues, setListValues] = useState([]);
   const [defaultValue, setDefaultValue] = useState("");
+  const [refrescar, setRefrescar] = useState(false);
+  // const title = tituloSmall == null ? "******" : tituloSmall;
 
   useEffect(() => {
     loadData();
-  }, []);
+    // alert("refrescar");
+  }, [defaultById]);
 
-  const EstsablecerDefault = (array) => {
+  const EstsablecerDefault = async (array) => {
     if (globalDefaultValue !== "") {
       setDefaultValue(globalDefaultValue);
       return;
     }
-    array.map((obj) => {
-      if (obj?.default === 1) {
-        setDefaultValue(obj.descripcion);
-        return;
-      }
-    });
+
+    if (editing) {
+      array.map((obj) => {
+        if (obj?.id === defaultById) {
+          // alert(JSON.stringify(obj));
+          setGlobalValue(obj); // Si esta en modo edicion, necesito precargar el valor por default Configurado.
+          setDefaultValue(obj.descripcion);
+          return;
+        }
+      });
+    } else {
+      array.map((obj) => {
+        if (defaultById === null) {
+          if (obj?.default === 1) {
+            setGlobalValue(obj);
+            setDefaultValue(obj.descripcion);
+            return;
+          }
+        } else {
+          if (obj?.id === defaultById) {
+            setGlobalValue(obj);
+            setDefaultValue(obj.descripcion);
+            return;
+          }
+        }
+      });
+    }
   };
   const loadData = async () => {
     try {
@@ -54,7 +84,13 @@ const SelectTipoTransaccion = ({
       {titulo}
       <Box sx={{ minWidth: 120 }}>
         <FormControl sx={{ m: 1, minWidth: 220 }}>
-          <InputLabel id="demo-simple-select-label">******</InputLabel>
+          <div
+            style={{ color: "#344767", fontSize: "15px" }}
+            onClick={() => setRefrescar(!refrescar)}
+          >
+            {tituloSmall}
+          </div>
+          <InputLabel id="demo-simple-select-label"> </InputLabel>
           <Select
             labelId="demo-simple-select-label"
             id="demo-simple-select"

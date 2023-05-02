@@ -12,10 +12,18 @@ import Loading from "../../../../components/Loading/Loading";
 import { buscarCliente } from "../../../../Controllers/ClienteController";
 import MenuItem from "@mui/material/MenuItem";
 import API from "../../../../Environment/config";
+import SelectTipoTransaccion from "../../../../components/SelectTipoTransaccion/SelectTipoTransaccion.js";
+
 export default function FormularioClienteTitular({ editing = false, dataReserva }) {
-  const { cliente, setCliente, SetLugarSalida, resetear, setInformacionPagos } = useContext(
-    RegistroTourClienteContext
-  );
+  const {
+    cliente,
+    setCliente,
+    SetLugarSalida,
+    resetear,
+    setInformacionPagos,
+    nacionalidad,
+    setNacionalidad,
+  } = useContext(RegistroTourClienteContext);
 
   const [tipoAcompañante, setTipoAcompañante] = useState({ descripcion: "adulto", id: -1 });
   const [isLoading, setIsLoading] = useState(false);
@@ -185,7 +193,7 @@ export default function FormularioClienteTitular({ editing = false, dataReserva 
           style={{ width: 350 }}
           defaultValue={cliente.documento}
           variant="standard"
-          helperText="Ingrese una Cédula o RUC "
+          helperText="Ingrese una Cédula/RUC o Pasaporte "
           inputProps={{
             maxLength: 15,
           }}
@@ -228,6 +236,14 @@ export default function FormularioClienteTitular({ editing = false, dataReserva 
           maxLength: 100,
         }}
       />{" "}
+      <SelectTipoTransaccion
+        editing={editing}
+        tituloSmall={"Nacionalidad"}
+        titulo=""
+        pathApi="/nacionalidads"
+        setGlobalValue={setNacionalidad}
+        defaultById={cliente?.nacionalidad_id}
+      ></SelectTipoTransaccion>
       <div></div>
       <ListaGenero editing={editing} generoDefault={cliente.genero}></ListaGenero>
       <div>

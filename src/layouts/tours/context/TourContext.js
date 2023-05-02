@@ -115,6 +115,7 @@ const TourProvider = (props) => {
 
     // const response = await API.post(`/tour/actualizar/${jsonDatos.id}`, jsonDatos);
     const response = await API.post(`/tour/actualizar/${jsonDatos.id}`, formData);
+
     if (response.status === 200) {
       setTour({
         titulo: "",

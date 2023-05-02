@@ -23,6 +23,7 @@ import DialogTitle from "@mui/material/DialogTitle";
 import Collage from "./Collage/Collage";
 
 import API from "../../Environment/config";
+import { transformText } from "../../Environment/utileria";
 
 function Notifications() {
   const [toursList, setToursList] = useState([]);
@@ -51,14 +52,14 @@ function Notifications() {
     setToursListOrigi(jsonTours.data);
   };
 
-  const initialMainImage = null;
-  // "https://zonetravel.s3.us-east-2.amazonaws.com/uploads/tours/quevedo.jpg";
-  const initialThumbnailImages = [
-    // "https://zonetravel.s3.us-east-2.amazonaws.com/uploads/tours/jairo.jpg",
-    // "https://zonetravel.s3.us-east-2.amazonaws.com/uploads/tours/uteq.jpg",
-    // "https://zonetravel.s3.us-east-2.amazonaws.com/uploads/PC.jpg",
-    // "https://zonetravel.s3.us-east-2.amazonaws.com/5.jpg",
-  ];
+  // const initialMainImage = null;
+  // // "https://zonetravel.s3.us-east-2.amazonaws.com/uploads/tours/quevedo.jpg";
+  // const initialThumbnailImages = [
+  //   // "https://zonetravel.s3.us-east-2.amazonaws.com/uploads/tours/jairo.jpg",
+  //   // "https://zonetravel.s3.us-east-2.amazonaws.com/uploads/tours/uteq.jpg",
+  //   // "https://zonetravel.s3.us-east-2.amazonaws.com/uploads/PC.jpg",
+  //   // "https://zonetravel.s3.us-east-2.amazonaws.com/5.jpg",
+  // ];
 
   const cargarImagenes = async (id) => {
     setTourid(id);
@@ -81,12 +82,23 @@ function Notifications() {
     setOpen(true);
   };
   useEffect(() => {
+    // alert(JSON.stringify(transformText(text4)));
     loadTours();
   }, []);
-
+  // const text1 = "2 dias 3 dias 2 noches 4 noches asdasddías 3 noches 6 ";
+  // const text2 = "1 (días) 3 (noches)";
+  // const text3 = "2 noches 4 días";
+  // const text4 = "días7";
+  // const text5 = " días";
   return (
     <DashboardLayout>
       <DashboardNavbar />
+      {/* <div>
+        <p>{transformText(text1)}</p>
+        <p>{transformText(text2)}</p>
+        <p>{transformText(text3)}</p>
+        <p>{transformText(text4)}</p>
+      </div> */}
       <MDBox mt={6} mb={3}>
         <Grid container spacing={3} justifyContent="center">
           <Grid item xs={12} lg={8}>

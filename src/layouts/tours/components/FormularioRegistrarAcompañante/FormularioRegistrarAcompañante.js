@@ -10,11 +10,13 @@ import Chip from "@mui/material/Chip";
 import Grid from "@mui/material/Grid";
 import MenuItem from "@mui/material/MenuItem";
 import API from "../../../../Environment/config";
+import { DEFAULT_NACIONALIDAD } from "../../../../Environment/utileria";
 import { RegistroTourClienteContext } from "../../context/RegistroTourClienteContext";
 import SeleccionHabitaciones from "../../components/IncripcionTour/Components/SeleccionHabitaciones";
 import { buscarAcompañante } from "../../../../Controllers/AcompañanteController";
 import { buscarCliente } from "../../../../Controllers/ClienteController";
 import Loading from "../../../../components/Loading/Loading";
+import SelectTipoTransaccion from "../../../../components/SelectTipoTransaccion/SelectTipoTransaccion.js";
 
 export default function FormularioRegistrarAcompañante({ editing = false, dataReserva }) {
   const {
@@ -26,6 +28,8 @@ export default function FormularioRegistrarAcompañante({ editing = false, dataR
     setAcompañantesEliminados,
     habitcionesEliminadas,
     setHabitacionesEliminadas,
+    nacionalidad,
+    setNacionalidad,
   } = useContext(RegistroTourClienteContext);
 
   //
@@ -65,7 +69,13 @@ export default function FormularioRegistrarAcompañante({ editing = false, dataR
 
 const FormularioAcompañante = ({ editing = false, dataReserva }) => {
   const [isLoading, setIsLoading] = useState(false);
-  const { acompañantes, setAcompañantes, lugarSalida } = useContext(RegistroTourClienteContext);
+  const {
+    acompañantes,
+    setAcompañantes,
+    lugarSalida,
+    nacionalidadAcompañante,
+    setNacionalidadAcompañante,
+  } = useContext(RegistroTourClienteContext);
   const [tipoAcompañante, setTipoAcompañante] = useState(null);
   const [acompañante, setAcompañante] = useState({
     id: -1,
@@ -117,9 +127,11 @@ const FormularioAcompañante = ({ editing = false, dataReserva }) => {
       alertify.error("Seleccione el tipo de acompañante");
       return;
     }
+    // alert(JSON.stringify(nacionalidadAcompañante));
     var newAcom = {
       ...acompañante,
-
+      nacionalidad_id: nacionalidadAcompañante?.id,
+      nacionalidad: nacionalidadAcompañante,
       documento: acompañante.documento === "" ? "9999999999" : acompañante.documento,
       nombres: acompañante.nombres,
       apellidos: acompañante.apellidos,
@@ -168,6 +180,7 @@ const FormularioAcompañante = ({ editing = false, dataReserva }) => {
     if (acompañante.documento === "") return;
     setIsLoading(true);
     const data = await buscarCliente(acompañante.documento);
+
     if (data.encontro) {
       setAcompañante(data.cliente);
     } else {
@@ -250,7 +263,7 @@ const FormularioAcompañante = ({ editing = false, dataReserva }) => {
         value={acompañante.nombres}
         defaultValue={acompañante.nombres}
         variant="standard"
-        helperText="Nombres del Titular de la reserva"
+        helperText="Nombres del acompañante"
       />
       <TextField
         required
@@ -262,8 +275,16 @@ const FormularioAcompañante = ({ editing = false, dataReserva }) => {
         onChange={handleChange}
         defaultValue={acompañante.apellidos}
         variant="standard"
-        helperText="Apellidos del Titular de la reserva"
+        helperText="Apellidos del acompañante"
       />
+      <SelectTipoTransaccion
+        editing={editing}
+        tituloSmall={"Nacionalidad"}
+        titulo=""
+        pathApi="/nacionalidads"
+        setGlobalValue={setNacionalidadAcompañante}
+        defaultById={acompañante?.nacionalidad_id || DEFAULT_NACIONALIDAD}
+      ></SelectTipoTransaccion>
       <Box
         component="form"
         sx={{
@@ -358,10 +379,17 @@ const ItemAcompañante = ({ acompañante }) => {
     if (dato === undefined) return "";
     return dato;
   };
+  const isNull2 = (dato) => {
+    if (dato === null) return "";
+    if (dato === undefined) return "";
+    return "(" + dato + ") ";
+  };
 
   var html = (
     <div style={{ margin: 5, fontSize: "11px" }}>
       <div>
+        {isNull2(acompañante?.nacionalidad.codigoPais)}
+
         <strong>CI: </strong>
         {`${acompañante.documento} - ${acompañante.nombres} ${acompañante.apellidos}   (${acompañante.tipoAcompañante.descripcion})  $ ${acompañante.tipoAcompañante.precio}  `}
       </div>

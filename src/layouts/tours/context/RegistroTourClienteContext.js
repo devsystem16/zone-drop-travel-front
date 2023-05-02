@@ -27,8 +27,10 @@ const RegistroTourClienteProvider = (props) => {
     tipo_acompanante_id: -1,
     existente: false,
     añadirAlDetalle: false,
+    nacionalidad_id: null,
   });
-
+  const [nacionalidad, setNacionalidad] = useState(null);
+  const [nacionalidadAcompañante, setNacionalidadAcompañante] = useState(null);
   const [existeError, setExisteError] = useState(false);
 
   // Acompañantes del cliente titular del registro.
@@ -130,6 +132,7 @@ const RegistroTourClienteProvider = (props) => {
         tipoCliente: null,
         existente: false,
         añadirAlDetalle: false,
+        nacionalidad_id: null,
       });
     }
     if (opcion === "informacionPagos" || "all") {
@@ -249,8 +252,17 @@ const RegistroTourClienteProvider = (props) => {
       ...informacionPagos,
       tipoTransaccion: tipoTransaccion,
     };
+
+    var ObjCliente;
+
+    var cambioNacionalidad = false;
+    if (nacionalidad?.id !== undefined) {
+      ObjCliente = { ...cliente, nacionalidad_id: nacionalidad?.id };
+      cambioNacionalidad = true;
+    }
+
     var reserva = {
-      cliente: cliente,
+      cliente: cambioNacionalidad ? ObjCliente : cliente,
       programacion_fecha_id: localStorage.getItem("programacion_fecha_id"),
       acompaniantes: acompañantes,
       informacionPagos: infoPagos,
@@ -286,8 +298,12 @@ const RegistroTourClienteProvider = (props) => {
       ...informacionPagos,
       tipoTransaccion: tipoTransaccion,
     };
+
+    // setCliente({ ...cliente, nacionalidad_id: nacionalidad.id });
+    var ObjCliente = { ...cliente, nacionalidad_id: nacionalidad?.id };
+
     var reserva = {
-      cliente: cliente,
+      cliente: ObjCliente,
       programacion_fecha_id: localStorage.getItem("programacion_fecha_id"),
       acompaniantes: acompañantes,
       informacionPagos: infoPagos,
@@ -385,6 +401,10 @@ const RegistroTourClienteProvider = (props) => {
         setAcompañantesEliminados,
         mostrarFechasOld,
         setMostrarFechasOld,
+        nacionalidad,
+        setNacionalidad,
+        nacionalidadAcompañante,
+        setNacionalidadAcompañante,
       }}
     >
       {props.children}

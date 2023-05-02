@@ -9,7 +9,7 @@ import Icon from "@mui/material/Icon";
 import DialogActions from "@mui/material/DialogActions";
 import Button from "@mui/material/Button";
 import alertify from "alertifyjs";
-
+import BackDrop from "./BackDrop";
 const Collage = ({
   Thumbnails,
   setThumbnails,
@@ -22,9 +22,9 @@ const Collage = ({
   const [portada, setPortada] = useState(null);
   const [thumbnailImages, setThumbnailImages] = useState(Thumbnails || []);
   const [nuevasImagenesCargadas, setNuevasImagenesCargadas] = useState([]);
-
+  const [cargando, setCargando] = useState(false);
   const [miniaturas, setMiniaturas] = useState([]);
-
+  const [texto, setTexto] = useState("Guardando imagenes...");
   useEffect(() => {}, [mainImage]);
 
   const handleMainImageChange = (event) => {
@@ -44,9 +44,10 @@ const Collage = ({
   };
 
   const handleSaveCollage = async () => {
-    console.log("ÓRTADA", portada);
-    console.log("miniaturas", miniaturas);
-
+    // console.log("ÓRTADA", portada);
+    // console.log("miniaturas", miniaturas);
+    setTexto("Guardando imagenes...");
+    setCargando(true);
     try {
       const formData = new FormData();
       formData.append("mainImage", portada);
@@ -59,9 +60,12 @@ const Collage = ({
 
       alertify.success("Guardado Correctamente."); // alert(JSON.stringify(response1.data));
       console.log(response1);
+      setOpen(false);
+      setCargando(false);
     } catch (error) {
       alertify.error("Ocurrió un error.");
       console.error(error);
+      setCargando(false);
     }
   };
 
@@ -100,12 +104,18 @@ const Collage = ({
   };
 
   const eliminarFromS3 = async (id) => {
-    const nuevasImagenes = Thumbnails.filter((imagen) => imagen.id !== id);
-    setThumbnails(nuevasImagenes);
-    const response1 = await API.post(`/image/delete/${id}`, {});
+    setCargando(true);
+    setTexto("Eliminando Imagen...");
+    try {
+      const nuevasImagenes = Thumbnails.filter((imagen) => imagen.id !== id);
+      setThumbnails(nuevasImagenes);
+      const response1 = await API.post(`/image/delete/${id}`, {});
 
-    if (response1.data.codigo !== 200) alertify.error("Ocurrió un error.");
-    alertify.success("Imagen eliminada correctamente.");
+      if (response1.data.codigo !== 200) alertify.error("Ocurrió un error.");
+      alertify.success("Imagen eliminada correctamente.");
+    } catch (error) {}
+
+    setCargando(false);
   };
 
   const eliminarWithoutS3 = (id) => {
@@ -132,6 +142,7 @@ const Collage = ({
 
   return (
     <div className="collage">
+      <BackDrop text={texto} open={cargando} setOpen={setCargando}></BackDrop>
       <div>
         <label htmlFor="main-image">Portada</label>
         <input accept="image/*" type="file" id="main-image" onChange={handleMainImageChange} />

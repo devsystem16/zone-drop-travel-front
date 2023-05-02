@@ -17,7 +17,27 @@
     background: linear-gradient(195deg, #49a3f1, #1A73E8);
     color: white;
   }
+  #customers th.ant {
+    padding-top: 4px;
+    padding-bottom: 4px;
+    text-align: left;
+    /* background: linear-gradient(195deg, #0d0d0e, #000000); */
+    background: #D8D8D8; 
+    /* #D8D8D8 */
+    color: black;
+    text-align: center;
+  }
 
+  #customers th.ant.color {
+    padding-top: 4px;
+    padding-bottom: 4px;
+    text-align: left;
+    /* background: linear-gradient(195deg, #0d0d0e, #000000); */
+    background: #C0C0C0; 
+  
+    color: black;
+    text-align: center;
+  }
   #customers tr th {
     text-align: center;
   }
@@ -25,3 +45,87 @@
     text-align: center;
   }
  
+
+
+
+
+
+
+
+
+
+
+
+
+  #customersANT {
+ font-family: Verdana;  
+ font-weight: bold;
+    border-collapse: collapse;
+    width: 100%;
+    font-size:9px;
+  }
+  #customersANT td, #customersANT th {
+    border: 2px solid #111111;
+    padding: 1px;
+  }
+  /* #customersANT tr:nth-child(even){background-color: #f2f2f2;}
+  #customersANT tr:hover {background-color: #ddd;} */
+  #customersANT th {
+    /* padding-top: 4px;
+    padding-bottom: 4px; */
+    text-align: left;
+    /* background: linear-gradient(195deg, #49a3f1, #1A73E8); */
+    color: white;
+  }
+  #customersANT th.ant {
+    /* padding-top: 4px;
+    padding-bottom: 4px; */
+    text-align: left;
+    /* background: linear-gradient(195deg, #0d0d0e, #000000); */
+    background: #D8D8D8; 
+    /* #D8D8D8 */
+    color: black;
+    text-align: center;
+  }
+
+  #customersANT th.ant.color {
+    /* padding-top: 4px;
+    padding-bottom: 4px; */
+    text-align: left;
+    /* background: linear-gradient(195deg, #0d0d0e, #000000); */
+    background: #C0C0C0; 
+  
+    color: black;
+    text-align: center;
+  }
+  #customersANT tr th {
+    text-align: center;
+  }
+  
+
+  .imagenANT{
+    width: 100px;
+    position: absolute; 
+   /* top:  5%; */
+    left: 10%;  
+  }
+
+  .siwtchANT{
+    background-image: linear-gradient(to right top, #d8d8d8, #d2d2d2, #cccccc, #c6c6c6, #c0c0c0);
+  }
+.siwtchDROPZONE{
+  /* background-image: radial-gradient( circle  , #ECB800, #1F3A78, #CA222C); */
+  /* background-image: radial-gradient(circle, #ECB800, #7c92ee, #b0b4f3, #1F3A78, #CA222C); */
+    background-image: radial-gradient(circle, #1a73e8, #7c92ee, #b0b4f3, #dad8f9, #ffffff);
+    /* background-image: url('https://zonetravel.s3.us-east-2.amazonaws.com/agenciaNacionalTransito.png');
+    background-size: contain; */
+
+  width: 20%;
+  
+}
+
+  .textoAnt {
+    font-size:13px;
+    padding: 0;
+    margin: 0;
+  }
