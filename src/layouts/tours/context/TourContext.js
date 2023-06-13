@@ -26,6 +26,22 @@ const TourProvider = (props) => {
   const [precios, setPrecios] = useState({});
   const [listLugaresSalida, setListLugaresSalida] = useState([]);
 
+  const eliminarLugarSalidaTour = async (lugarSalidaTourId) => {
+    const response = await API.post("/lugar-salida-tour/eliminar", {
+      lugarSalidaTourId: lugarSalidaTourId,
+    });
+
+    return response.data;
+  };
+
+  const eliminarLugarSalidaTourForzado = async (lugarSalidaTourId) => {
+    const response = await API.post("/lugar-salida-tour/eliminar-forzado", {
+      lugarSalidaTourId: lugarSalidaTourId,
+    });
+
+    return response.data;
+  };
+
   const guardarTour = async () => {
     const datos = {
       ...tour,
@@ -204,6 +220,8 @@ const TourProvider = (props) => {
         ActualizarPrecios,
         image,
         setImage,
+        eliminarLugarSalidaTour,
+        eliminarLugarSalidaTourForzado,
       }}
     >
       {props.children}

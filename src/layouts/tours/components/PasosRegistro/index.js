@@ -9,7 +9,7 @@ import Typography from "@mui/material/Typography";
 import { GlobalConfigContext } from "../../context/GlobalConfigContext";
 import { TourContext } from "../../context/TourContext";
 import Switch from "./Switch";
-
+import "./pasosRegistro.css";
 export default function PasosRegistro({ editing, tour }) {
   const [activeStep, setActiveStep] = React.useState(0);
   const [skipped, setSkipped] = React.useState(new Set());
@@ -104,7 +104,7 @@ export default function PasosRegistro({ editing, tour }) {
             </Button>
             <Box sx={{ flex: "1 1 auto" }} />
 
-            <Button onClick={handleNext}>
+            <Button className="botonSiguienteFlotante" onClick={handleNext}>
               {activeStep === steps.length - 1 ? "Guardar" : "Siguiente"}
             </Button>
           </Box>
